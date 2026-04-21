@@ -85,9 +85,7 @@
         });
     }
 
-    /* --- Accordéons services (animation max-height) --- */
-    if (typeof window.initAccordion === 'function') {
-        window.initAccordion('.acc-service-card', '.acc-service-body');
-    }
+    /* --- Accordéons services --- */
+    PRH68.initAccordions( '.acc-service-card', '.acc-service-body' );
 
 })();
