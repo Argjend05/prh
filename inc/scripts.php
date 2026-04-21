@@ -28,6 +28,10 @@ function prh68_enqueue_styles() {
         wp_enqueue_style(  'pro-style',  $uri . '/css/style-professionnels.css', [ 'child-style' ],    $ver );
         wp_enqueue_script( 'pro-script', $uri . '/js/professionnels.js',         [ 'common-script' ], $ver, true );
     }
+
+    if ( is_page_template( 'page-politique-confidentialite.php' ) ) {
+        wp_enqueue_style( 'pc-style', $uri . '/css/style-politique-confidentialite.css', [ 'child-style' ], $ver );
+    }
 }
 
 /* =======================================================
@@ -39,7 +43,7 @@ if ( ! function_exists( 'prh68_acc_items' ) ) {
         $lines = array_filter( array_map( 'trim', explode( "\n", $text ) ) );
         $lines = ! empty( $lines ) ? $lines : $defaults;
         foreach ( $lines as $line ) {
-            echo '<li>' . esc_html( $line ) . '</li>';
+            echo '<li>' . wp_kses_post( $line ) . '</li>';
         }
     }
 }

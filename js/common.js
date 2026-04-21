@@ -2,55 +2,62 @@
    PRH68 — Utilitaires communs
    ======================================================= */
 
-var PRH68 = window.PRH68 || {};
+const PRH68 = window.PRH68 || {};
 
 /**
- * Initialise les accordéons <details> avec animation max-height fluide.
+ * Initialise les accordéons <details> avec animation WAAPI (Web Animations API).
+ * Aucun reflow manuel — l'animation est gérée nativement par le navigateur.
  *
  * @param {string} cardSelector  Sélecteur des éléments <details>
  * @param {string} bodySelector  Sélecteur du corps animé à l'intérieur
  */
-PRH68.initAccordions = function ( cardSelector, bodySelector ) {
-    document.querySelectorAll( cardSelector ).forEach( function ( details ) {
-        var summary = details.querySelector( 'summary' );
-        var body    = details.querySelector( bodySelector );
+PRH68.initAccordions = (cardSelector, bodySelector) => {
+    document.querySelectorAll(cardSelector).forEach(details => {
+        const summary = details.querySelector('summary');
+        const body    = details.querySelector(bodySelector);
+        if (!summary || !body) return;
 
-        if ( ! summary || ! body ) return;
+        let animation = null;
 
-        /* Garantit que le corps est visible même si Neve le masque */
-        body.style.display = 'block';
+        /* État initial */
+        body.style.overflow = 'hidden';
+        if (!details.open) body.style.height = '0px';
+        summary.setAttribute('aria-expanded', String(details.open));
 
-        summary.addEventListener( 'click', function ( e ) {
+        summary.addEventListener('click', e => {
             e.preventDefault();
 
-            if ( details.open ) {
-                /* ── Fermeture ── */
-                body.style.maxHeight = body.scrollHeight + 'px';
-                body.offsetHeight; /* force reflow pour déclencher la transition */
-                body.style.maxHeight = '0';
+            /* Annule l'animation en cours si l'utilisateur reclique rapidement */
+            if (animation) { animation.cancel(); animation = null; }
 
-                body.addEventListener( 'transitionend', function close( e ) {
-                    if ( e.propertyName !== 'max-height' ) return;
-                    details.removeAttribute( 'open' );
-                    body.style.maxHeight = '';
-                    body.removeEventListener( 'transitionend', close );
-                } );
+            if (details.open) {
+                /* ── Fermeture ── */
+                const from = body.offsetHeight + 'px';
+                animation  = body.animate(
+                    [{ height: from }, { height: '0px' }],
+                    { duration: 350, easing: 'ease' }
+                );
+                summary.setAttribute('aria-expanded', 'false');
+                animation.onfinish = () => {
+                    details.removeAttribute('open');
+                    body.style.height = '0px';
+                    animation = null;
+                };
 
             } else {
                 /* ── Ouverture ── */
-                details.setAttribute( 'open', '' );
-                body.style.maxHeight = '';
-                var h = body.scrollHeight;
-                body.style.maxHeight = '0';
-                body.offsetHeight; /* force reflow */
-                body.style.maxHeight = h + 'px';
-
-                body.addEventListener( 'transitionend', function open( e ) {
-                    if ( e.propertyName !== 'max-height' ) return;
-                    body.style.maxHeight = 'none'; /* permet au contenu de s'adapter librement */
-                    body.removeEventListener( 'transitionend', open );
-                } );
+                details.setAttribute('open', '');
+                const to  = body.scrollHeight + 'px';
+                animation = body.animate(
+                    [{ height: '0px' }, { height: to }],
+                    { duration: 350, easing: 'ease' }
+                );
+                summary.setAttribute('aria-expanded', 'true');
+                animation.onfinish = () => {
+                    body.style.height = 'auto'; /* permet au contenu de s'adapter librement */
+                    animation = null;
+                };
             }
-        } );
-    } );
+        });
+    });
 };

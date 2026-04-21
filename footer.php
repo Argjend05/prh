@@ -3,7 +3,7 @@
  * Sur les pages NON-observatoire, Neve ouvre <main class="neve-main"> et
  * <div class="wrapper"> dans son header. Il faut les fermer ici avant le footer.
  */
-$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php'];
+$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php'];
 if (!is_page_template($custom_templates)):
     do_action('neve_before_primary_end');
     ?>
@@ -57,6 +57,12 @@ endif;
                     <li><a
                             href="<?php echo esc_url(get_permalink(get_page_by_path('observatoire'))); ?>">Observatoire</a>
                     </li>
+                    <li><a
+                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    </li>
+                <?php elseif (is_page_template('page-politique-confidentialite.php')): ?>
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <li><a href="<?php echo esc_url(site_url('/mentions-legales/')); ?>">Mentions légales</a></li>
                     <li><a
                             href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>

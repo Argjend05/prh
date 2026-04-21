@@ -56,26 +56,10 @@
     padding: 0 24px;
 }
 
-/* Boutons */
+/* Boutons — surcharge de .btn-orange (base dans style.css) */
 .acc-btn-orange {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--orange);
-    color: #fff;
-    font-family: var(--ubuntu);
     font-weight: 700;
-    font-size: .95rem;
     padding: 13px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background .2s, transform .2s;
-}
-
-.acc-btn-orange:hover {
-    background: var(--orange-hover);
-    transform: translateY(-1px);
-    color: #fff;
 }
 
 .acc-btn-dark {
@@ -783,11 +767,9 @@ body .acc-info-card.acc-card-turquoise {
     color: #666;
 }
 
-/* Contenu déroulant */
+/* Contenu déroulant — hauteur gérée par WAAPI (js/common.js) */
 .acc-service-body {
     overflow: hidden;
-    max-height: 0;
-    transition: max-height .4s ease;
     padding: 0 28px;
     box-sizing: border-box;
 }

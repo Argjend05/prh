@@ -340,11 +340,10 @@ details[open] .pro-acc-chevron {
     transform: rotate(180deg);
 }
 
+/* Hauteur gérée par WAAPI (js/common.js) */
 .pro-acc-body {
     padding: 0 28px;
-    max-height: 0;
     overflow: hidden;
-    transition: max-height .35s ease-in-out;
 }
 
 /* Items */
