@@ -1,0 +1,22 @@
+[{
+    "key": "group_prh68_mission",
+    "title": "Notre Ambition \u2014 Mission",
+    "fields": [
+        {"key":"field_prh68_mission_title",    "label":"Titre de section", "name":"prh68_mission_title",    "type":"text",     "required":0, "default_value":"Notre Ambition"},
+        {"key":"field_prh68_mission_subtitle", "label":"Sous-titre",       "name":"prh68_mission_subtitle", "type":"textarea", "required":0, "rows":2, "default_value":"Partir des besoins concrets du terrain \u2013 Enfants, Parents, Professionnels \u2013 pour \u00e9clairer et faire \u00e9voluer les pratiques au regard des r\u00e9alit\u00e9s du quotidien"},
+        {"key":"field_prh68_m1_title", "label":"Carte Enfants \u2014 Titre",        "name":"prh68_m1_title", "type":"text",     "required":0, "default_value":"Enfants"},
+        {"key":"field_prh68_m1_desc",  "label":"Carte Enfants \u2014 Points (1 ligne = 1 puce)", "name":"prh68_m1_desc", "type":"textarea", "required":0, "rows":3},
+        {"key":"field_prh68_m2_title", "label":"Carte Parents \u2014 Titre",        "name":"prh68_m2_title", "type":"text",     "required":0, "default_value":"Parents"},
+        {"key":"field_prh68_m2_desc",  "label":"Carte Parents \u2014 Points (1 ligne = 1 puce)", "name":"prh68_m2_desc", "type":"textarea", "required":0, "rows":3},
+        {"key":"field_prh68_m3_title", "label":"Carte Professionnels \u2014 Titre", "name":"prh68_m3_title", "type":"text",     "required":0, "default_value":"Professionnels"},
+        {"key":"field_prh68_m3_desc",  "label":"Carte Professionnels \u2014 Points (1 ligne = 1 puce)", "name":"prh68_m3_desc", "type":"textarea", "required":0, "rows":3}
+    ],
+    "location": [[{"param":"page_template","operator":"==","value":"page-observatoire.php"}]],
+    "menu_order": 2,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "modified": 1700000002
+}]

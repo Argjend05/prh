@@ -1,0 +1,22 @@
+[{
+    "key": "group_prh68_participez",
+    "title": "Participez \u2014 Questionnaires",
+    "fields": [
+        {"key":"field_prh68_part_title",    "label":"Titre de section", "name":"prh68_part_title",    "type":"text",     "required":0, "default_value":"Participez \u00e0 notre d\u00e9marche"},
+        {"key":"field_prh68_part_subtitle", "label":"Sous-titre",       "name":"prh68_part_subtitle", "type":"textarea", "required":0, "rows":2},
+        {"key":"field_prh68_part_pro_title", "label":"Professionnels \u2014 Titre",       "name":"prh68_part_pro_title",    "type":"text",     "required":0, "default_value":"Professionnels"},
+        {"key":"field_prh68_part_pro_desc",  "label":"Professionnels \u2014 Description", "name":"prh68_part_pro_desc",     "type":"textarea", "required":0, "rows":2},
+        {"key":"field_prh68_url_pro",        "label":"Professionnels \u2014 Lien questionnaire", "name":"prh68_url_professionnels", "type":"url", "required":0},
+        {"key":"field_prh68_part_par_title", "label":"Parents \u2014 Titre",       "name":"prh68_part_par_title", "type":"text",     "required":0, "default_value":"Parents"},
+        {"key":"field_prh68_part_par_desc",  "label":"Parents \u2014 Description", "name":"prh68_part_par_desc",  "type":"textarea", "required":0, "rows":2},
+        {"key":"field_prh68_url_parents",    "label":"Parents \u2014 Lien questionnaire", "name":"prh68_url_parents", "type":"url", "required":0}
+    ],
+    "location": [[{"param":"page_template","operator":"==","value":"page-observatoire.php"}]],
+    "menu_order": 3,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "modified": 1700000003
+}]

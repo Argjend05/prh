@@ -1,0 +1,40 @@
+[{
+    "key": "group_prh68_cycle",
+    "title": "Le Cycle d'Observation",
+    "fields": [
+        {"key":"field_prh68_cycle_title",    "label":"Titre de section", "name":"prh68_cycle_title",    "type":"text",     "required":0, "default_value":"Les étapes clés"},
+        {"key":"field_prh68_cycle_subtitle", "label":"Sous-titre",       "name":"prh68_cycle_subtitle", "type":"textarea", "required":0, "rows":2},
+
+        {"key":"field_prh68_c1_title",       "label":"Étape 1 — Titre de l'étape", "name":"prh68_c1_title", "type":"text", "required":0, "default_value":"AVRIL - MAI"},
+        {"key":"field_prh68_c1_i1_title",    "label":"Étape 1 — Point 1 — Titre",       "name":"prh68_c1_i1_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c1_i1_desc",     "label":"Étape 1 — Point 1 — Description", "name":"prh68_c1_i1_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c1_i2_title",    "label":"Étape 1 — Point 2 — Titre",       "name":"prh68_c1_i2_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c1_i2_desc",     "label":"Étape 1 — Point 2 — Description", "name":"prh68_c1_i2_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c1_i3_title",    "label":"Étape 1 — Point 3 — Titre",       "name":"prh68_c1_i3_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c1_i3_desc",     "label":"Étape 1 — Point 3 — Description", "name":"prh68_c1_i3_desc",  "type":"textarea", "required":0, "rows":1},
+
+        {"key":"field_prh68_c2_title",       "label":"Étape 2 — Titre de l'étape", "name":"prh68_c2_title", "type":"text", "required":0, "default_value":"JUILLET - NOVEMBRE"},
+        {"key":"field_prh68_c2_i1_title",    "label":"Étape 2 — Point 1 — Titre",       "name":"prh68_c2_i1_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c2_i1_desc",     "label":"Étape 2 — Point 1 — Description", "name":"prh68_c2_i1_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c2_i2_title",    "label":"Étape 2 — Point 2 — Titre",       "name":"prh68_c2_i2_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c2_i2_desc",     "label":"Étape 2 — Point 2 — Description", "name":"prh68_c2_i2_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c2_i3_title",    "label":"Étape 2 — Point 3 — Titre",       "name":"prh68_c2_i3_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c2_i3_desc",     "label":"Étape 2 — Point 3 — Description", "name":"prh68_c2_i3_desc",  "type":"textarea", "required":0, "rows":1},
+
+        {"key":"field_prh68_c3_title",       "label":"Étape 3 — Titre de l'étape", "name":"prh68_c3_title", "type":"text", "required":0, "default_value":"FEVRIER"},
+        {"key":"field_prh68_c3_i1_title",    "label":"Étape 3 — Point 1 — Titre",       "name":"prh68_c3_i1_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c3_i1_desc",     "label":"Étape 3 — Point 1 — Description", "name":"prh68_c3_i1_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c3_i2_title",    "label":"Étape 3 — Point 2 — Titre",       "name":"prh68_c3_i2_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c3_i2_desc",     "label":"Étape 3 — Point 2 — Description", "name":"prh68_c3_i2_desc",  "type":"textarea", "required":0, "rows":1},
+        {"key":"field_prh68_c3_i3_title",    "label":"Étape 3 — Point 3 — Titre",       "name":"prh68_c3_i3_title", "type":"text",     "required":0},
+        {"key":"field_prh68_c3_i3_desc",     "label":"Étape 3 — Point 3 — Description", "name":"prh68_c3_i3_desc",  "type":"textarea", "required":0, "rows":1}
+    ],
+    "location": [[{"param":"page_template","operator":"==","value":"page-observatoire.php"}]],
+    "menu_order": 4,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "modified": 1700000004
+}]

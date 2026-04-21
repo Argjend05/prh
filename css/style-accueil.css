@@ -1,0 +1,1050 @@
+/* =======================================================
+   PAGE ACCUEIL
+   Préfixe : acc-
+   ======================================================= */
+
+:root {
+    --acc-hero-from: #52c4bb;
+    --acc-hero-to: #6868aa;
+    --acc-cta-from: #23235e;
+}
+
+.acc-page {
+    font-family: var(--ubuntu);
+    color: #333;
+    position: relative;
+}
+
+/* Barre d'annonce */
+.acc-announce-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: var(--violet);
+    color: rgba(255, 255, 255, .9);
+    font-size: .8rem;
+    text-align: center;
+    padding: 7px 40px;
+    letter-spacing: .02em;
+}
+
+.acc-announce-close {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, .65);
+    cursor: pointer;
+    font-size: .8rem;
+    line-height: 1;
+    padding: 4px 6px;
+    transition: color .2s;
+}
+
+.acc-announce-close:hover {
+    color: #fff;
+}
+
+/* Container centré */
+.acc-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Boutons */
+.acc-btn-orange {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    font-size: .95rem;
+    padding: 13px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background .2s, transform .2s;
+}
+
+.acc-btn-orange:hover {
+    background: var(--orange-hover);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+.acc-btn-dark {
+    display: inline-block;
+    background: var(--violet);
+    color: #fff;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    font-size: .95rem;
+    padding: 13px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background .25s, transform .25s, box-shadow .25s;
+    margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(75, 75, 139, .35);
+}
+
+.acc-btn-dark:hover {
+    background: var(--violet-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(75, 75, 139, .55);
+    color: #fff;
+}
+
+/* Bouton outline hero */
+.acc-btn-hero-outline {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid rgba(255, 255, 255, .75);
+    color: #fff;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    font-size: .95rem;
+    padding: 11px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background .2s, border-color .2s, transform .2s;
+}
+
+.acc-btn-hero-outline:hover {
+    background: rgba(255, 255, 255, .15);
+    border-color: #fff;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* Couleurs utilitaires */
+.acc-color-violet {
+    color: var(--violet);
+}
+
+.acc-color-turquoise {
+    color: var(--turquoise);
+}
+
+/* =====================================================
+   HERO
+   ===================================================== */
+body .acc-page .acc-hero {
+    background: linear-gradient(135deg, var(--acc-hero-from) 0%, var(--acc-hero-to) 60%);
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    padding: 80px 24px 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Halos décoratifs */
+.acc-page .acc-hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, .07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.acc-page .acc-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: 5%;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(63, 183, 171, .18) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+/* Vague de transition */
+.acc-hero-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 2;
+}
+
+.acc-hero-wave {
+    overflow: hidden;
+}
+
+.acc-hero-wave svg {
+    display: block;
+    width: 200%;
+    height: 55px;
+    animation: acc-wave-scroll 12s linear infinite;
+}
+
+@keyframes acc-wave-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.acc-hero-wrap {
+    padding-left: 80px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.acc-hero-content {
+    max-width: 850px;
+}
+
+/* Groupe de boutons hero */
+.acc-hero-btns {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Blobs animés en arrière-plan */
+.acc-hero-blobs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.acc-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .18;
+}
+
+.acc-blob-1 {
+    width: 420px;
+    height: 420px;
+    background: rgba(255, 255, 255, .9);
+    top: -80px;
+    right: 8%;
+    animation: acc-blob-drift 9s ease-in-out infinite;
+}
+
+.acc-blob-2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(63, 183, 171, .8);
+    bottom: 0;
+    left: 15%;
+    animation: acc-blob-drift 12s ease-in-out infinite reverse;
+}
+
+.acc-blob-3 {
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, .7);
+    top: 40%;
+    right: 30%;
+    animation: acc-blob-drift 7s ease-in-out infinite 2s;
+}
+
+@keyframes acc-blob-drift {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(20px, -18px) scale(1.06);
+    }
+
+    66% {
+        transform: translate(-14px, 12px) scale(.96);
+    }
+}
+
+.acc-hero-content h1 {
+    font-family: var(--montserrat);
+    font-size: clamp(2.2rem, 4.5vw, 3.3rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0 0 24px;
+}
+
+.acc-hero-content p {
+    font-size: 1.35rem;
+    color: rgba(255, 255, 255, .85);
+    margin: 0 0 36px;
+    line-height: 1.6;
+}
+
+/* =====================================================
+   TOOLTIP DÉFINITION INCLUSION
+   ===================================================== */
+.acc-def-trigger {
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: rgba(255, 255, 255, .55);
+    text-underline-offset: 4px;
+    transition: color .2s, text-decoration-color .2s;
+}
+
+.acc-def-trigger:hover,
+.acc-def-trigger[aria-expanded="true"] {
+    color: var(--orange);
+    text-decoration-color: var(--orange);
+}
+
+.acc-def-star {
+    font-size: .5em;
+    vertical-align: super;
+    color: rgba(255, 255, 255, .85);
+    margin-left: 1px;
+    line-height: 1;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    transition: color .2s;
+}
+
+.acc-def-trigger:hover .acc-def-star,
+.acc-def-trigger[aria-expanded="true"] .acc-def-star {
+    color: var(--orange);
+}
+
+.acc-def-box {
+    position: fixed;
+    z-index: 9999;
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    background: #fff;
+    color: #333;
+    font-family: var(--ubuntu);
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.7;
+    padding: 20px 22px;
+    border-radius: 12px;
+    border-left: 4px solid var(--violet);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .2), 0 2px 8px rgba(0, 0, 0, .1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    transform: translateY(8px);
+}
+
+.acc-def-box.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Flèche pointant vers le bas (tooltip au-dessus du mot — défaut) */
+.acc-def-box::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: var(--arrow-left, 50%);
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: #fff;
+}
+
+/* Flèche pointant vers le haut (tooltip en dessous — fallback) */
+.acc-def-box.acc-def-below::before {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: #fff;
+}
+
+.acc-def-box p {
+    margin: 0;
+}
+
+body .acc-def-note {
+    font-size: .8rem;
+    color: #999;
+    font-style: italic;
+    padding-top: 12px;
+    margin-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+/* =====================================================
+   CHIFFRES CLÉS
+   ===================================================== */
+.acc-stats {
+    background: #fff;
+    padding: 44px 24px;
+    border-bottom: 1px solid #eeeef6;
+}
+
+.acc-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    gap: 24px;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.acc-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.acc-stat-number {
+    font-family: var(--montserrat);
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--violet);
+}
+
+.acc-stat:nth-child(2) .acc-stat-number {
+    color: var(--turquoise);
+}
+
+.acc-stat:nth-child(3) .acc-stat-number {
+    color: var(--orange);
+}
+
+.acc-stat-logo img {
+    max-width: 220px;
+    width: 100%;
+    height: auto;
+}
+
+.acc-stat-label {
+    font-size: .85rem;
+    color: #777;
+    line-height: 1.4;
+}
+
+/* =====================================================
+   PRESENTATION / PARTENAIRES
+   ===================================================== */
+.acc-presentation {
+    background: #f7f7fc;
+    padding: 72px 24px;
+    border-top: 1px solid #eeeef6;
+    border-bottom: 1px solid #eeeef6;
+}
+
+.acc-presentation-content {
+    max-width: 750px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.acc-presentation-content p {
+    font-size: 1.05rem;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+.acc-logos-partenaires {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+    padding: 32px 0;
+    border-top: 1px solid #e4e4ee;
+    border-bottom: 1px solid #e4e4ee;
+}
+
+.acc-logos-partenaires img {
+    max-height: 80px;
+    max-width: 180px;
+    object-fit: contain;
+    filter: grayscale(30%);
+    opacity: .85;
+    transition: filter .3s, opacity .3s, transform .3s;
+}
+
+.acc-logos-partenaires img:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* =====================================================
+   MISSION / OBJECTIF
+   ===================================================== */
+.acc-info {
+    background: #fff;
+    padding: 72px 24px;
+}
+
+.acc-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    justify-items: center;
+}
+
+.acc-info-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: 16px;
+    padding: 32px;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(75, 75, 139, .07);
+    background: #fff;
+}
+
+.acc-info-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.acc-info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.acc-icon-violet {
+    background: var(--violet);
+    color: #fff;
+}
+
+.acc-icon-turquoise {
+    background: var(--turquoise);
+    color: #fff;
+}
+
+.acc-info-icon svg {
+    filter: brightness(0) invert(1);
+}
+
+/* Bordures colorées par carte */
+body .acc-info-card.acc-card-violet {
+    border-color: var(--violet);
+}
+
+body .acc-info-card.acc-card-turquoise {
+    border-color: var(--turquoise);
+}
+
+.acc-info-card h3 {
+    font-family: var(--montserrat);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.acc-info-card p {
+    font-size: .9rem;
+    color: #666;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* =====================================================
+   PROFESSIONNELS
+   ===================================================== */
+.acc-pro {
+    background: #f7f7fc;
+    padding: 64px 24px;
+    text-align: center;
+}
+
+.acc-pro-title {
+    font-family: var(--montserrat);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--footer-bg);
+    margin: 0 0 44px;
+}
+
+.acc-pro-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 44px;
+}
+
+.acc-pro-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 16px 20px;
+    width: 130px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.acc-pro-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+}
+
+.acc-pro-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+.acc-pro-icon svg,
+.acc-pro-icon img {
+    filter: brightness(0) invert(1);
+}
+
+/* Couleurs des icônes pros */
+.acc-pro-icon--violet {
+    background: var(--violet);
+}
+
+.acc-pro-icon--turquoise {
+    background: var(--turquoise);
+}
+
+.acc-pro-icon--orange {
+    background: var(--orange);
+}
+
+.acc-pro-item span {
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.35;
+}
+
+.acc-pro-subtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--footer-bg);
+    margin: 0;
+}
+
+/* =====================================================
+   SERVICES
+   ===================================================== */
+.acc-services {
+    background: #fff;
+    padding: 80px 24px;
+}
+
+.acc-section-title {
+    font-family: var(--montserrat);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--violet);
+    text-align: center;
+    margin: 0 0 52px;
+}
+
+.acc-services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.acc-services-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Accordéon service */
+.acc-service-card {
+    border-radius: 12px;
+    border: 1.5px solid #ebebf3;
+    border-left-width: 4px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    overflow: hidden;
+    transition: box-shadow .2s;
+}
+
+.acc-service-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .1);
+}
+
+.acc-service-card[open] {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .1);
+}
+
+.acc-border-violet {
+    border-left-color: var(--violet);
+}
+
+.acc-border-turquoise {
+    border-left-color: var(--turquoise);
+}
+
+.acc-border-orange {
+    border-left-color: var(--orange);
+}
+
+/* Summary = en-tête cliquable */
+.acc-service-card summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 24px 24px 28px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.acc-service-card summary::-webkit-details-marker {
+    display: none;
+}
+
+.acc-service-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.acc-service-icon img {
+    filter: brightness(0) invert(1);
+}
+
+/* Couleurs des icônes services */
+.acc-service-icon--orange {
+    background: var(--orange);
+}
+
+.acc-service-icon--violet {
+    background: var(--violet);
+}
+
+.acc-service-icon--turquoise {
+    background: var(--turquoise);
+}
+
+.acc-service-card h3 {
+    font-family: var(--montserrat);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+}
+
+/* Chevron animé */
+.acc-service-chevron {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: #aaa;
+    transition: transform .3s ease, color .2s;
+}
+
+.acc-service-card[open] .acc-service-chevron {
+    transform: rotate(180deg);
+    color: #666;
+}
+
+/* Contenu déroulant */
+.acc-service-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .4s ease;
+    padding: 0 28px;
+    box-sizing: border-box;
+}
+
+/* Séparateur + padding interne */
+.acc-service-body::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: #f0f0f6;
+    margin: 0 0 16px;
+}
+
+.acc-service-body .acc-service-list {
+    padding-bottom: 24px;
+}
+
+/* Liste */
+.acc-service-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.acc-service-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: .88rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.acc-service-list li::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    margin-top: 7px;
+}
+
+.acc-border-orange .acc-service-list li::before {
+    background: var(--orange);
+}
+
+.acc-border-violet .acc-service-list li::before {
+    background: var(--violet);
+}
+
+.acc-border-turquoise .acc-service-list li::before {
+    background: var(--turquoise);
+}
+
+/* Boutons dans les accordéons de services */
+.acc-btn-ressources,
+.acc-btn-service {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 8px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-family: var(--ubuntu);
+    font-size: .85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .2s, color .2s, transform .2s;
+}
+
+.acc-btn-ressources,
+.acc-btn-service--turquoise {
+    background: rgba(63, 183, 171, .12);
+    color: var(--turquoise);
+    border: 1.5px solid var(--turquoise);
+}
+
+.acc-btn-ressources:hover,
+.acc-btn-service--turquoise:hover {
+    background: var(--turquoise);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.acc-btn-service--orange {
+    background: rgba(236, 111, 4, .12);
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+}
+
+.acc-btn-service--orange:hover {
+    background: var(--orange);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.acc-btn-service--violet {
+    background: rgba(75, 75, 139, .12);
+    color: var(--violet);
+    border: 1.5px solid var(--violet);
+}
+
+.acc-btn-service--violet:hover {
+    background: var(--violet);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.acc-btn-ressources svg,
+.acc-btn-service svg {
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   CTA
+   ===================================================== */
+.acc-cta {
+    background: linear-gradient(135deg, var(--acc-cta-from) 0%, var(--turquoise) 100%);
+    padding: 80px 24px;
+    text-align: center;
+}
+
+.acc-cta>.acc-container>h2 {
+    font-family: var(--montserrat);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 40px;
+    line-height: 1.25;
+}
+
+.acc-cta-card {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 44px 48px;
+    max-width: 650px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.acc-cta-card h3 {
+    font-family: var(--montserrat);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 12px;
+}
+
+.acc-cta-card>p {
+    font-size: .9rem;
+    color: rgba(255, 255, 255, .8);
+    line-height: 1.6;
+    margin: 0 0 28px;
+    text-align: center;
+}
+
+.acc-cta-phone {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.acc-cta-phone-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.acc-cta-phone span {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 860px) {
+    .acc-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acc-services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acc-services-col {
+        gap: 16px;
+    }
+
+    .acc-hero-wrap {
+        padding-left: 24px;
+    }
+
+    .acc-stats-grid {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .acc-hero-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .acc-hero {
+        padding: 60px 20px;
+    }
+
+    .acc-hero-btns {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .acc-stats {
+        padding: 32px 20px;
+    }
+
+    .acc-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .acc-info,
+    .acc-services {
+        padding: 48px 20px;
+    }
+
+    .acc-pro {
+        padding: 48px 20px;
+    }
+
+    .acc-cta {
+        padding: 56px 20px;
+    }
+
+    .acc-cta-card {
+        padding: 32px 24px;
+    }
+
+    .acc-pro-items {
+        gap: 16px 24px;
+    }
+}

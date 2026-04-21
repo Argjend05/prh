@@ -1,0 +1,17 @@
+[{
+    "key": "group_prh68_hero",
+    "title": "Section Hero",
+    "fields": [
+        {"key":"field_prh68_hero_title",    "label":"Titre principal", "name":"prh68_hero_title",    "type":"text",     "required":0, "default_value":"Observatoire d\u00e9partemental de l'inclusion"},
+        {"key":"field_prh68_hero_subtitle", "label":"Sous-titre",      "name":"prh68_hero_subtitle", "type":"text",     "required":0, "default_value":"Am\u00e9liorer l'accueil de tous les enfants au sein des lieux collectifs."},
+        {"key":"field_prh68_hero_btn",      "label":"Texte du bouton", "name":"prh68_hero_btn",      "type":"text",     "required":0, "default_value":"Voir les questionnaires"}
+    ],
+    "location": [[{"param":"page_template","operator":"==","value":"page-observatoire.php"}]],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "modified": 1700000001
+}]
