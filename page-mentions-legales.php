@@ -25,7 +25,6 @@ $host_phone = $f('prh68_ml_host_phone', '09 72 16 91 58');
 // Section 3 — Propriété intellectuelle
 $s3_title = $f('prh68_ml_s3_title', 'Propriété intellectuelle');
 $pi_text1 = $f('prh68_ml_pi_text1', "L'ensemble des contenus présents sur ce site (textes, images, graphismes, logos, vidéos, etc.) est la propriété exclusive de l'association Marguerite Sinclair.");
-$pi_text2 = $f('prh68_ml_pi_text2', "Les éléments Canva utilisés sur ce site sont exploités sous licences conformément aux conditions d'utilisation de la plateforme Canva.");
 $pi_warning = $f('prh68_ml_pi_warning', "Toute reproduction est interdite sans autorisation préalable écrite de l'association.");
 
 // Section 4 — Responsabilité & Cookies
@@ -178,7 +177,6 @@ get_header();
                         </span>
                         <span><?php echo esc_html($pi_text1); ?></span>
                     </p>
-                    <p><?php echo esc_html($pi_text2); ?></p>
                     <div class="ml-warning-box">
                         <span class="ml-icon-circle ml-icon-warning">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16"

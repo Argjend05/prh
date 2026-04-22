@@ -8,29 +8,28 @@ function prh68_enqueue_styles() {
     $ver = wp_get_theme()->get( 'Version' );
     $uri = get_stylesheet_directory_uri();
 
-    wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-    wp_enqueue_style( 'child-style',  get_stylesheet_uri(), [ 'parent-style' ], $ver );
-    wp_enqueue_style( 'local-fonts',  $uri . '/css/fonts.css', [ 'parent-style' ], $ver );
+    wp_enqueue_style( 'prh68-style', get_stylesheet_uri(), [], $ver );
+    wp_enqueue_style( 'local-fonts', $uri . '/css/fonts.css', [ 'prh68-style' ], $ver );
 
     wp_enqueue_script( 'header-script', $uri . '/js/header.js', [],                  $ver, true );
     wp_enqueue_script( 'common-script', $uri . '/js/common.js', [ 'header-script' ], $ver, true );
 
     if ( is_page_template( 'page-accueil.php' ) ) {
-        wp_enqueue_style(  'accueil-style',  $uri . '/css/style-accueil.css',   [ 'child-style' ],    $ver );
+        wp_enqueue_style(  'accueil-style',  $uri . '/css/style-accueil.css',   [ 'prh68-style' ],   $ver );
         wp_enqueue_script( 'accueil-script', $uri . '/js/accueil.js',           [ 'common-script' ], $ver, true );
     }
 
     if ( is_page_template( 'page-mentions-legales.php' ) ) {
-        wp_enqueue_style( 'mentions-style', $uri . '/css/style-mentions-legales.css', [ 'child-style' ], $ver );
+        wp_enqueue_style( 'mentions-style', $uri . '/css/style-mentions-legales.css', [ 'prh68-style' ], $ver );
     }
 
     if ( is_page_template( 'page-professionnels.php' ) ) {
-        wp_enqueue_style(  'pro-style',  $uri . '/css/style-professionnels.css', [ 'child-style' ],    $ver );
+        wp_enqueue_style(  'pro-style',  $uri . '/css/style-professionnels.css', [ 'prh68-style' ],   $ver );
         wp_enqueue_script( 'pro-script', $uri . '/js/professionnels.js',         [ 'common-script' ], $ver, true );
     }
 
     if ( is_page_template( 'page-politique-confidentialite.php' ) ) {
-        wp_enqueue_style( 'pc-style', $uri . '/css/style-politique-confidentialite.css', [ 'child-style' ], $ver );
+        wp_enqueue_style( 'pc-style', $uri . '/css/style-politique-confidentialite.css', [ 'prh68-style' ], $ver );
     }
 }
 

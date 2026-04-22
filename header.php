@@ -1,28 +1,18 @@
 <!DOCTYPE html>
-<?php do_action( 'neve_html_start_before' ); ?>
 <html <?php language_attributes(); ?>>
 
 <head>
-    <?php do_action( 'neve_head_start_after' ); ?>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <link rel="profile" href="http://gmpg.org/xfn/11">
-    <?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
-        <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-    <?php endif; ?>
     <?php wp_head(); ?>
-    <?php do_action( 'neve_head_end_before' ); ?>
 </head>
 
-<body <?php body_class(); ?> <?php neve_body_attrs(); ?>>
-<?php do_action( 'neve_body_start_after' ); ?>
+<body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-
-<?php do_action( 'neve_before_header_wrapper_hook' ); ?>
 
 <!-- Header en dehors du .wrapper pour que position:sticky fonctionne -->
 <header class="prh-header" id="prh-header">
-    <a class="neve-skip-link show-on-focus" href="#content"><?php _e( 'Skip to content', 'neve' ); ?></a>
+    <a class="prh-skip-link show-on-focus" href="#content"><?php esc_html_e( 'Skip to content', 'prh68' ); ?></a>
 
     <div class="prh-header-inner">
 
@@ -70,9 +60,4 @@
 </nav>
 
 <div class="wrapper">
-
-    <?php do_action( 'neve_after_header_wrapper_hook' ); ?>
-    <?php do_action( 'neve_before_primary' ); ?>
-
     <main id="content" class="neve-main">
-    <?php do_action( 'neve_after_primary_start' ); ?>
