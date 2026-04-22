@@ -37,7 +37,7 @@ $cookies_text = $f('prh68_ml_cookies_text', "Le site ne collecte ni n'utilise de
 // Section 5 — Droit applicable
 $s5_title = $f('prh68_ml_s5_title', 'Droit applicable');
 $droit_text = $f('prh68_ml_droit_text', "Le présent site et les présentes mentions légales sont soumis au droit français. En cas de litige, et à défaut de résolution amiable, la compétence exclusive est attribuée aux tribunaux français.");
-$update_date = $f('prh68_ml_update_date', 'Juin 2025');
+$update_date = $f('prh68_ml_update_date', 'Avril 2026');
 
 // Helpers définis dans functions.php
 
