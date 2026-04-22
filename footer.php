@@ -42,36 +42,30 @@ endif;
             <ul>
                 <?php if (is_page_template('page-accueil.php')): ?>
                     <li><a href="#presentation">Qui sommes-nous</a></li>
-                    <li><a href="#services">Nos services</a></li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    <li><a href="#services">Notre Démarche</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
                 <?php elseif (is_page_template('page-professionnels.php')): ?>
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
                     <li><a href="#nos-accompagnements">Nos accompagnements</a></li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
                 <?php elseif (is_page_template('page-mentions-legales.php')): ?>
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('observatoire'))); ?>">Observatoire</a>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('observatoire'))); ?>">Observatoire</a>
                     </li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
                 <?php elseif (is_page_template('page-politique-confidentialite.php')): ?>
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
                     <li><a href="<?php echo esc_url(site_url('/mentions-legales/')); ?>">Mentions légales</a></li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
                 <?php else: ?>
-                    <li><a href="#mission">Notre Mission</a></li>
-                    <li><a href="#cycle">Les Objectifs</a></li>
+                    <li><a href="#mission">Notre Ambition</a></li>
+                    <li><a href="#cycle">Les Étapes Clés</a></li>
                     <li><a href="#questionnaires">Questionnaires</a></li>
-                    <li><a
-                            href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
                 <?php endif; ?>
             </ul>

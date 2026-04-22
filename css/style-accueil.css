@@ -384,7 +384,7 @@ body .acc-def-note {
 .acc-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    align-items: center;
+    align-items: start;
     gap: 24px;
     max-width: 640px;
     margin: 0 auto;
@@ -656,6 +656,16 @@ body .acc-info-card.acc-card-turquoise {
     color: var(--violet);
     text-align: center;
     margin: 0 0 52px;
+}
+
+.acc-section-title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 4px;
+    background: var(--orange);
+    border-radius: 2px;
+    margin: 16px auto 0;
 }
 
 .acc-services-grid {

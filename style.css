@@ -5,6 +5,48 @@
 */
 
 /* =====================================================
+   RESET
+   ===================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.75em;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.1rem; }
+
+p {
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* =====================================================
    VARIABLES
    ===================================================== */
 html {
@@ -265,6 +307,32 @@ body .prh-mobile-nav-list li a {
     padding-inline-start: unset;
     margin-block-start: unset;
     margin-block-end: unset;
+}
+
+/* =====================================================
+   SKIP LINK (accessibilité — visible uniquement au focus)
+   ===================================================== */
+.prh-skip-link {
+    position: absolute;
+    top: -999px;
+    left: -999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.prh-skip-link:focus {
+    top: 8px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    background: var(--violet);
+    color: #fff;
+    font-size: .9rem;
+    border-radius: 6px;
+    z-index: 9999;
+    text-decoration: none;
 }
 
 /* =====================================================

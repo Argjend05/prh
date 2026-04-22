@@ -167,6 +167,16 @@ body .pro-hero-btn {
     margin-bottom: 40px;
 }
 
+.pro-section-title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 4px;
+    background: var(--turquoise);
+    border-radius: 2px;
+    margin: 16px auto 0;
+}
+
 .pro-why-grid {
     display: grid;
     justify-content: center;
@@ -358,7 +368,7 @@ details[open] .pro-acc-chevron {
 
 .pro-item-title {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     font-family: var(--montserrat);
     font-weight: 700;
@@ -370,11 +380,19 @@ details[open] .pro-acc-chevron {
 .pro-item-title::before {
     content: '';
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    margin-top: 1px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%233fb7ab'/%3E%3Cpath d='M10 15.5l-3.5-3.5 1.4-1.4 2.1 2.1 5.9-5.9 1.4 1.4L10 15.5z' fill='%23fff'/%3E%3C/svg%3E") no-repeat center / contain;
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+    border-radius: 50%;
+    background: var(--turquoise);
+}
+
+.pro-acc-card:has(.pro-icon-violet) .pro-item-title::before {
+    background: var(--violet);
+}
+
+.pro-acc-card:has(.pro-icon-orange) .pro-item-title::before {
+    background: var(--orange);
 }
 
 .pro-item-desc {
