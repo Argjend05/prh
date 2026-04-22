@@ -183,7 +183,7 @@ get_header();
                     <h3><?php echo esc_html($par_title); ?></h3>
                     <p><?php echo esc_html($par_desc); ?></p>
                     <ul class="obs-part-list">
-                        <li><span class="check-turquoise">✓</span> Durée : 3 - 5 minutes</li>
+                        <li><span class="check-turquoise">✓</span> Durée : 5 - 7 minutes</li>
                         <li><span class="check-turquoise">✓</span> Anonyme et confidentiel</li>
                         <li><span class="check-turquoise">✓</span> Accessible 24/7</li>
                     </ul>
