@@ -243,7 +243,7 @@ get_header();
                             <?php for ($i = 1; $i <= 3; $i++): ?>
                                 <li>
                                     <span class="cycle-dot cdot-<?php echo $col; ?>"></span>
-                                    <strong><?php echo esc_html($c[$n]["i{$i}_title"]); ?></strong>
+                                    <?php echo esc_html($c[$n]["i{$i}_title"]); ?>
                                 </li>
                             <?php endfor; ?>
                         </ul>

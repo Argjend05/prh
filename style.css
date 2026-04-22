@@ -1316,22 +1316,17 @@ body .color-violet {
     gap: 12px;
 }
 
-
 .cycle-dot {
     width: 9px;
     height: 9px;
     border-radius: 50%;
     flex-shrink: 0;
-    margin-top: 5px;
+    margin-top: 0.5em;
 }
 
 .cdot-orange    { background: var(--orange); }
 .cdot-turquoise { background: var(--turquoise); }
 .cdot-violet    { background: var(--violet); }
-
-.obs-cycle-list li {
-    align-items: flex-start;
-}
 
 .obs-cycle-list li strong {
     font-size: .92rem;
