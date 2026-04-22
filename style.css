@@ -361,7 +361,7 @@ body .prh-mobile-nav-list li a {
 }
 
 .acc-def-box {
-    position: fixed;
+    position: absolute;
     z-index: 9999;
     width: 320px;
     max-width: calc(100vw - 32px);

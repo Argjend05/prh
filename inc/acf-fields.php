@@ -90,6 +90,18 @@ function prh68_acf_register_groups() {
         'fields'     => $fields,
     ] );
 
+    acf_add_local_field_group( [
+        'key'        => 'group_prh68_obs_def',
+        'title'      => 'Bulle "inclusion"',
+        'menu_order' => 5,
+        'position'   => 'normal',
+        'location'   => $loc,
+        'fields'     => [
+            [ 'key' => 'field_prh68_obs_def_text', 'label' => 'Définition', 'name' => 'prh68_obs_def_text', 'type' => 'textarea', 'rows' => 3, 'default_value' => "L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des lieux d'accueil de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement." ],
+            [ 'key' => 'field_prh68_obs_def_note', 'label' => 'Note (optionnelle)', 'name' => 'prh68_obs_def_note', 'type' => 'text', 'default_value' => "Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain." ],
+        ],
+    ] );
+
     /* ── PAGE MENTIONS LÉGALES ─────────────────────────── */
     $loc_ml = [ [ [ 'param' => 'page_template', 'operator' => '==', 'value' => 'page-mentions-legales.php' ] ] ];
 
@@ -161,7 +173,7 @@ function prh68_acf_register_groups() {
             [ 'key' => 'field_prh68_acc_hero_subtitle','label' => 'Sous-titre',               'name' => 'prh68_acc_hero_subtitle','type' => 'text',    'default_value' => 'Nous sommes à vos côtés pour construire un accueil inclusif.' ],
             [ 'key' => 'field_prh68_acc_hero_btn1',   'label' => 'Bouton 1 — texte',          'name' => 'prh68_acc_hero_btn1',   'type' => 'text',     'default_value' => 'Découvrir nos missions' ],
             [ 'key' => 'field_prh68_acc_hero_btn2',   'label' => 'Bouton 2 — texte',          'name' => 'prh68_acc_hero_btn2',   'type' => 'text',     'default_value' => 'Nous contacter' ],
-            [ 'key' => 'field_prh68_acc_def_text',    'label' => 'Bulle "inclusion" — Définition','name' => 'prh68_acc_def_text','type' => 'textarea', 'rows' => 3, 'default_value' => "L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des structures de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement." ],
+            [ 'key' => 'field_prh68_acc_def_text',    'label' => 'Bulle "inclusion" — Définition','name' => 'prh68_acc_def_text','type' => 'textarea', 'rows' => 3, 'default_value' => "L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des lieux d'accueil de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement." ],
             [ 'key' => 'field_prh68_acc_def_note',    'label' => 'Bulle "inclusion" — Note',  'name' => 'prh68_acc_def_note',    'type' => 'text',     'default_value' => "Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain." ],
         ],
     ] );
@@ -278,7 +290,15 @@ function prh68_acf_register_groups() {
     ] );
 
     acf_add_local_field_group( [
-        'key' => 'group_prh68_pro_cta', 'title' => 'CTA – Page Professionnels', 'menu_order' => 33, 'position' => 'normal', 'location' => $loc_pro,
+        'key' => 'group_prh68_pro_def', 'title' => 'Bulle "inclusion"', 'menu_order' => 34, 'position' => 'normal', 'location' => $loc_pro,
+        'fields' => [
+            [ 'key' => 'field_prh68_pro_def_text', 'label' => 'Définition', 'name' => 'prh68_pro_def_text', 'type' => 'textarea', 'rows' => 3, 'default_value' => "L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des lieux d'accueil de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement." ],
+            [ 'key' => 'field_prh68_pro_def_note', 'label' => 'Note (optionnelle)', 'name' => 'prh68_pro_def_note', 'type' => 'text', 'default_value' => "Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain." ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
+        'key' => 'group_prh68_pro_cta', 'title' => 'CTA – Page Professionnels', 'menu_order' => 35, 'position' => 'normal', 'location' => $loc_pro,
         'fields' => [
             [ 'key' => 'field_prh68_pro_cta_title', 'label' => 'Titre section',    'name' => 'prh68_pro_cta_title', 'type' => 'text',     'default_value' => "Prêt à développer l'inclusion dans votre structure ?" ],
             [ 'key' => 'field_prh68_pro_cta_sub',   'label' => 'Sous-texte',       'name' => 'prh68_pro_cta_sub',   'type' => 'textarea', 'rows' => 2, 'default_value' => "Contactez-nous dès aujourd'hui pour échanger sur vos besoins et construire ensemble un accompagnement sur mesure" ],

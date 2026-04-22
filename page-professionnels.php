@@ -325,10 +325,16 @@ $acc6_items = [
 
 </div><!-- /.pro-page -->
 
+<?php
+$def_text = $f('prh68_pro_def_text', "L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des lieux d'accueil de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement.");
+$def_note = $f('prh68_pro_def_note', "Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain.");
+?>
 <!-- Tooltip définition "inclusion" -->
 <div class="acc-def-box" id="acc-def-inclusion" role="tooltip" aria-hidden="true">
-    <p>L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des structures de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement.</p>
-    <p class="acc-def-note">Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain.</p>
+    <p><?php echo esc_html($def_text); ?></p>
+    <?php if ($def_note): ?>
+        <p class="acc-def-note"><?php echo esc_html($def_note); ?></p>
+    <?php endif; ?>
 </div>
 
 <?php get_footer(); ?>

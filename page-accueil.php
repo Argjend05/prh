@@ -9,14 +9,14 @@ $hero_title = $f('prh68_acc_hero_title', 'Vous accompagnez des enfants de 0 à 1
 $hero_subtitle = $f('prh68_acc_hero_subtitle', 'Nous sommes à vos côtés pour construire un accueil inclusif.');
 $hero_btn1 = $f('prh68_acc_hero_btn1', 'Découvrir nos missions');
 $hero_btn2 = $f('prh68_acc_hero_btn2', 'Nous contacter');
-$def_text = $f('prh68_acc_def_text', 'L\'inclusion désigne l\'accueil de tous les enfants, quels que soient leurs besoins, au sein des structures de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement.');
+$def_text = $f('prh68_acc_def_text', 'L\'inclusion désigne l\'accueil de tous les enfants, quels que soient leurs besoins, au sein des lieux d\'accueil de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement.');
 $def_note = $f('prh68_acc_def_note', 'Cette définition est issue d\'une réflexion partagée et en lien avec les réalités du terrain.');
 
 // Chiffres clés
 $stat1_num = $f('prh68_acc_stat1_num', '3');
 $stat1_lbl = $f('prh68_acc_stat1_lbl', 'Intervenants spécialisés');
 $stat2_num = $f('prh68_acc_stat2_num', '7');
-$stat2_lbl = $f('prh68_acc_stat2_lbl', 'Types de structures accompagnées');
+$stat2_lbl = $f('prh68_acc_stat2_lbl', "Types de lieux d'accueil concernés");
 $stat3_num = $f('prh68_acc_stat3_num', '68');
 $stat3_lbl = $f('prh68_acc_stat3_lbl', 'Haut-Rhin : notre territoire');
 
