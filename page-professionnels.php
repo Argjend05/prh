@@ -80,7 +80,16 @@ $acc6_items = [
     <section class="pro-hero">
         <div class="pro-container">
             <div class="pro-hero-content">
-                <h1><?= esc_html($hero_title) ?></h1>
+                <h1><?php
+                    $parts = explode( "l'inclusion", $hero_title, 2 );
+                    if ( count( $parts ) === 2 ) {
+                        echo esc_html( $parts[0] );
+                        ?><span class="acc-def-trigger" tabindex="0" role="button" aria-expanded="false" aria-controls="acc-def-inclusion">l'inclusion<sup class="acc-def-star">*</sup></span><?php
+                        echo esc_html( $parts[1] );
+                    } else {
+                        echo esc_html( $hero_title );
+                    }
+                ?></h1>
                 <p><?= esc_html($hero_p1) ?></p>
                 <p><?= esc_html($hero_p2) ?></p>
                 <a href="#nos-accompagnements" class="pro-hero-btn">
@@ -315,5 +324,11 @@ $acc6_items = [
     </section>
 
 </div><!-- /.pro-page -->
+
+<!-- Tooltip définition "inclusion" -->
+<div class="acc-def-box" id="acc-def-inclusion" role="tooltip" aria-hidden="true">
+    <p>L'inclusion désigne l'accueil de tous les enfants, quels que soient leurs besoins, au sein des structures de droit commun, avec les adaptations nécessaires pour garantir leur participation, leur bien-être et leur développement.</p>
+    <p class="acc-def-note">Cette définition est issue d'une réflexion partagée et en lien avec les réalités du terrain.</p>
+</div>
 
 <?php get_footer(); ?>

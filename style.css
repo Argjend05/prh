@@ -310,6 +310,112 @@ body .prh-mobile-nav-list li a {
 }
 
 /* =====================================================
+   TOOLTIP DÉFINITION "INCLUSION" (partagé entre pages)
+   ===================================================== */
+.acc-def-trigger {
+    cursor: pointer;
+    text-decoration: none;
+    /* Pointillés espacés via background-image — text-decoration: dotted ne permet pas de contrôler l'espacement */
+    background-image: radial-gradient(circle, rgba(255, 255, 255, .6) 1.5px, transparent 1.5px);
+    background-size: 6px 2px;
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    padding-bottom: 3px;
+    transition: color .2s;
+}
+
+.acc-def-trigger:hover,
+.acc-def-trigger[aria-expanded="true"] {
+    color: var(--orange);
+    background-image: radial-gradient(circle, var(--orange) 1.5px, transparent 1.5px);
+}
+
+/* Hero observatoire — fond clair, points en violet semi-transparent */
+.obs-hero-content .acc-def-trigger {
+    background-image: radial-gradient(circle, rgba(75, 75, 139, .5) 1.5px, transparent 1.5px);
+}
+
+.obs-hero-content .acc-def-trigger:hover,
+.obs-hero-content .acc-def-trigger[aria-expanded="true"] {
+    background-image: radial-gradient(circle, var(--orange) 1.5px, transparent 1.5px);
+}
+
+.obs-hero-content .acc-def-star {
+    color: rgba(75, 75, 139, .7);
+}
+
+.acc-def-star {
+    font-size: .5em;
+    vertical-align: super;
+    color: rgba(255, 255, 255, .85);
+    margin-left: 1px;
+    line-height: 1;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    transition: color .2s;
+}
+
+.acc-def-trigger:hover .acc-def-star,
+.acc-def-trigger[aria-expanded="true"] .acc-def-star {
+    color: var(--orange);
+}
+
+.acc-def-box {
+    position: fixed;
+    z-index: 9999;
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    background: #fff;
+    color: #333;
+    font-family: var(--ubuntu);
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.7;
+    padding: 20px 22px;
+    border-radius: 12px;
+    border-left: 4px solid var(--violet);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .2), 0 2px 8px rgba(0, 0, 0, .1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    transform: translateY(8px);
+}
+
+.acc-def-box.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.acc-def-box::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: var(--arrow-left, 50%);
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: #fff;
+}
+
+.acc-def-box.acc-def-below::before {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: #fff;
+}
+
+.acc-def-box p { margin: 0; }
+
+.acc-def-note {
+    font-size: .8rem;
+    color: #999;
+    font-style: italic;
+    padding-top: 12px;
+    margin-top: 12px !important;
+    border-top: 1px solid #eee;
+}
+
+/* =====================================================
    SKIP LINK (accessibilité — visible uniquement au focus)
    ===================================================== */
 .prh-skip-link {

@@ -246,6 +246,30 @@ get_header();
                 </div>
             </section>
 
+            <!-- 6. Crédits -->
+            <section class="ml-section">
+                <div class="ml-section-header">
+                    <span class="ml-badge">6</span>
+                    <h2>Crédits</h2>
+                </div>
+                <div class="ml-card ml-card-text">
+                    <p class="ml-text-icon">
+                        <span class="ml-icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                            </svg>
+                        </span>
+                        <span>
+                            Carte du Haut-Rhin utilisée dans la page Observatoire — source :
+                            <a href="https://www.ajpn.org/cartedepart-Haut-Rhin-68.html"
+                               target="_blank" rel="noopener noreferrer" class="ml-contact-link">
+                                ajpn.org — Carte de départ du Haut-Rhin (68)
+                            </a>
+                        </span>
+                    </p>
+                </div>
+            </section>
+
             <p class="ml-update-date">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
                     <path

@@ -279,97 +279,37 @@ body .acc-page .acc-hero {
     line-height: 1.6;
 }
 
-/* =====================================================
-   TOOLTIP DÉFINITION INCLUSION
-   ===================================================== */
-.acc-def-trigger {
-    cursor: pointer;
-    text-decoration-line: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: rgba(255, 255, 255, .55);
-    text-underline-offset: 4px;
-    transition: color .2s, text-decoration-color .2s;
+/* --- Animation d'entrée hero --- */
+@keyframes acc-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.acc-def-trigger:hover,
-.acc-def-trigger[aria-expanded="true"] {
-    color: var(--orange);
-    text-decoration-color: var(--orange);
-}
-
-.acc-def-star {
-    font-size: .5em;
-    vertical-align: super;
-    color: rgba(255, 255, 255, .85);
-    margin-left: 1px;
-    line-height: 1;
-    font-family: var(--ubuntu);
-    font-weight: 700;
-    transition: color .2s;
-}
-
-.acc-def-trigger:hover .acc-def-star,
-.acc-def-trigger[aria-expanded="true"] .acc-def-star {
-    color: var(--orange);
-}
-
-.acc-def-box {
-    position: fixed;
-    z-index: 9999;
-    width: 320px;
-    max-width: calc(100vw - 32px);
-    background: #fff;
-    color: #333;
-    font-family: var(--ubuntu);
-    font-size: .875rem;
-    font-weight: 400;
-    line-height: 1.7;
-    padding: 20px 22px;
-    border-radius: 12px;
-    border-left: 4px solid var(--violet);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, .2), 0 2px 8px rgba(0, 0, 0, .1);
+.acc-hero-content h1,
+.acc-hero-content p,
+.acc-hero-content .acc-hero-btns {
     opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
-    transform: translateY(8px);
+    animation: acc-fade-up .65s cubic-bezier(.22, .61, .36, 1) forwards;
 }
 
-.acc-def-box.is-open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
+.acc-hero-content h1        { animation-delay:   0ms; }
+.acc-hero-content p         { animation-delay: 160ms; }
+.acc-hero-content .acc-hero-btns { animation-delay: 320ms; }
 
-/* Flèche pointant vers le bas (tooltip au-dessus du mot — défaut) */
-.acc-def-box::before {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: var(--arrow-left, 50%);
-    transform: translateX(-50%);
-    border: 8px solid transparent;
-    border-top-color: #fff;
-}
-
-/* Flèche pointant vers le haut (tooltip en dessous — fallback) */
-.acc-def-box.acc-def-below::before {
-    top: auto;
-    bottom: 100%;
-    border-top-color: transparent;
-    border-bottom-color: #fff;
-}
-
-.acc-def-box p {
-    margin: 0;
-}
-
-body .acc-def-note {
-    font-size: .8rem;
-    color: #999;
-    font-style: italic;
-    padding-top: 12px;
-    margin-top: 12px;
-    border-top: 1px solid #eee;
+/* Respect des préférences de réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    .acc-hero-content h1,
+    .acc-hero-content p,
+    .acc-hero-content .acc-hero-btns {
+        opacity: 1;
+        animation: none;
+    }
 }
 
 /* =====================================================
