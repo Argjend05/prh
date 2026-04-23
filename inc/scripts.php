@@ -61,11 +61,7 @@ if ( ! function_exists( 'ml_nl2br' ) ) {
 remove_action( 'wp_head', 'wp_site_icon' );
 
 add_action( 'wp_head', function () {
-    $url = esc_url( get_stylesheet_directory_uri() . '/logo.svg' );
-    // SVG (navigateurs modernes + Google Search)
-    echo '<link rel="icon" type="image/svg+xml" href="' . $url . '">' . "\n";
-    // Fallback PNG si le SVG n'est pas supporté
-    echo '<link rel="shortcut icon" href="' . $url . '">' . "\n";
-    // Apple touch icon (partage iOS, PWA)
-    echo '<link rel="apple-touch-icon" href="' . $url . '">' . "\n";
-}, 1 ); // priorité 1 = s'exécute avant wp_site_icon (priorité 10)
+    $svg = esc_url( get_stylesheet_directory_uri() . '/logo.svg' );
+    echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . $svg . '">' . "\n";
+}, 1 );

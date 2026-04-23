@@ -5,6 +5,19 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <meta name="google-site-verification" content="bMPN8fsSVj0T_6AgGBnv_fZ5vfZJkiFBMrzjemMfNOc" />
+    <?php
+    $prh_meta_description = '';
+    if ( is_singular() ) {
+        $prh_meta_description = get_the_excerpt();
+    }
+    if ( empty( $prh_meta_description ) ) {
+        $prh_meta_description = get_bloginfo( 'description' );
+    }
+    if ( empty( $prh_meta_description ) ) {
+        $prh_meta_description = 'Le PRH 68 (Pôle Ressources Handicap du Haut-Rhin) vous accompagne pour l\'inclusion des enfants et jeunes en situation de handicap. Accueil, écoute, conseil et orientation.';
+    }
+    ?>
+    <meta name="description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
     <?php wp_head(); ?>
 </head>
 
