@@ -112,7 +112,7 @@
 }
 
 .acc-color-turquoise {
-    color: var(--turquoise);
+    color: var(--turquoise-text);
 }
 
 /* =====================================================
@@ -362,7 +362,7 @@ body .acc-page .acc-hero {
 
 .acc-stat-label {
     font-size: .85rem;
-    color: #777;
+    color: #555;
     line-height: 1.4;
 }
 
