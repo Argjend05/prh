@@ -61,7 +61,10 @@ if ( ! function_exists( 'ml_nl2br' ) ) {
 remove_action( 'wp_head', 'wp_site_icon' );
 
 add_action( 'wp_head', function () {
-    $svg = esc_url( get_stylesheet_directory_uri() . '/logo.svg' );
+    $uri = get_stylesheet_directory_uri();
+    $png = esc_url( $uri . '/logos/favicon.png' );
+    $svg = esc_url( $uri . '/logo.svg' );
+    echo '<link rel="icon" type="image/png" sizes="32x32" href="' . $png . '">' . "\n";
     echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
-    echo '<link rel="apple-touch-icon" href="' . $svg . '">' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . $png . '">' . "\n";
 }, 1 );
