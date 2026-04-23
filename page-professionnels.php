@@ -9,7 +9,6 @@ $f = fn($key, $default) => get_field($key) ?: $default;
 /* ── Hero ─────────────────────────────────────────────── */
 $hero_title = $f('prh68_pro_hero_title', 'Espace Professionnels : Co-construire l\'inclusion');
 $hero_p1 = $f('prh68_pro_hero_p1', 'Vos compétences, votre expérience et votre engagement sont au cœur de cette mission.');
-$hero_p2 = $f('prh68_pro_hero_p2', 'Votre créativité et votre capacité à vous adapter au quotidien permettent de répondre au plus près aux besoins de chaque enfant.');
 
 /* ── Pourquoi ─────────────────────────────────────────── */
 $why_title = $f('prh68_pro_why_title', 'Pourquoi nous solliciter ?');
@@ -91,7 +90,6 @@ $acc6_items = [
                     }
                 ?></h1>
                 <p><?= esc_html($hero_p1) ?></p>
-                <p><?= esc_html($hero_p2) ?></p>
                 <a href="#nos-accompagnements" class="pro-hero-btn">
                     Voir les accompagnements
                     <img src="<?= esc_url($icons_base . 'fleche.svg') ?>" alt="" width="16" height="13"

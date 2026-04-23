@@ -82,11 +82,6 @@
     font-weight: 500;
 }
 
-.pro-hero-content p:first-of-type {
-    border-bottom: 1px solid rgba(255, 255, 255, .25);
-    padding-bottom: 16px;
-    margin-bottom: 16px;
-}
 
 .pro-hero-content p:last-child {
     margin-bottom: 0;

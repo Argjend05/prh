@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.0.4
+ Version:      1.0.5
 */
 
 /* =====================================================
@@ -459,6 +459,24 @@ body .prh-mobile-nav-list li a {
     font-family: var(--ubuntu);
     color: #333;
     padding: 0 128px;
+}
+
+@media (max-width: 1100px) {
+    .prh-default-page {
+        padding: 0 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .prh-default-page {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prh-default-page {
+        padding: 0 14px;
+    }
 }
 
 .prh-default-container {
