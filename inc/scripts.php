@@ -54,6 +54,21 @@ if ( ! function_exists( 'ml_nl2br' ) ) {
 }
 
 /* =======================================================
+   STRUCTURED DATA (site name pour Google)
+   ======================================================= */
+
+add_action( 'wp_head', function () {
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type'    => 'WebSite',
+        'name'     => 'PRH68',
+        'alternateName' => 'Pôle Ressources Handicap du Haut-Rhin',
+        'url'      => home_url( '/' ),
+    ];
+    echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
+}, 1 );
+
+/* =======================================================
    FAVICON
    ======================================================= */
 
