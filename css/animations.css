@@ -6,9 +6,7 @@
 [data-reveal] {
     opacity: 0;
     transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                filter 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: opacity, transform, filter;
+                transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 [data-reveal="fade-up"] {
@@ -44,12 +42,10 @@
 /* 2. SURVOL 3D */
 [data-tilt] {
     transform-style: preserve-3d;
-    will-change: transform;
 }
 
 /* 3. BOUTONS MAGNETIQUES */
 [data-magnetic] {
-    will-change: transform;
     display: inline-block; 
 }
 
