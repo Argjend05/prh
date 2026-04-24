@@ -98,7 +98,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
     <section class="pro-hero">
 
         <!-- Décorations animées -->
-        <div class="pro-hero-deco" aria-hidden="true">
+        <div class="pro-hero-deco" aria-hidden="true" data-parallax="0.15">
             <div class="pro-ring pro-ring-1"></div>
             <div class="pro-ring pro-ring-2"></div>
             <div class="pro-ring pro-ring-3"></div>
@@ -130,7 +130,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
 
         <div class="pro-container">
             <div class="pro-hero-content">
-                <h1><?php
+                <h1 data-reveal="text-soft"><?php
                     $parts = explode( "l'inclusion", $hero_title, 2 );
                     if ( count( $parts ) === 2 ) {
                         echo esc_html( $parts[0] );
@@ -140,8 +140,8 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                         echo esc_html( $hero_title );
                     }
                 ?></h1>
-                <p><?= esc_html($hero_p1) ?></p>
-                <a href="#nos-accompagnements" class="pro-hero-btn">
+                <p data-reveal="text-soft" data-reveal-delay="150"><?= esc_html($hero_p1) ?></p>
+                <a href="#nos-accompagnements" class="pro-hero-btn" data-magnetic>
                     Voir les accompagnements
                     <img src="<?= esc_url($icons_base . 'fleche.svg') ?>" alt="" width="16" height="13"
                         class="pro-hero-btn-arrow">
@@ -158,31 +158,31 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
     <!-- POURQUOI -->
     <section class="pro-why" id="pourquoi">
         <div class="pro-container">
-            <h2 class="pro-section-title"><?= esc_html($why_title) ?></h2>
+            <h2 class="pro-section-title" data-reveal="fade-up"><?= esc_html($why_title) ?></h2>
             <div class="pro-why-grid">
 
-                <div class="pro-why-card pro-why-violet">
+                <div class="pro-why-card pro-why-violet" data-reveal="fade-up" data-reveal-delay="0" data-tilt>
                     <div class="pro-why-icon">
                         <img src="<?= esc_url($icons_base . 'Engrenage-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c1) ?></p>
                 </div>
 
-                <div class="pro-why-card pro-why-turquoise">
+                <div class="pro-why-card pro-why-turquoise" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="pro-why-icon">
                         <img src="<?= esc_url($icons_base . 'Question-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c2) ?></p>
                 </div>
 
-                <div class="pro-why-card pro-why-orange">
+                <div class="pro-why-card pro-why-orange" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                     <div class="pro-why-icon">
                         <img src="<?= esc_url($icons_base . 'Ampoule-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c3) ?></p>
                 </div>
 
-                <div class="pro-why-card pro-why-dark">
+                <div class="pro-why-card pro-why-dark" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                     <div class="pro-why-icon">
                         <img src="<?= esc_url($icons_base . 'Ressources.svg') ?>" alt="" width="28" height="28">
                     </div>
@@ -196,14 +196,14 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
     <!-- NOUS VOUS PROPOSONS -->
     <section class="pro-nvp" id="nos-accompagnements">
         <div class="pro-container">
-            <h2 class="pro-section-title"><?= esc_html($nvp_title) ?></h2>
-            <p class="pro-section-sub"><?= esc_html($nvp_sub) ?></p>
+            <h2 class="pro-section-title" data-reveal="fade-up"><?= esc_html($nvp_title) ?></h2>
+            <p class="pro-section-sub" data-reveal="fade-up" data-reveal-delay="100"><?= esc_html($nvp_sub) ?></p>
             <div class="pro-nvp-grid">
 
                 <!-- Colonne gauche : acc1, acc3, acc5 -->
                 <div class="pro-nvp-col">
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-turquoise">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -228,7 +228,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                         </div>
                     </details>
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-violet">
                                 <img src="<?= esc_url($icons_base . 'Sensibilisation-pro.svg') ?>" alt="" width="22"
@@ -250,7 +250,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                         </div>
                     </details>
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-orange">
                                 <img src="<?= esc_url($icons_base . 'Sacs-pro.svg') ?>" alt="" width="22" height="22">
@@ -276,7 +276,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                 <!-- Colonne droite : acc2, acc4, acc6 -->
                 <div class="pro-nvp-col">
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-violet">
                                 <img src="<?= esc_url($icons_base . 'Appui-pro.svg') ?>" alt="" width="22"
@@ -298,7 +298,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                         </div>
                     </details>
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-orange">
                                 <img src="<?= esc_url($icons_base . 'Accueil-jeunes-pro.svg') ?>" alt="" width="22"
@@ -320,7 +320,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                         </div>
                     </details>
 
-                    <details class="pro-acc-card">
+                    <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="350" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-turquoise">
                                 <img src="<?= esc_url($icons_base . 'Projets-pro.svg') ?>" alt="" width="22"
@@ -351,14 +351,14 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
     <!-- CTA -->
     <section class="pro-cta">
         <div class="pro-container">
-            <h2><?= esc_html($cta_title) ?></h2>
-            <p><?= esc_html($cta_sub) ?></p>
-            <a href="<?= esc_url(get_permalink(get_page_by_path('formulaire-contact'))) ?>" class="pro-cta-btn">
+            <h2 data-reveal="fade-up"><?= esc_html($cta_title) ?></h2>
+            <p data-reveal="fade-up" data-reveal-delay="100"><?= esc_html($cta_sub) ?></p>
+            <a href="<?= esc_url(get_permalink(get_page_by_path('formulaire-contact'))) ?>" class="pro-cta-btn" data-magnetic>
                 <span><?= esc_html($cta_btn) ?></span>
                 <img src="<?= esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg') ?>" alt="" width="18"
                     height="15" class="pro-cta-arrow">
             </a>
-            <div class="pro-cta-contact">
+            <div class="pro-cta-contact" data-reveal="fade-up" data-reveal-delay="200">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24"
                         height="24">

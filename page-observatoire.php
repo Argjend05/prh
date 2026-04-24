@@ -80,7 +80,7 @@ get_header();
 
         <div class="obs-container obs-hero-inner">
             <div class="obs-hero-content">
-                <h1><?php
+                <h1 data-reveal="text-soft"><?php
                     $parts = explode( "l'inclusion", $hero_title, 2 );
                     if ( count( $parts ) === 2 ) {
                         echo esc_html( $parts[0] );
@@ -90,14 +90,14 @@ get_header();
                         echo esc_html( $hero_title );
                     }
                 ?></h1>
-                <p><?php echo esc_html($hero_subtitle); ?></p>
-                <a href="#questionnaires" class="obs-btn-violet">
+                <p data-reveal="text-soft" data-reveal-delay="150"><?php echo esc_html($hero_subtitle); ?></p>
+                <a href="#questionnaires" class="obs-btn-violet" data-magnetic>
                     <span><?php echo esc_html($hero_btn); ?></span>
                     <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
                         width="18" height="15" class="obs-btn-arrow">
                 </a>
             </div>
-            <div class="obs-hero-deco">
+            <div class="obs-hero-deco" data-parallax="0.15">
                 <img src="<?php echo get_stylesheet_directory_uri(); ?>/img/Carte.svg" alt="Carte du Haut-Rhin"
                     class="obs-hero-carte">
             </div>
@@ -113,12 +113,12 @@ get_header();
     <!-- ===================== MISSION ===================== -->
     <section class="obs-mission" id="mission">
         <div class="obs-container">
-            <h2 class="obs-section-title"><?php echo esc_html($mission_title); ?></h2>
-            <p class="obs-section-subtitle"><?php echo esc_html($mission_subtitle); ?></p>
+            <h2 class="obs-section-title" data-reveal="fade-up"><?php echo esc_html($mission_title); ?></h2>
+            <p class="obs-section-subtitle" data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($mission_subtitle); ?></p>
 
             <div class="obs-mission-grid">
 
-                <div class="obs-mission-card bg-violet">
+                <div class="obs-mission-card bg-violet" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="obs-mission-icon-wrap">
                         <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Enfant.svg" alt="Enfants"
                             width="36" height="36">
@@ -127,7 +127,7 @@ get_header();
                     <?php prh68_bullet_list($m1_desc); ?>
                 </div>
 
-                <div class="obs-mission-card bg-turquoise">
+                <div class="obs-mission-card bg-turquoise" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                     <div class="obs-mission-icon-wrap">
                         <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Parents.svg" alt="Parents"
                             width="36" height="36">
@@ -136,7 +136,7 @@ get_header();
                     <?php prh68_bullet_list($m2_desc); ?>
                 </div>
 
-                <div class="obs-mission-card bg-orange">
+                <div class="obs-mission-card bg-orange" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                     <div class="obs-mission-icon-wrap">
                         <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Professionnels.svg"
                             alt="Professionnels" width="36" height="36">
@@ -151,8 +151,8 @@ get_header();
     <!-- ===================== PARTICIPEZ ===================== -->
     <section class="obs-participez" id="questionnaires">
         <div class="obs-container">
-            <h2 class="obs-section-title"><?php echo esc_html($part_title); ?></h2>
-            <p class="obs-section-subtitle"><?php echo esc_html($part_subtitle); ?></p>
+            <h2 class="obs-section-title" data-reveal="fade-up"><?php echo esc_html($part_title); ?></h2>
+            <p class="obs-section-subtitle" data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($part_subtitle); ?></p>
 
             <div class="obs-participez-grid">
 
@@ -168,7 +168,7 @@ get_header();
                         <li><span class="check-orange">✓</span> Anonyme et confidentiel</li>
                         <li><span class="check-orange">✓</span> Accessible 24/7</li>
                     </ul>
-                    <a href="<?php echo esc_url($url_pro); ?>" class="obs-btn-orange">
+                    <a href="<?php echo esc_url($url_pro); ?>" class="obs-btn-orange" data-magnetic>
                         <span>Répondre au Questionnaire</span>
                         <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
                             width="18" height="15" class="obs-btn-arrow-right">
@@ -187,7 +187,7 @@ get_header();
                         <li><span class="check-turquoise">✓</span> Anonyme et confidentiel</li>
                         <li><span class="check-turquoise">✓</span> Accessible 24/7</li>
                     </ul>
-                    <a href="<?php echo esc_url($url_parents); ?>" class="obs-btn-turquoise">
+                    <a href="<?php echo esc_url($url_parents); ?>" class="obs-btn-turquoise" data-magnetic>
                         <span>Répondre au Questionnaire</span>
                         <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
                             width="18" height="15" class="obs-btn-arrow-right">
@@ -209,8 +209,8 @@ get_header();
     <!-- ===================== CYCLE ===================== -->
     <section class="obs-cycle-section" id="cycle">
         <div class="obs-container">
-            <h2 class="obs-section-title"><?php echo esc_html($cycle_title); ?></h2>
-            <p class="obs-section-subtitle"><?php echo esc_html($cycle_subtitle); ?></p>
+            <h2 class="obs-section-title" data-reveal="fade-up"><?php echo esc_html($cycle_title); ?></h2>
+            <p class="obs-section-subtitle" data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($cycle_subtitle); ?></p>
 
             <?php
             $cycle_cfg = [
@@ -233,8 +233,8 @@ get_header();
                 <?php foreach ($cycle_cfg as $n => $cfg):
                     $col = $cfg['color'];
                     if ($n > 1): ?>
-                        <div class="obs-cycle-arrow">→</div><?php endif; ?>
-                    <div class="obs-cycle-card cycle-card-<?php echo $col; ?>">
+                        <div class="obs-cycle-arrow" data-reveal="fade-left" data-reveal-delay="<?php echo ($n * 100); ?>">→</div><?php endif; ?>
+                    <div class="obs-cycle-card cycle-card-<?php echo $col; ?>" data-reveal="fade-up" data-reveal-delay="<?php echo ($n * 150); ?>" data-tilt>
                         <div class="obs-cycle-num bg-<?php echo $col; ?>">
                             <?php echo $cfg['icon']; ?>
                         </div>

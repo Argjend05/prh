@@ -10,9 +10,11 @@ function prh68_enqueue_styles() {
 
     wp_enqueue_style( 'prh68-style', get_stylesheet_uri(), [], $ver );
     wp_enqueue_style( 'local-fonts', $uri . '/css/fonts.css', [ 'prh68-style' ], $ver );
+    wp_enqueue_style( 'animations-style', $uri . '/css/animations.css', [ 'prh68-style' ], $ver );
 
     wp_enqueue_script( 'header-script', $uri . '/js/header.js', [],                  $ver, true );
     wp_enqueue_script( 'common-script', $uri . '/js/common.js', [ 'header-script' ], $ver, true );
+    wp_enqueue_script( 'animations-script', $uri . '/js/animations.js', [ 'common-script' ], $ver, true );
 
     if ( is_page_template( 'page-accueil.php' ) ) {
         wp_enqueue_style(  'accueil-style',  $uri . '/css/style-accueil.css',   [ 'prh68-style' ],   $ver );

@@ -120,14 +120,14 @@ get_header();
 
     <!-- ===================== HERO ===================== -->
     <section class="acc-hero">
-        <div class="acc-hero-blobs" aria-hidden="true">
+        <div class="acc-hero-blobs" aria-hidden="true" data-parallax="0.25">
             <div class="acc-blob acc-blob-1"></div>
             <div class="acc-blob acc-blob-2"></div>
             <div class="acc-blob acc-blob-3"></div>
         </div>
 
         <!-- Décorations animées -->
-        <div class="acc-hero-deco" aria-hidden="true">
+        <div class="acc-hero-deco" aria-hidden="true" data-parallax="0.15">
             <div class="acc-ring acc-ring-1"></div>
             <div class="acc-ring acc-ring-2"></div>
             <div class="acc-ring acc-ring-3"></div>
@@ -159,15 +159,19 @@ get_header();
 
         <div class="acc-hero-wrap">
             <div class="acc-hero-content">
-                <h1>Vous accompagnez des enfants de 0 à 17 ans et souhaitez favoriser <span class="acc-def-trigger"
+                <h1 data-reveal="text-soft">Vous accompagnez des enfants de 0 à 17 ans et souhaitez favoriser <span class="acc-def-trigger"
                         tabindex="0" role="button" aria-expanded="false"
                         aria-controls="acc-def-inclusion">l'inclusion<sup class="acc-def-star">*</sup></span>&nbsp;?
                 </h1>
-                <p><?php echo esc_html($hero_subtitle); ?></p>
+                <p data-reveal="text-soft" data-reveal-delay="150"><?php echo esc_html($hero_subtitle); ?></p>
                 <div class="acc-hero-btns">
-                    <a href="#services" class="acc-btn-orange"><?php echo esc_html($hero_btn1); ?></a>
+                    <a href="#services" class="acc-btn-orange" data-magnetic>
+                        <?php echo esc_html($hero_btn1); ?>
+                    </a>
                     <a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>"
-                        class="acc-btn-hero-outline"><?php echo esc_html($hero_btn2); ?></a>
+                        class="acc-btn-hero-outline" data-magnetic>
+                        <?php echo esc_html($hero_btn2); ?>
+                    </a>
                 </div>
             </div>
         </div>
@@ -182,16 +186,16 @@ get_header();
     <section class="acc-stats">
         <div class="acc-container">
             <div class="acc-stats-grid">
-                <div class="acc-stat">
-                    <span class="acc-stat-number"><?php echo esc_html($stat1_num); ?></span>
+                <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="0">
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat1_num); ?>">0</span>
                     <span class="acc-stat-label"><?php echo esc_html($stat1_lbl); ?></span>
                 </div>
-                <div class="acc-stat">
-                    <span class="acc-stat-number"><?php echo esc_html($stat2_num); ?></span>
+                <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="100">
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat2_num); ?>">0</span>
                     <span class="acc-stat-label"><?php echo esc_html($stat2_lbl); ?></span>
                 </div>
-                <div class="acc-stat">
-                    <span class="acc-stat-number"><?php echo esc_html($stat3_num); ?></span>
+                <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="200">
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat3_num); ?>">0</span>
                     <span class="acc-stat-label"><?php echo esc_html($stat3_lbl); ?></span>
                 </div>
             </div>
@@ -201,20 +205,20 @@ get_header();
     <!-- ===================== PRESENTATION / PARTENAIRES ===================== -->
     <section class="acc-presentation" id="presentation">
         <div class="acc-container">
-            <h2 class="acc-section-title"><?php echo esc_html($pres_title); ?></h2>
+            <h2 class="acc-section-title" data-reveal="fade-up"><?php echo esc_html($pres_title); ?></h2>
             <div class="acc-presentation-content">
-                <p><?php echo esc_html($pres_p1); ?></p>
+                <p data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($pres_p1); ?></p>
 
                 <div class="acc-logos-partenaires">
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/sinclair.png"
-                        alt="Marguerite Sinclair">
+                        alt="Marguerite Sinclair" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/adapei.png"
-                        alt="ADAPEI Papillons Blancs d'Alsace">
+                        alt="ADAPEI Papillons Blancs d'Alsace" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/au-fil-de-la-vie.png"
-                        alt="Au Fil de la Vie">
+                        alt="Au Fil de la Vie" data-reveal="fade-up" data-reveal-delay="350" data-tilt>
                 </div>
 
-                <p><?php echo esc_html($pres_p2); ?></p>
+                <p data-reveal="fade-up" data-reveal-delay="200"><?php echo esc_html($pres_p2); ?></p>
             </div>
         </div>
     </section>
@@ -222,10 +226,10 @@ get_header();
     <!-- ===================== MISSION / OBJECTIF ===================== -->
     <section class="acc-info">
         <div class="acc-container">
-            <h2 class="acc-section-title"><?php echo esc_html($info_title); ?></h2>
+            <h2 class="acc-section-title" data-reveal="fade-up"><?php echo esc_html($info_title); ?></h2>
             <div class="acc-info-grid">
 
-                <div class="acc-info-card acc-card-violet">
+                <div class="acc-info-card acc-card-violet" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="acc-info-card-header">
                         <div class="acc-info-icon acc-icon-violet">
                             <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Mission.svg'); ?>"
@@ -236,7 +240,7 @@ get_header();
                     <p><?php echo esc_html($card1_text); ?></p>
                 </div>
 
-                <div class="acc-info-card acc-card-turquoise">
+                <div class="acc-info-card acc-card-turquoise" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                     <div class="acc-info-card-header">
                         <div class="acc-info-icon acc-icon-turquoise">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26"
@@ -257,7 +261,7 @@ get_header();
     <!-- ===================== PROFESSIONNELS ===================== -->
     <section class="acc-pro">
         <div class="acc-container">
-            <p class="acc-pro-title"><?php echo esc_html($pro_intro); ?></p>
+            <p class="acc-pro-title" data-reveal="fade-up"><?php echo esc_html($pro_intro); ?></p>
             <div class="acc-pro-items">
                 <?php
                 $pro_url = esc_url(get_permalink(get_page_by_path('professionnel')));
@@ -265,7 +269,7 @@ get_header();
                 foreach ($pro_items as $i => $label):
                     $icon = $pro_icons[$i];
                     ?>
-                    <a href="<?php echo $pro_url; ?>" class="acc-pro-item" style="text-decoration:none;">
+                    <a href="<?php echo $pro_url; ?>" class="acc-pro-item" style="text-decoration:none;" data-reveal="fade-up" data-reveal-delay="<?php echo $i * 50; ?>" data-tilt>
                         <div class="acc-pro-icon <?php echo $pro_classes[$i]; ?>">
                             <img src="<?php echo esc_url($icons_base . $icon); ?>" alt="" width="26" height="26">
                         </div>
@@ -273,19 +277,19 @@ get_header();
                     </a>
                 <?php endforeach; ?>
             </div>
-            <p class="acc-pro-subtitle"><?php echo esc_html($pro_sub); ?></p>
+            <p class="acc-pro-subtitle" data-reveal="fade-up" data-reveal-delay="200"><?php echo esc_html($pro_sub); ?></p>
         </div>
     </section>
 
     <!-- ===================== SERVICES ===================== -->
     <section class="acc-services" id="services">
         <div class="acc-container">
-            <h2 class="acc-section-title"><?php echo esc_html($srv_title); ?></h2>
+            <h2 class="acc-section-title" data-reveal="fade-up"><?php echo esc_html($srv_title); ?></h2>
             <div class="acc-services-grid">
 
                 <!-- Colonne gauche -->
                 <div class="acc-services-col">
-                    <details class="acc-service-card acc-border-orange">
+                    <details class="acc-service-card acc-border-orange" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--orange">
                                 <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Professionnels.svg'); ?>"
@@ -302,13 +306,13 @@ get_header();
                                 <?php prh68_acc_items($srv1_items, $srv1_defaults); ?>
                             </ul>
                             <a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnel'))); ?>"
-                                class="acc-btn-service acc-btn-service--orange">
+                                class="acc-btn-service acc-btn-service--orange" data-magnetic>
                                 En savoir plus
                             </a>
                         </div>
                     </details>
 
-                    <details class="acc-service-card acc-border-orange">
+                    <details class="acc-service-card acc-border-orange" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--orange">
                                 <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/icons/reseau.svg"); ?>"
@@ -325,7 +329,7 @@ get_header();
                                 <?php prh68_acc_items($srv2_items, $srv2_defaults); ?>
                             </ul>
                             <a href="<?php echo esc_url(get_permalink(get_page_by_path('evenements-prh68'))); ?>"
-                                class="acc-btn-service acc-btn-service--orange">
+                                class="acc-btn-service acc-btn-service--orange" data-magnetic>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                     width="16" height="16">
                                     <path
@@ -339,7 +343,7 @@ get_header();
 
                 <!-- Colonne droite -->
                 <div class="acc-services-col">
-                    <details class="acc-service-card acc-border-violet">
+                    <details class="acc-service-card acc-border-violet" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--violet">
                                 <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/icons/Partagez-vos-besoins-et-questionnements.svg"); ?>"
@@ -356,13 +360,13 @@ get_header();
                                 <?php prh68_acc_items($srv3_items, $srv3_defaults); ?>
                             </ul>
                             <a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnel'))); ?>"
-                                class="acc-btn-service acc-btn-service--violet">
+                                class="acc-btn-service acc-btn-service--violet" data-magnetic>
                                 En savoir plus
                             </a>
                         </div>
                     </details>
 
-                    <details class="acc-service-card acc-border-turquoise">
+                    <details class="acc-service-card acc-border-turquoise" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--turquoise">
                                 <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Ressources.svg'); ?>"
@@ -379,7 +383,7 @@ get_header();
                                 <?php prh68_acc_items($srv4_items, $srv4_defaults); ?>
                             </ul>
                             <a href="<?php echo esc_url(get_permalink(get_page_by_path('malettes-pedagogiques'))); ?>"
-                                class="acc-btn-ressources">
+                                class="acc-btn-ressources" data-magnetic>
                                 <?php echo esc_html($srv4_btn); ?>
                             </a>
                         </div>
@@ -393,8 +397,8 @@ get_header();
     <!-- ===================== CTA ===================== -->
     <section class="acc-cta">
         <div class="acc-container">
-            <h2><?php echo esc_html($cta_title); ?></h2>
-            <div class="acc-cta-card">
+            <h2 data-reveal="fade-up"><?php echo esc_html($cta_title); ?></h2>
+            <div class="acc-cta-card" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                 <h3><?php echo esc_html($cta_card_title); ?></h3>
                 <p><?php echo esc_html($cta_card_text); ?></p>
                 <div class="acc-cta-phone">
@@ -408,7 +412,7 @@ get_header();
                     <span><?php echo esc_html($cta_phone); ?></span>
                 </div>
                 <a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>"
-                    class="acc-btn-dark"><?php echo esc_html($cta_btn); ?></a>
+                    class="acc-btn-dark" data-magnetic><?php echo esc_html($cta_btn); ?></a>
             </div>
         </div>
     </section>
