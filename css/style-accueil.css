@@ -193,7 +193,7 @@ body .acc-page .acc-hero {
 }
 
 .acc-hero-content {
-    max-width: 850px;
+    max-width: 1060px;
 }
 
 /* Groupe de boutons hero */
@@ -265,18 +265,20 @@ body .acc-page .acc-hero {
 
 .acc-hero-content h1 {
     font-family: var(--montserrat);
-    font-size: clamp(2.2rem, 4.5vw, 3.3rem);
+    font-size: clamp(1.6rem, 3.8vw, 3.5rem);
     font-weight: 800;
     color: #fff;
     line-height: 1.15;
     margin: 0 0 24px;
+    text-wrap: balance;
 }
 
 .acc-hero-content p {
-    font-size: 1.35rem;
+    font-size: clamp(1rem, 1.6vw, 1.35rem);
     color: rgba(255, 255, 255, .85);
     margin: 0 0 36px;
     line-height: 1.6;
+    text-wrap: balance;
 }
 
 /* --- Animation d'entrée hero --- */
@@ -591,11 +593,12 @@ body .acc-info-card.acc-card-turquoise {
 
 .acc-section-title {
     font-family: var(--montserrat);
-    font-size: 2rem;
+    font-size: clamp(1.4rem, 2.6vw, 2.6rem);
     font-weight: 800;
     color: var(--violet);
     text-align: center;
     margin: 0 0 52px;
+    text-wrap: balance;
 }
 
 .acc-section-title::after {
@@ -849,11 +852,12 @@ body .acc-info-card.acc-card-turquoise {
 
 .acc-cta>.acc-container>h2 {
     font-family: var(--montserrat);
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-size: clamp(1.5rem, 3vw, 2.8rem);
     font-weight: 800;
     color: #fff;
     margin: 0 0 40px;
     line-height: 1.25;
+    text-wrap: balance;
 }
 
 .acc-cta-card {
@@ -872,10 +876,11 @@ body .acc-info-card.acc-card-turquoise {
 
 .acc-cta-card h3 {
     font-family: var(--montserrat);
-    font-size: 1.4rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
     font-weight: 700;
     color: #fff;
     margin: 0 0 12px;
+    text-wrap: balance;
 }
 
 .acc-cta-card>p {
@@ -937,10 +942,6 @@ body .acc-info-card.acc-card-turquoise {
 }
 
 @media (max-width: 640px) {
-    .acc-hero-content h1 {
-        font-size: 1.75rem;
-    }
-
     .acc-hero {
         padding: 60px 20px;
     }
@@ -979,4 +980,195 @@ body .acc-info-card.acc-card-turquoise {
     .acc-pro-items {
         gap: 16px 24px;
     }
+}
+
+/* =====================================================
+   GRANDS ÉCRANS
+   ===================================================== */
+@media (min-width: 1600px) {
+    .acc-container {
+        max-width: 1400px;
+    }
+
+    .acc-hero-content {
+        max-width: 1200px;
+    }
+
+    .acc-hero-wrap {
+        padding-left: 100px;
+    }
+}
+
+/* =====================================================
+   HERO — DÉCORATIONS ANIMÉES
+   ===================================================== */
+.acc-hero-deco {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* ── Rings ──────────────────────────────────────────── */
+.acc-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, .18);
+    animation: acc-ring-drift 16s ease-in-out infinite;
+}
+
+.acc-ring-1 {
+    width: 500px; height: 500px;
+    top: -15%; right: -8%;
+}
+
+.acc-ring-2 {
+    width: 300px; height: 300px;
+    top: 5%; right: 8%;
+    border-color: rgba(255, 255, 255, .12);
+    animation-duration: 11s;
+    animation-direction: reverse;
+    animation-delay: -3s;
+}
+
+.acc-ring-3 {
+    width: 180px; height: 180px;
+    top: 50%; left: 3%;
+    border-color: rgba(255, 190, 80, .25);
+    animation-duration: 9s;
+    animation-delay: -6s;
+}
+
+@keyframes acc-ring-drift {
+    0%, 100% { transform: translate(0, 0)   scale(1); }
+    33%       { transform: translate(16px, -22px) scale(1.05); }
+    66%       { transform: translate(-10px, 14px) scale(.96); }
+}
+
+/* ── Dot grid ───────────────────────────────────────── */
+.acc-dots-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, .3) 1.5px, transparent 1.5px);
+    background-size: 30px 30px;
+    -webkit-mask-image: radial-gradient(ellipse 52% 80% at 88% 22%, black 0%, transparent 68%);
+            mask-image: radial-gradient(ellipse 52% 80% at 88% 22%, black 0%, transparent 68%);
+}
+
+/* ── Floating glassmorphism cards ───────────────────── */
+.acc-float-card {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .13);
+    border: 1px solid rgba(255, 255, 255, .28);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255, 255, 255, .22);
+    animation: acc-card-float 10s ease-in-out infinite;
+}
+
+.acc-fcard-1 {
+    width: 64px; height: 64px;
+    top: 10%; right: 10%;
+    animation-delay: 0s;
+}
+
+.acc-fcard-1 img {
+    filter: brightness(0) invert(1);
+    opacity: .92;
+}
+
+.acc-fcard-2 {
+    width: 54px; height: 54px;
+    top: 28%; right: 5%;
+    color: rgba(255, 255, 255, .9);
+    animation-delay: -3s;
+}
+
+.acc-fcard-3 {
+    width: 50px; height: 50px;
+    top: 5%; right: 26%;
+    animation-delay: -1.5s;
+}
+
+.acc-fcard-3 img {
+    filter: brightness(0) invert(1);
+    opacity: .88;
+}
+
+@keyframes acc-card-float {
+    0%, 100% { transform: translateY(0)      rotate(0deg);  opacity: .85; }
+    35%       { transform: translateY(-14px)  rotate(4deg);  opacity: 1;   }
+    70%       { transform: translateY(-6px)   rotate(-3deg); opacity: .9;  }
+}
+
+/* ── Floating pills ─────────────────────────────────── */
+.acc-float-pill {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .14);
+    border: 1px solid rgba(255, 255, 255, .28);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, .92);
+    font-family: var(--ubuntu);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+    animation: acc-pill-float 12s ease-in-out infinite;
+}
+
+.acc-fpill-1 {
+    top: 38%; right: 14%;
+    animation-delay: -2s;
+}
+
+.acc-fpill-2 {
+    top: 20%; right: 20%;
+    animation-delay: -5s;
+}
+
+@keyframes acc-pill-float {
+    0%, 100% { transform: translateY(0)     rotate(0deg);  opacity: .8; }
+    40%       { transform: translateY(-10px) rotate(-2deg); opacity: 1; }
+    75%       { transform: translateY(-4px)  rotate(1deg);  opacity: .88; }
+}
+
+/* ── Responsive décorations ─────────────────────────── */
+@media (max-width: 860px) {
+    .acc-ring-1 { width: 380px; height: 380px; }
+    .acc-fcard-3 { right: 20%; }
+    .acc-fpill-2 { right: 14%; }
+}
+
+@media (max-width: 640px) {
+    .acc-ring-1 { width: 260px; height: 260px; top: -6%; right: -6%; }
+    .acc-ring-2 { width: 160px; height: 160px; top: 6%;  right: 6%; }
+    .acc-ring-3 { width: 110px; height: 110px; top: 46%; left: 4%; }
+
+    .acc-fcard-1 { top: 9%;  right: 6%; width: 54px; height: 54px; }
+    .acc-fcard-2 { top: 28%; right: 4%; width: 46px; height: 46px; }
+    .acc-fcard-3 { top: 6%;  right: 22%; width: 44px; height: 44px; }
+
+    .acc-fpill-1 { top: 40%; right: 8%; font-size: .7rem; padding: 6px 11px; }
+    .acc-fpill-2 { top: 20%; right: 12%; font-size: .7rem; padding: 6px 11px; }
+
+    .acc-dots-grid {
+        -webkit-mask-image: radial-gradient(ellipse 75% 55% at 85% 18%, black 0%, transparent 68%);
+                mask-image: radial-gradient(ellipse 75% 55% at 85% 18%, black 0%, transparent 68%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .acc-ring, .acc-float-card, .acc-float-pill { animation: none; opacity: .6; }
 }

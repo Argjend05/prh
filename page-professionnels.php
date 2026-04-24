@@ -96,6 +96,38 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
 
     <!-- HERO -->
     <section class="pro-hero">
+
+        <!-- Décorations animées -->
+        <div class="pro-hero-deco" aria-hidden="true">
+            <div class="pro-ring pro-ring-1"></div>
+            <div class="pro-ring pro-ring-2"></div>
+            <div class="pro-ring pro-ring-3"></div>
+            <div class="pro-dots-grid"></div>
+
+            <div class="pro-float-card pro-fcard-1">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+                    <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+                </svg>
+            </div>
+            <div class="pro-float-card pro-fcard-2">
+                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Projets-pro.svg'); ?>"
+                                alt="" width="26" height="26">
+            </div>
+            <div class="pro-float-card pro-fcard-3">
+                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Engrenage-pro.svg'); ?>"
+                                alt="" width="26" height="26">
+            </div>
+
+            <div class="pro-float-pill pro-fpill-1">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                Co-construire
+            </div>
+            <div class="pro-float-pill pro-fpill-2">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                Accueil inclusif
+            </div>
+        </div>
+
         <div class="pro-container">
             <div class="pro-hero-content">
                 <h1><?php

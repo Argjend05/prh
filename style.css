@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.0.9
+ Version:      1.1.4
 */
 
 /* =====================================================
@@ -312,12 +312,12 @@ body .prh-mobile-nav-list li a {
 }
 
 /* =====================================================
-   TOOLTIP DÉFINITION "INCLUSION" (partagé entre pages)
+   TOOLTIP DÉFINITION "INCLUSION"
    ===================================================== */
 .acc-def-trigger {
     cursor: pointer;
     text-decoration: none;
-    /* Pointillés espacés via background-image — text-decoration: dotted ne permet pas de contrôler l'espacement */
+
     background-image: radial-gradient(circle, rgba(255, 255, 255, .6) 1.5px, transparent 1.5px);
     background-size: 6px 2px;
     background-position: 0 100%;
@@ -444,7 +444,7 @@ body .prh-mobile-nav-list li a {
 }
 
 /* =====================================================
-   WRAPPER GLOBAL (remplace Neve)
+   WRAPPER GLOBAL 
    ===================================================== */
 .wrapper {
     width: 100%;
@@ -455,7 +455,7 @@ body .prh-mobile-nav-list li a {
 }
 
 /* =====================================================
-   PAGE PAR DÉFAUT (page.php — pages plugin)
+   PAGE PAR DÉFAUT
    ===================================================== */
 .prh-default-page {
     font-family: var(--ubuntu);
@@ -532,12 +532,13 @@ body .prh-mobile-nav-list li a {
    ===================================================== */
 .obs-section-title {
     font-family: var(--montserrat);
-    font-size: 2.2rem;
+    font-size: clamp(1.4rem, 2.6vw, 2.8rem);
     font-weight: 800;
     color: var(--violet);
     text-align: center;
     margin: 0 0 14px;
     padding: 0;
+    text-wrap: balance;
 }
 
 .obs-section-title::after {
@@ -553,10 +554,11 @@ body .prh-mobile-nav-list li a {
 .obs-section-subtitle {
     text-align: center;
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: clamp(.9rem, 1.2vw, 1.1rem);
     line-height: 1.6;
     margin: 0 auto 50px;
     max-width: 680px;
+    text-wrap: balance;
 }
 
 /* =====================================================
@@ -592,7 +594,6 @@ body .obs-btn-violet {
 
 .obs-btn-violet:hover .obs-btn-arrow {
     transform: rotate(90deg) translateX(4px);
-    /* Se déplace vers le bas puisque l'axe X est tourné de 90° */
 }
 
 .obs-btn-arrow-right {
@@ -696,24 +697,26 @@ body .obs-btn-turquoise {
 }
 
 .obs-hero-content {
-    max-width: 1000px;
+    max-width: 1100px;
     text-align: left;
 }
 
 .obs-hero h1 {
     font-family: var(--montserrat);
-    font-size: 3rem;
+    font-size: clamp(1.6rem, 3.5vw, 3.2rem);
     font-weight: 800;
     color: var(--violet);
     margin: 0;
     line-height: 1.2;
+    text-wrap: balance;
 }
 
 .obs-hero p {
-    font-size: 1.3rem;
+    font-size: clamp(.95rem, 1.5vw, 1.3rem);
     color: #555;
     margin: 18px 0 0;
     line-height: 1.5;
+    text-wrap: balance;
 }
 
 /* Blobs décoratifs du hero */
@@ -894,7 +897,7 @@ body .obs-btn-turquoise {
 }
 
 .obs-hero-carte {
-    width: 260px;
+    width: 220px;
     height: auto;
     display: block;
     position: relative;
@@ -1556,10 +1559,6 @@ body ul.obs-footer-contact {
         display: none;
     }
 
-    .obs-hero h1 {
-        font-size: 2.2rem;
-    }
-
     .obs-cycle-grid {
         flex-direction: column;
         align-items: center;
@@ -1584,14 +1583,6 @@ body ul.obs-footer-contact {
 @media (max-width: 640px) {
     .obs-hero-content {
         text-align: center;
-    }
-
-    .obs-hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .obs-section-title {
-        font-size: 1.7rem;
     }
 
     .obs-mission-grid,
@@ -1619,5 +1610,18 @@ body ul.obs-footer-contact {
         flex-direction: column;
         gap: 8px;
         align-items: center;
+    }
+}
+
+/* =====================================================
+   GRANDS ÉCRANS (27" et +)
+   ===================================================== */
+@media (min-width: 1600px) {
+    .obs-container {
+        max-width: 1400px;
+    }
+
+    .obs-hero-content {
+        max-width: 1300px;
     }
 }

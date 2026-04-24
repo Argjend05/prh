@@ -1,5 +1,4 @@
 <?php
-/* Template pour les pages "Modèle par défaut" */
 get_header();
 ?>
 
