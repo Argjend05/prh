@@ -70,43 +70,64 @@ document.addEventListener('DOMContentLoaded', () => {
         const tiltElements = document.querySelectorAll('[data-tilt]');
         
         tiltElements.forEach(el => {
+            let rect, centerX, centerY;
+            
+            el.addEventListener('mouseenter', () => {
+                rect = el.getBoundingClientRect();
+                centerX = rect.width / 2;
+                centerY = rect.height / 2;
+            });
+
             el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
+                if (!rect) return;
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
                 
                 const maxTilt = 8;
                 const tiltX = ((y - centerY) / centerY) * -maxTilt;
                 const tiltY = ((x - centerX) / centerX) * maxTilt;
                 
-                el.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-                el.style.transition = 'transform 0.1s ease-out';
+                window.requestAnimationFrame(() => {
+                    el.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    el.style.transition = 'transform 0.1s ease-out';
+                });
             });
             
             el.addEventListener('mouseleave', () => {
-                el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                el.style.transition = 'transform 0.5s ease';
+                rect = null;
+                window.requestAnimationFrame(() => {
+                    el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    el.style.transition = 'transform 0.5s ease';
+                });
             });
         });
 
         const magneticElements = document.querySelectorAll('[data-magnetic]');
         
         magneticElements.forEach(el => {
+            let rect;
+            
+            el.addEventListener('mouseenter', () => {
+                rect = el.getBoundingClientRect();
+            });
+
             el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
+                if (!rect) return;
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
                 
-                el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-                el.style.transition = 'transform 0.1s ease-out';
+                window.requestAnimationFrame(() => {
+                    el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                    el.style.transition = 'transform 0.1s ease-out';
+                });
             });
             
             el.addEventListener('mouseleave', () => {
-                el.style.transform = 'translate(0px, 0px)';
-                el.style.transition = 'transform 0.5s ease-out';
+                rect = null;
+                window.requestAnimationFrame(() => {
+                    el.style.transform = 'translate(0px, 0px)';
+                    el.style.transition = 'transform 0.5s ease-out';
+                });
             });
         });
     }

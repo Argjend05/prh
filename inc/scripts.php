@@ -119,7 +119,7 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
     return $tag;
 }, 10, 2 );
 
-// 4. Supprimer les requêtes Google Fonts tierces (car polices hébergées localement)
+// 4. Supprimer les requêtes Google Fonts
 add_filter( 'style_loader_src', function ( $href ) {
     if ( strpos( $href, 'fonts.googleapis.com' ) !== false ) {
         return false;
