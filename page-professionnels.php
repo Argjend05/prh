@@ -37,40 +37,59 @@ $cta_email = $f('prh68_pro_cta_email', 'contact@prh68.fr');
 /* ── Chemin icônes ────────────────────────────────────── */
 $icons_base = get_stylesheet_directory_uri() . '/icons/';
 
-/* ── Contenu accordéons (hardcodé) ───────────────────── */
-$acc1_items = [
+/* ── Helper : parse "Titre | Description" par ligne ──── */
+$parse_acc_items = function( $raw, $defaults = [] ) {
+    $lines = array_filter( array_map( 'trim', explode( "\n", $raw ) ) );
+    if ( empty( $lines ) ) return $defaults;
+    $items = [];
+    foreach ( $lines as $line ) {
+        $parts   = array_map( 'trim', explode( '|', $line, 2 ) );
+        $items[] = [ $parts[0], $parts[1] ?? '' ];
+    }
+    return $items;
+};
+
+/* ── Contenu accordéons via ACF ──────────────────────── */
+$acc1_defaults = [
     ['Écoute bienveillante', 'Soyez libre de vous exprimer, de partager vos ressentis, vos questions ou vos difficultés, sans jugement'],
     ['Soutien', 'Appelez le PRH68 si vous avez besoin d\'être conforté et/ou rassuré dans votre pratique professionnelle'],
     ['Conseils personnalisés', 'Le PRH68 vous propose des pistes d\'actions concrètes, en lien avec les besoins des enfants et votre réalité de terrain'],
     ['Orientation', 'Si nécessaire, le PRH68 vous oriente vers les partenaires du réseau'],
 ];
-$acc2_items = [
+$acc2_defaults = [
     ['Observations', 'Le PRH68 observe les besoins des enfants, l\'aménagement de l\'espace, la structuration du temps et les réponses éducatives afin de croiser son regard avec le vôtre'],
     ['Temps réflexifs', 'Lors de réunions d\'équipe, échangez autour de vos questionnements et des situations rencontrées pour faire évoluer les pratiques professionnelles'],
     ['Préconisations', 'Le PRH68 vous transmet un écrit avec des pistes de réflexion et des outils concrets adaptés aux besoins des enfants'],
     ['Mise en place d\'outils', 'Le PRH68 vous accompagne dans la mise en œuvre d\'outils et d\'adaptations au quotidien, en lien avec votre réalité de terrain'],
     ['Dialogue avec les partenaires', 'Si besoin, le PRH68 vous accompagne dans vos échanges avec les parents et les partenaires'],
 ];
-$acc3_items = [
+$acc3_defaults = [
     ['Sessions thématiques', 'Partagez vos questions, vos observations et votre réalité de terrain afin de co-construire des temps de sensibilisation adaptés à vos besoins'],
     ['Apports de connaissances', 'Selon vos besoins, des contenus peuvent être proposés sous différentes formes (supports visuels, vidéos, affiches…)'],
     ['Formats interactifs', 'Selon les objectifs, des outils ludiques, participatifs ou immersifs peuvent être proposés'],
     ['Temps d\'échange', 'Ces temps sont conçus comme des espaces ouverts à la discussion, favorisant les échanges et le partage d\'expériences'],
 ];
-$acc4_items = [
+$acc4_defaults = [
     ['Prendre du recul', 'Si vous le souhaitez, changez de regard sur votre quotidien professionnel pour ouvrir de nouvelles pistes d\'action'],
     ['Découvrir d\'autres pratiques', 'Observez d\'autres lieux d\'accueil, sources d\'inspiration pour enrichir vos pratiques'],
     ['S\'inspirer de situations concrètes', 'Repérez des aménagements, des outils et des postures liés à l\'accueil inclusif'],
     ['Échanger entre professionnels', 'Rencontrez d\'autres équipes et partagez vos expériences'],
 ];
-$acc5_items = [
+$acc5_defaults = [
     ['Prêt de matériel', 'Le PRH68 met à votre disposition du matériel éducatif pour vous permettre de le tester avant un éventuel investissement'],
     ['Mise en pratique', 'Le PRH68 vous accompagne dans la compréhension et l\'appropriation du matériel, en lien avec les besoins des enfants et votre réalité de terrain'],
 ];
-$acc6_items = [
+$acc6_defaults = [
     ['Dynamique inclusive', 'Favoriser l\'échange et l\'implication de chacun.'],
     ['Conseil aux structures', 'Accompagner la mise en place de projets spécifiques d\'inclusion.'],
 ];
+
+$acc1_items = $parse_acc_items( $f( 'prh68_pro_acc1_items', '' ), $acc1_defaults );
+$acc2_items = $parse_acc_items( $f( 'prh68_pro_acc2_items', '' ), $acc2_defaults );
+$acc3_items = $parse_acc_items( $f( 'prh68_pro_acc3_items', '' ), $acc3_defaults );
+$acc4_items = $parse_acc_items( $f( 'prh68_pro_acc4_items', '' ), $acc4_defaults );
+$acc5_items = $parse_acc_items( $f( 'prh68_pro_acc5_items', '' ), $acc5_defaults );
+$acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults );
 ?>
 
 <div class="pro-page">
@@ -105,7 +124,7 @@ $acc6_items = [
     </section>
 
     <!-- POURQUOI -->
-    <section class="pro-why">
+    <section class="pro-why" id="pourquoi">
         <div class="pro-container">
             <h2 class="pro-section-title"><?= esc_html($why_title) ?></h2>
             <div class="pro-why-grid">

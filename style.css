@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.0.8
+ Version:      1.0.9
 */
 
 /* =====================================================
@@ -1508,6 +1508,10 @@ body ul.obs-footer-contact {
 
 .obs-footer-financeurs-logos img:hover {
     opacity: .85;
+}
+
+.obs-footer-financeurs-logos img[alt="CAF du Haut-Rhin"] {
+    height: 64px;
 }
 
 .obs-footer-bottom {

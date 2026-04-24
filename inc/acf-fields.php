@@ -278,14 +278,38 @@ function prh68_acf_register_groups() {
     acf_add_local_field_group( [
         'key' => 'group_prh68_pro_nvp', 'title' => 'Nous vous proposons', 'menu_order' => 32, 'position' => 'normal', 'location' => $loc_pro,
         'fields' => [
-            [ 'key' => 'field_prh68_pro_nvp_title',  'label' => 'Titre section',        'name' => 'prh68_pro_nvp_title',  'type' => 'text',     'default_value' => 'Nous vous proposons' ],
-            [ 'key' => 'field_prh68_pro_nvp_sub',    'label' => 'Sous-titre',            'name' => 'prh68_pro_nvp_sub',    'type' => 'textarea', 'rows' => 2, 'default_value' => "Six types d'interventions co-construites avec vous à partir de vos besoins et de votre réalité de terrain" ],
-            [ 'key' => 'field_prh68_pro_acc1_title', 'label' => 'Accordéon 1 — Titre',  'name' => 'prh68_pro_acc1_title', 'type' => 'text',     'default_value' => 'Appui téléphonique' ],
-            [ 'key' => 'field_prh68_pro_acc2_title', 'label' => 'Accordéon 2 — Titre',  'name' => 'prh68_pro_acc2_title', 'type' => 'text',     'default_value' => "Appui sur votre lieu d'accueil" ],
-            [ 'key' => 'field_prh68_pro_acc3_title', 'label' => 'Accordéon 3 — Titre',  'name' => 'prh68_pro_acc3_title', 'type' => 'text',     'default_value' => 'Sensibilisation collective' ],
-            [ 'key' => 'field_prh68_pro_acc4_title', 'label' => 'Accordéon 4 — Titre',  'name' => 'prh68_pro_acc4_title', 'type' => 'text',     'default_value' => 'Immersion dans des lieux inclusifs' ],
-            [ 'key' => 'field_prh68_pro_acc5_title', 'label' => 'Accordéon 5 — Titre',  'name' => 'prh68_pro_acc5_title', 'type' => 'text',     'default_value' => 'Sacs pédagogiques' ],
-            [ 'key' => 'field_prh68_pro_acc6_title', 'label' => 'Accordéon 6 — Titre',  'name' => 'prh68_pro_acc6_title', 'type' => 'text',     'default_value' => 'Projets / Partenariats' ],
+            [ 'key' => 'field_prh68_pro_nvp_title', 'label' => 'Titre section', 'name' => 'prh68_pro_nvp_title', 'type' => 'text',     'default_value' => 'Nous vous proposons' ],
+            [ 'key' => 'field_prh68_pro_nvp_sub',   'label' => 'Sous-titre',    'name' => 'prh68_pro_nvp_sub',   'type' => 'textarea', 'rows' => 2, 'default_value' => "Six types d'interventions co-construites avec vous à partir de vos besoins et de votre réalité de terrain" ],
+
+            // ── Accordéon 1 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc1_title', 'label' => 'Accordéon 1 — Titre', 'name' => 'prh68_pro_acc1_title', 'type' => 'text', 'default_value' => 'Appui téléphonique' ],
+            [ 'key' => 'field_prh68_pro_acc1_items', 'label' => 'Accordéon 1 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc1_items', 'type' => 'textarea', 'rows' => 5,
+              'default_value' => "Écoute bienveillante | Soyez libre de vous exprimer, de partager vos ressentis, vos questions ou vos difficultés, sans jugement\nSoutien | Appelez le PRH68 si vous avez besoin d'être conforté et/ou rassuré dans votre pratique professionnelle\nConseils personnalisés | Le PRH68 vous propose des pistes d'actions concrètes, en lien avec les besoins des enfants et votre réalité de terrain\nOrientation | Si nécessaire, le PRH68 vous oriente vers les partenaires du réseau" ],
+
+            // ── Accordéon 2 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc2_title', 'label' => 'Accordéon 2 — Titre', 'name' => 'prh68_pro_acc2_title', 'type' => 'text', 'default_value' => "Appui sur votre lieu d'accueil" ],
+            [ 'key' => 'field_prh68_pro_acc2_items', 'label' => 'Accordéon 2 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc2_items', 'type' => 'textarea', 'rows' => 6,
+              'default_value' => "Observations | Le PRH68 observe les besoins des enfants, l'aménagement de l'espace, la structuration du temps et les réponses éducatives afin de croiser son regard avec le vôtre\nTemps réflexifs | Lors de réunions d'équipe, échangez autour de vos questionnements et des situations rencontrées pour faire évoluer les pratiques professionnelles\nPréconisations | Le PRH68 vous transmet un écrit avec des pistes de réflexion et des outils concrets adaptés aux besoins des enfants\nMise en place d'outils | Le PRH68 vous accompagne dans la mise en œuvre d'outils et d'adaptations au quotidien, en lien avec votre réalité de terrain\nDialogue avec les partenaires | Si besoin, le PRH68 vous accompagne dans vos échanges avec les parents et les partenaires" ],
+
+            // ── Accordéon 3 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc3_title', 'label' => 'Accordéon 3 — Titre', 'name' => 'prh68_pro_acc3_title', 'type' => 'text', 'default_value' => 'Sensibilisation collective' ],
+            [ 'key' => 'field_prh68_pro_acc3_items', 'label' => 'Accordéon 3 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc3_items', 'type' => 'textarea', 'rows' => 5,
+              'default_value' => "Sessions thématiques | Partagez vos questions, vos observations et votre réalité de terrain afin de co-construire des temps de sensibilisation adaptés à vos besoins\nApports de connaissances | Selon vos besoins, des contenus peuvent être proposés sous différentes formes (supports visuels, vidéos, affiches…)\nFormats interactifs | Selon les objectifs, des outils ludiques, participatifs ou immersifs peuvent être proposés\nTemps d'échange | Ces temps sont conçus comme des espaces ouverts à la discussion, favorisant les échanges et le partage d'expériences" ],
+
+            // ── Accordéon 4 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc4_title', 'label' => 'Accordéon 4 — Titre', 'name' => 'prh68_pro_acc4_title', 'type' => 'text', 'default_value' => 'Immersion dans des lieux inclusifs' ],
+            [ 'key' => 'field_prh68_pro_acc4_items', 'label' => 'Accordéon 4 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc4_items', 'type' => 'textarea', 'rows' => 5,
+              'default_value' => "Prendre du recul | Si vous le souhaitez, changez de regard sur votre quotidien professionnel pour ouvrir de nouvelles pistes d'action\nDécouvrir d'autres pratiques | Observez d'autres lieux d'accueil, sources d'inspiration pour enrichir vos pratiques\nS'inspirer de situations concrètes | Repérez des aménagements, des outils et des postures liés à l'accueil inclusif\nÉchanger entre professionnels | Rencontrez d'autres équipes et partagez vos expériences" ],
+
+            // ── Accordéon 5 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc5_title', 'label' => 'Accordéon 5 — Titre', 'name' => 'prh68_pro_acc5_title', 'type' => 'text', 'default_value' => 'Sacs pédagogiques' ],
+            [ 'key' => 'field_prh68_pro_acc5_items', 'label' => 'Accordéon 5 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc5_items', 'type' => 'textarea', 'rows' => 3,
+              'default_value' => "Prêt de matériel | Le PRH68 met à votre disposition du matériel éducatif pour vous permettre de le tester avant un éventuel investissement\nMise en pratique | Le PRH68 vous accompagne dans la compréhension et l'appropriation du matériel, en lien avec les besoins des enfants et votre réalité de terrain" ],
+
+            // ── Accordéon 6 ──────────────────────────────────
+            [ 'key' => 'field_prh68_pro_acc6_title', 'label' => 'Accordéon 6 — Titre', 'name' => 'prh68_pro_acc6_title', 'type' => 'text', 'default_value' => 'Projets / Partenariats' ],
+            [ 'key' => 'field_prh68_pro_acc6_items', 'label' => 'Accordéon 6 — Contenu (format : Titre | Description, une entrée par ligne)', 'name' => 'prh68_pro_acc6_items', 'type' => 'textarea', 'rows' => 3,
+              'default_value' => "Dynamique inclusive | Favoriser l'échange et l'implication de chacun.\nConseil aux structures | Accompagner la mise en place de projets spécifiques d'inclusion." ],
         ],
     ] );
 
