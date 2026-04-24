@@ -33,7 +33,7 @@
         <!-- Logo -->
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="prh-header-logo" aria-label="Accueil">
             <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo-header.png"
-                 alt="PRH68 – Pôle Ressources Handicap">
+                 alt="PRH68 – Pôle Ressources Handicap" width="350" height="140">
         </a>
 
         <!-- Nav desktop -->

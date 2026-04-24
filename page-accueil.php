@@ -211,11 +211,11 @@ get_header();
 
                 <div class="acc-logos-partenaires">
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/sinclair.png"
-                        alt="Marguerite Sinclair" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
+                        alt="Marguerite Sinclair" data-reveal="fade-up" data-reveal-delay="150" data-tilt width="192" height="160">
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/adapei.png"
-                        alt="ADAPEI Papillons Blancs d'Alsace" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
+                        alt="ADAPEI Papillons Blancs d'Alsace" data-reveal="fade-up" data-reveal-delay="250" data-tilt width="305" height="160">
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/au-fil-de-la-vie.png"
-                        alt="Au Fil de la Vie" data-reveal="fade-up" data-reveal-delay="350" data-tilt>
+                        alt="Au Fil de la Vie" data-reveal="fade-up" data-reveal-delay="350" data-tilt width="200" height="159">
                 </div>
 
                 <p data-reveal="fade-up" data-reveal-delay="200"><?php echo esc_html($pres_p2); ?></p>
