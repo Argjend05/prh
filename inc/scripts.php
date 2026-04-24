@@ -119,9 +119,13 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
     return $tag;
 }, 10, 2 );
 
-// 4. Supprimer les requêtes Google Fonts
+// 4. Supprimer TOUTES les requêtes Google Fonts
+add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
+add_filter( 'neve_google_fonts_url', '__return_empty_string' );
+add_filter( 'neve_get_fonts_url', '__return_empty_string' );
+
 add_filter( 'style_loader_src', function ( $href ) {
-    if ( strpos( $href, 'fonts.googleapis.com' ) !== false ) {
+    if ( strpos( $href, 'fonts.googleapis.com' ) !== false || strpos( $href, 'fonts.gstatic.com' ) !== false ) {
         return false;
     }
     return $href;
