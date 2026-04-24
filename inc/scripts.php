@@ -85,3 +85,36 @@ add_action( 'wp_head', function () {
     echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
     echo '<link rel="apple-touch-icon" href="' . $png . '">' . "\n";
 }, 1 );
+
+/* =======================================================
+   OPTIMISATIONS
+   ======================================================= */
+
+// 1. Supprimer le CSS inutilisé
+add_action( 'wp_enqueue_scripts', function() {
+    wp_dequeue_style( 'wp-block-library' );
+    wp_dequeue_style( 'wp-block-library-theme' );
+    wp_dequeue_style( 'classic-theme-styles' );
+}, 100 );
+
+// 2. Désactiver les Emojis natifs WP
+add_action( 'init', function() {
+    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+    remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+    remove_action( 'wp_print_styles', 'print_emoji_styles' );
+    remove_action( 'admin_print_styles', 'print_emoji_styles' ); 
+    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' ); 
+    remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+} );
+
+// 3. Defer jQuery
+add_filter( 'script_loader_tag', function ( $tag, $handle ) {
+    if ( is_admin() ) {
+        return $tag;
+    }
+    if ( 'jquery-core' === $handle || 'jquery' === $handle || 'jquery-migrate' === $handle ) {
+        return str_replace( ' src', ' defer="defer" src', $tag );
+    }
+    return $tag;
+}, 10, 2 );
