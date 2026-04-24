@@ -669,8 +669,8 @@ details[open] .pro-acc-chevron {
     .pro-fcard-2 { top: 28%; right: 4%; width: 46px; height: 46px; }
     .pro-fcard-3 { top: 6%;  right: 22%; width: 44px; height: 44px; }
 
-    .pro-fpill-1 { top: 40%; right: 8%;  font-size: .7rem; padding: 6px 11px; }
-    .pro-fpill-2 { top: 20%; right: 12%; font-size: .7rem; padding: 6px 11px; }
+    .pro-fpill-1 { top: 84%; right: 6%;  font-size: .7rem; padding: 6px 11px; }
+    .pro-fpill-2 { top: 15%; right: 6%; font-size: .7rem; padding: 6px 11px; }
 
     .pro-dots-grid {
         -webkit-mask-image: radial-gradient(ellipse 75% 55% at 85% 18%, black 0%, transparent 68%);
