@@ -74,7 +74,7 @@ add_action( 'wp_head', function () {
    FAVICON
    ======================================================= */
 
-// Empêche WordPress d'afficher son propre favicon (logo WP par défaut)
+// Empêche WordPress d'afficher son propre favicon
 remove_action( 'wp_head', 'wp_site_icon' );
 
 add_action( 'wp_head', function () {
@@ -118,3 +118,11 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
     }
     return $tag;
 }, 10, 2 );
+
+// 4. Supprimer les requêtes Google Fonts tierces (car polices hébergées localement)
+add_filter( 'style_loader_src', function ( $href ) {
+    if ( strpos( $href, 'fonts.googleapis.com' ) !== false ) {
+        return false;
+    }
+    return $href;
+} );
