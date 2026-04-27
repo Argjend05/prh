@@ -82,11 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!rect) return;
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                const maxTilt = 8;
+
+                const isOpen = el.open || el.closest('details[open]');
+                const maxTilt = isOpen ? 1.5 : 8;
                 const tiltX = ((y - centerY) / centerY) * -maxTilt;
                 const tiltY = ((x - centerX) / centerX) * maxTilt;
-                
+
                 window.requestAnimationFrame(() => {
                     el.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
                     el.style.transition = 'transform 0.1s ease-out';
