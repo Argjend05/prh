@@ -631,7 +631,9 @@ body .acc-info-card.acc-card-turquoise {
     background: #fff;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
     overflow: hidden;
-    transition: box-shadow .2s;
+    transition: box-shadow .2s,
+                opacity  1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .acc-service-card:hover {
