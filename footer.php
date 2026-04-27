@@ -106,13 +106,13 @@ endif;
         <div class="obs-container">
             <p class="obs-footer-financeurs-label">Nos financeurs</p>
             <div class="obs-footer-financeurs-logos">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/caf.png" alt="CAF du Haut-Rhin" width="55" height="80">
+                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/caf.png" alt="CAF du Haut-Rhin" width="55" height="80" loading="lazy">
                 <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/alsace.png"
-                    alt="Alsace Collectivité européenne" width="66" height="80">
+                    alt="Alsace Collectivité européenne" width="66" height="80" loading="lazy">
                 <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/academie.jpg"
-                    alt="Direction des services départementaux – Haut-Rhin" width="251" height="80">
+                    alt="Direction des services départementaux – Haut-Rhin" width="251" height="80" loading="lazy">
                 <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/msa.jpg"
-                    alt="MSA – Santé Famille Retraite Services" width="133" height="80">
+                    alt="MSA – Santé Famille Retraite Services" width="133" height="80" loading="lazy">
             </div>
         </div>
     </div>

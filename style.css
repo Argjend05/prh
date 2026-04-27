@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.1.6
+ Version:      1.2.6
 */
 
 /* =====================================================
@@ -10,6 +10,10 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
+
+/* Scrollbar native masquée — remplacée par la barre de progression custom */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
 
 body {
     margin: 0;

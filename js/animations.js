@@ -1,5 +1,55 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* =======================================================
+       5. BOUTON RETOUR EN HAUT
+       ======================================================= */
+    const btn = document.createElement('button');
+    btn.id = 'prh-back-to-top';
+    btn.setAttribute('aria-label', 'Retour en haut');
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="18 15 12 9 6 15"/></svg>';
+    document.body.appendChild(btn);
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('is-visible', window.scrollY > 400);
+    }, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' }));
+
+    /* =======================================================
+       6. BARRE DE PROGRESSION
+       ======================================================= */
+    const bar = document.createElement('div');
+    bar.id = 'prh-progress-bar';
+    document.body.prepend(bar);
+    window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+    }, { passive: true });
+
+    /* =======================================================
+       7. SCROLL SPY (liens d'ancrage dans la nav)
+       ======================================================= */
+    const navAnchors = document.querySelectorAll('.prh-nav-list a[href^="#"], .prh-mobile-nav-list a[href^="#"]');
+    if (navAnchors.length) {
+        const spySections = [];
+        navAnchors.forEach(a => {
+            const id = a.getAttribute('href').slice(1);
+            const sec = document.getElementById(id);
+            if (sec) spySections.push({ a, sec });
+        });
+        if (spySections.length) {
+            const spyObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    spySections.forEach(({ a }) => a.classList.remove('spy-active'));
+                    const match = spySections.find(s => s.sec === entry.target);
+                    if (match) match.a.classList.add('spy-active');
+                });
+            }, { rootMargin: '-35% 0px -60% 0px' });
+            spySections.forEach(({ sec }) => spyObserver.observe(sec));
+        }
+    }
+
     if (prefersReducedMotion) return;
 
     /* =======================================================

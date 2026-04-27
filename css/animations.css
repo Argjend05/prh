@@ -53,3 +53,74 @@
 [data-counter] {
     font-variant-numeric: tabular-nums;
 }
+
+/* 5. TRANSITIONS DE PAGE — View Transitions API */
+@view-transition {
+    navigation: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) {
+        animation: prh-vt-out .18s ease forwards;
+    }
+    ::view-transition-new(root) {
+        animation: prh-vt-in .28s ease forwards;
+    }
+    @keyframes prh-vt-out {
+        to { opacity: 0; }
+    }
+    @keyframes prh-vt-in {
+        from { opacity: 0; }
+    }
+}
+
+/* 6. BARRE DE PROGRESSION */
+#prh-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, #ec6f04, #4b4b8b);
+    z-index: 9999;
+    transition: width .1s linear;
+    pointer-events: none;
+}
+
+/* 7. BOUTON RETOUR EN HAUT */
+#prh-back-to-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #4b4b8b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(75, 75, 139, .35);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .3s, transform .3s, background .2s;
+    pointer-events: none;
+    z-index: 998;
+}
+#prh-back-to-top.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+#prh-back-to-top:hover { background: #3a3a7a; }
+@media (max-width: 640px) {
+    #prh-back-to-top { bottom: 20px; right: 16px; width: 40px; height: 40px; }
+}
+
+/* 8. SCROLL SPY */
+.prh-nav-list a.spy-active,
+.prh-mobile-nav-list a.spy-active {
+    color: #ec6f04 !important;
+    font-weight: 700;
+}
