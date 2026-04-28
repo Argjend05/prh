@@ -108,16 +108,6 @@ add_action( 'init', function() {
     remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 } );
 
-// 3. Defer jQuery
-add_filter( 'script_loader_tag', function ( $tag, $handle ) {
-    if ( is_admin() ) {
-        return $tag;
-    }
-    if ( 'jquery-core' === $handle || 'jquery' === $handle || 'jquery-migrate' === $handle ) {
-        return str_replace( ' src', ' defer="defer" src', $tag );
-    }
-    return $tag;
-}, 10, 2 );
 
 // 4. Supprimer TOUTES les requêtes Google Fonts
 add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
@@ -131,14 +121,25 @@ add_filter( 'style_loader_src', function ( $href ) {
     return $href;
 } );
 
-// Filet de sécurité : supprime les balises Google Fonts qui auraient échappé aux filtres
+// Désactiver Google Fonts dans Elementor via l'option DB (évite le @import dans le CSS généré)
+add_filter( 'pre_option_elementor_google_font', '__return_zero' );
+
+// Filet de sécurité : supprime les balises ET @import Google Fonts qui auraient échappé aux filtres
 add_action( 'template_redirect', function () {
     if ( is_admin() ) return;
     ob_start( function ( $html ) {
-        return preg_replace(
+        // Supprime les <link> Google Fonts
+        $html = preg_replace(
             '/<link[^>]+href=["\'][^"\']*fonts\.googleapis\.com[^"\']*["\'][^>]*>/i',
             '',
             $html
         );
+        // Supprime les <style> contenant un @import Google Fonts
+        $html = preg_replace(
+            '/<style[^>]*>.*?@import\s+url\([^)]*fonts\.googleapis\.com[^)]*\).*?<\/style>/is',
+            '',
+            $html
+        );
+        return $html;
     } );
 } );
