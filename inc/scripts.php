@@ -128,18 +128,13 @@ add_filter( 'pre_option_elementor_google_font', '__return_zero' );
 add_action( 'template_redirect', function () {
     if ( is_admin() ) return;
     ob_start( function ( $html ) {
+        if ( ! is_string( $html ) ) return '';
         // Supprime les <link> Google Fonts
-        $html = preg_replace(
-            '/<link[^>]+href=["\'][^"\']*fonts\.googleapis\.com[^"\']*["\'][^>]*>/i',
-            '',
-            $html
-        );
-        // Supprime les <style> contenant un @import Google Fonts
-        $html = preg_replace(
-            '/<style[^>]*>.*?@import\s+url\([^)]*fonts\.googleapis\.com[^)]*\).*?<\/style>/is',
-            '',
-            $html
-        );
+        $r = preg_replace( '/<link[^>]+href=["\'][^"\']*fonts\.googleapis\.com[^"\']*["\'][^>]*>/i', '', $html );
+        if ( is_string( $r ) ) $html = $r;
+        // Supprime uniquement la ligne @import Google Fonts (pas le bloc <style> entier)
+        $r = preg_replace( '/@import\s+url\([\'"]?[^\'")]*fonts\.googleapis\.com[^\'")]*[\'"]?\)\s*;?/i', '', $html );
+        if ( is_string( $r ) ) $html = $r;
         return $html;
     } );
 } );
