@@ -36,8 +36,8 @@
     <meta name="twitter:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
     <meta name="twitter:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
 
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/montserrat-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/ubuntu-400-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/montserrat-800-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/ubuntu-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>" as="image" type="image/webp" fetchpriority="high">
 
     <?php wp_head(); ?>
