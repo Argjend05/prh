@@ -209,13 +209,23 @@ get_header();
             <div class="acc-presentation-content">
                 <p data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($pres_p1); ?></p>
 
+                <?php $uri = get_stylesheet_directory_uri(); ?>
                 <div class="acc-logos-partenaires">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/sinclair.png"
-                        alt="Marguerite Sinclair" data-reveal="fade-up" data-reveal-delay="150" data-tilt width="192" height="160" loading="lazy">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/adapei.png"
-                        alt="ADAPEI Papillons Blancs d'Alsace" data-reveal="fade-up" data-reveal-delay="250" data-tilt width="305" height="160" loading="lazy">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/au-fil-de-la-vie.png"
-                        alt="Au Fil de la Vie" data-reveal="fade-up" data-reveal-delay="350" data-tilt width="200" height="159" loading="lazy">
+                    <picture data-reveal="fade-up" data-reveal-delay="150" data-tilt>
+                        <source srcset="<?php echo esc_url( $uri . '/logos/sinclair.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/logos/sinclair.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/logos/sinclair.webp' ); ?>" alt="Marguerite Sinclair" width="192" height="160" loading="lazy">
+                    </picture>
+                    <picture data-reveal="fade-up" data-reveal-delay="250" data-tilt>
+                        <source srcset="<?php echo esc_url( $uri . '/logos/adapei.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/logos/adapei.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/logos/adapei.webp' ); ?>" alt="ADAPEI Papillons Blancs d'Alsace" width="305" height="160" loading="lazy">
+                    </picture>
+                    <picture data-reveal="fade-up" data-reveal-delay="350" data-tilt>
+                        <source srcset="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.webp' ); ?>" alt="Au Fil de la Vie" width="200" height="159" loading="lazy">
+                    </picture>
                 </div>
 
                 <p data-reveal="fade-up" data-reveal-delay="200"><?php echo esc_html($pres_p2); ?></p>

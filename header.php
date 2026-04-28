@@ -18,6 +18,28 @@
     }
     ?>
     <meta name="description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
+
+    <?php
+    $prh_og_title = is_singular() ? get_the_title() : get_bloginfo( 'name' );
+    $prh_og_url   = is_singular() ? get_permalink() : home_url( '/' );
+    $uri = get_stylesheet_directory_uri();
+    ?>
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="PRH68">
+    <meta property="og:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
+    <meta property="og:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
+    <meta property="og:url"         content="<?php echo esc_url( $prh_og_url ); ?>">
+    <meta property="og:image"       content="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>">
+    <meta property="og:image:width"  content="350">
+    <meta property="og:image:height" content="140">
+    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
+    <meta name="twitter:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
+
+    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/montserrat-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/ubuntu-400-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>" as="image" type="image/webp" fetchpriority="high">
+
     <?php wp_head(); ?>
 </head>
 
@@ -32,8 +54,14 @@
 
         <!-- Logo -->
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="prh-header-logo" aria-label="Accueil">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo-header.png"
-                 alt="PRH68 – Pôle Ressources Handicap" width="350" height="140">
+            <?php $uri = get_stylesheet_directory_uri(); ?>
+            <picture>
+                <source srcset="<?php echo esc_url( $uri . '/logo-header.avif' ); ?>" type="image/avif">
+                <source srcset="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>" type="image/webp">
+                <img src="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>"
+                     alt="PRH68 – Pôle Ressources Handicap" width="350" height="140"
+                     fetchpriority="high" decoding="async">
+            </picture>
         </a>
 
         <!-- Nav desktop -->

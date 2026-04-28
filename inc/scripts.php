@@ -130,3 +130,15 @@ add_filter( 'style_loader_src', function ( $href ) {
     }
     return $href;
 } );
+
+// Filet de sécurité : supprime les balises Google Fonts qui auraient échappé aux filtres
+add_action( 'template_redirect', function () {
+    if ( is_admin() ) return;
+    ob_start( function ( $html ) {
+        return preg_replace(
+            '/<link[^>]+href=["\'][^"\']*fonts\.googleapis\.com[^"\']*["\'][^>]*>/i',
+            '',
+            $html
+        );
+    } );
+} );

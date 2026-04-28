@@ -105,14 +105,28 @@ endif;
     <div class="obs-footer-financeurs">
         <div class="obs-container">
             <p class="obs-footer-financeurs-label">Nos financeurs</p>
+            <?php $uri = get_stylesheet_directory_uri(); ?>
             <div class="obs-footer-financeurs-logos">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/caf.png" alt="CAF du Haut-Rhin" width="55" height="80" loading="lazy">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/alsace.png"
-                    alt="Alsace Collectivité européenne" width="66" height="80" loading="lazy">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/academie.jpg"
-                    alt="Direction des services départementaux – Haut-Rhin" width="251" height="80" loading="lazy">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logos/msa.jpg"
-                    alt="MSA – Santé Famille Retraite Services" width="133" height="80" loading="lazy">
+                <picture>
+                    <source srcset="<?php echo esc_url( $uri . '/logos/caf.avif' ); ?>" type="image/avif">
+                    <source srcset="<?php echo esc_url( $uri . '/logos/caf.webp' ); ?>" type="image/webp">
+                    <img src="<?php echo esc_url( $uri . '/logos/caf.webp' ); ?>" alt="CAF du Haut-Rhin" width="55" height="80" loading="lazy">
+                </picture>
+                <picture>
+                    <source srcset="<?php echo esc_url( $uri . '/logos/alsace.avif' ); ?>" type="image/avif">
+                    <source srcset="<?php echo esc_url( $uri . '/logos/alsace.webp' ); ?>" type="image/webp">
+                    <img src="<?php echo esc_url( $uri . '/logos/alsace.webp' ); ?>" alt="Alsace Collectivité européenne" width="66" height="80" loading="lazy">
+                </picture>
+                <picture>
+                    <source srcset="<?php echo esc_url( $uri . '/logos/academie.avif' ); ?>" type="image/avif">
+                    <source srcset="<?php echo esc_url( $uri . '/logos/academie.webp' ); ?>" type="image/webp">
+                    <img src="<?php echo esc_url( $uri . '/logos/academie.webp' ); ?>" alt="Direction des services départementaux – Haut-Rhin" width="251" height="80" loading="lazy">
+                </picture>
+                <picture>
+                    <source srcset="<?php echo esc_url( $uri . '/logos/msa.avif' ); ?>" type="image/avif">
+                    <source srcset="<?php echo esc_url( $uri . '/logos/msa.webp' ); ?>" type="image/webp">
+                    <img src="<?php echo esc_url( $uri . '/logos/msa.webp' ); ?>" alt="MSA – Santé Famille Retraite Services" width="133" height="80" loading="lazy">
+                </picture>
             </div>
         </div>
     </div>
