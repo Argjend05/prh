@@ -581,6 +581,8 @@ body .prh-mobile-nav-list li a {
     background: var(--orange);
     border-radius: 2px;
     margin: 12px auto 0;
+    transform: scaleX(var(--prh-line, 0));
+    transform-origin: center;
 }
 
 .obs-section-subtitle {

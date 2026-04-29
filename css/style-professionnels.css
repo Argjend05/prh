@@ -173,6 +173,8 @@ body .pro-hero-btn {
     background: var(--turquoise);
     border-radius: 2px;
     margin: 16px auto 0;
+    transform: scaleX(var(--prh-line, 0));
+    transform-origin: center;
 }
 
 .pro-why-grid {
