@@ -91,6 +91,35 @@ function prh68_acf_register_groups() {
     ] );
 
     acf_add_local_field_group( [
+        'key'        => 'group_prh68_resultats_section',
+        'title'      => 'Résultats annuels — Textes de section',
+        'menu_order' => 4,
+        'position'   => 'normal',
+        'location'   => $loc,
+        'fields'     => [
+            [ 'key' => 'field_prh68_res_title',    'label' => 'Titre de section', 'name' => 'prh68_res_title',    'type' => 'text', 'default_value' => "Résultats de l'enquête" ],
+            [ 'key' => 'field_prh68_res_subtitle', 'label' => 'Sous-titre',       'name' => 'prh68_res_subtitle', 'type' => 'text', 'default_value' => 'Retrouvez ci-dessous les résultats des enquêtes annuelles menées auprès des familles et des professionnels du Haut-Rhin.' ],
+        ],
+    ] );
+
+    /* ── CPT RÉSULTATS ENQUÊTE ─────────────────────────── */
+    $loc_res = [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'resultats_enquete' ] ] ];
+    acf_add_local_field_group( [
+        'key'      => 'group_prh68_res_cpt',
+        'title'    => 'Résultat enquête',
+        'position' => 'normal',
+        'location' => $loc_res,
+        'fields'   => [
+            [ 'key' => 'field_prh68_res_cpt_desc', 'label' => 'Description courte (optionnel)', 'name' => 'prh68_res_desc', 'type' => 'text',
+              'instructions' => 'Ex : 127 répondants, 3 territoires' ],
+            [ 'key' => 'field_prh68_res_cpt_pdf',  'label' => 'Fichier PDF',                    'name' => 'prh68_res_pdf',  'type' => 'file',
+              'return_format' => 'array', 'instructions' => 'Uploadez le rapport PDF. Si vous avez un lien externe à la place, laissez ce champ vide.' ],
+            [ 'key' => 'field_prh68_res_cpt_lien', 'label' => 'Lien externe (si pas de PDF)',   'name' => 'prh68_res_lien', 'type' => 'url',
+              'instructions' => 'Lien vers un Google Drive, Slideshare, etc.' ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
         'key'        => 'group_prh68_obs_def',
         'title'      => 'Bulle "inclusion"',
         'menu_order' => 5,

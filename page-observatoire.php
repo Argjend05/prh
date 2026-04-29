@@ -206,6 +206,75 @@ get_header();
         </div>
     </section>
 
+    <!-- ===================== RÉSULTATS ===================== -->
+    <?php
+    $res_query = new WP_Query( [
+        'post_type'      => 'resultats_enquete',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'DESC',
+        'post_status'    => 'publish',
+    ] );
+    if ( $res_query->have_posts() ) :
+        $resultats = $res_query->posts;
+    if ( ! empty( $resultats ) ) :
+        $res_title    = $m('prh68_res_title',    "Résultats de l'enquête");
+        $res_subtitle = $m('prh68_res_subtitle', 'Retrouvez ci-dessous les résultats des enquêtes annuelles menées auprès des familles et des professionnels du Haut-Rhin.');
+    ?>
+    <section class="obs-resultats" id="resultats">
+        <div class="obs-container">
+            <h2 class="obs-section-title" data-reveal="fade-up"><?php echo esc_html($res_title); ?></h2>
+            <p class="obs-section-subtitle" data-reveal="fade-up" data-reveal-delay="100"><?php echo esc_html($res_subtitle); ?></p>
+
+            <div class="obs-resultats-list">
+                <?php $colors = ['orange', 'turquoise', 'violet'];
+                foreach ( $resultats as $i => $post ) :
+                    $col    = $colors[ $i % 3 ];
+                    $annee  = get_the_title( $post );
+                    $desc   = get_field( 'prh68_res_desc',  $post->ID );
+                    $fichier= get_field( 'prh68_res_pdf',   $post->ID );
+                    $lien   = get_field( 'prh68_res_lien',  $post->ID );
+                    $row    = [ 'annee' => $annee, 'description' => $desc, 'fichier' => $fichier, 'lien_externe' => $lien ];
+                    $url    = '';
+                    $label  = '';
+                    $is_pdf = false;
+                    if ( ! empty( $fichier ) ) {
+                        $url    = $fichier['url'];
+                        $label  = 'Télécharger le rapport PDF';
+                        $is_pdf = true;
+                    } elseif ( ! empty( $lien ) ) {
+                        $url   = $lien;
+                        $label = 'Consulter les résultats';
+                    }
+                ?>
+                <div class="obs-resultat-row">
+                    <div class="obs-res-top">
+                        <div class="obs-res-annee bg-<?php echo esc_attr($col); ?>">
+                            <?php echo esc_html($row['annee']); ?>
+                        </div>
+                        <?php if ( ! empty( $row['description'] ) ) : ?>
+                            <p class="obs-res-desc"><?php echo esc_html($row['description']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ( $url ) : ?>
+                    <a href="<?php echo esc_url($url); ?>"
+                       class="obs-res-btn obs-btn-<?php echo esc_attr($col); ?>"
+                       <?php echo $is_pdf ? 'download' : 'target="_blank" rel="noopener"'; ?>>
+                        <span><?php echo esc_html($label); ?></span>
+                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt="" width="16" height="13" class="obs-btn-arrow-right">
+                    </a>
+                    <?php else : ?>
+                    <span class="obs-res-soon">Disponible prochainement</span>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif;
+    wp_reset_postdata();
+    endif; ?>
+
     <!-- ===================== CYCLE ===================== -->
     <section class="obs-cycle-section" id="cycle">
         <div class="obs-container">

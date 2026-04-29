@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -56,17 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
        1. APPARITION AU DEFILEMENT
        ======================================================= */
     const revealElements = document.querySelectorAll('[data-reveal]');
-    
+
     const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const el = entry.target;
                 const delay = el.getAttribute('data-reveal-delay') || 0;
-                
+
                 setTimeout(() => {
                     el.classList.add('reveal-visible');
                 }, delay);
-                
+
                 observer.unobserve(el);
             }
         });
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
        2. COMPTEURS DYNAMIQUES
        ======================================================= */
     const counterElements = document.querySelectorAll('[data-counter]');
-    
+
     const counterObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -90,35 +89,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 const target = parseInt(el.getAttribute('data-counter'), 10);
                 const duration = 2000;
                 let startTimestamp = null;
-                
+
                 const step = (timestamp) => {
                     if (!startTimestamp) startTimestamp = timestamp;
                     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                     const easeProgress = 1 - Math.pow(1 - progress, 4);
                     el.innerText = Math.floor(easeProgress * target);
-                    
+
                     if (progress < 1) {
                         window.requestAnimationFrame(step);
                     } else {
                         el.innerText = target;
                     }
                 };
-                
+
                 window.requestAnimationFrame(step);
                 observer.unobserve(el);
             }
         });
     }, { threshold: 0.5 });
-    
+
     counterElements.forEach(el => counterObserver.observe(el));
 
     /* =======================================================
        3. SURVOL 3D ET BOUTONS MAGNETIQUES
        ======================================================= */
     if (window.matchMedia("(pointer: fine)").matches) {
-        
+
         const tiltElements = document.querySelectorAll('[data-tilt]');
-        
+
         tiltElements.forEach(el => {
             let rect, centerX, centerY, rafId;
 
@@ -156,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const magneticElements = document.querySelectorAll('[data-magnetic]');
-        
+
         magneticElements.forEach(el => {
             let rect, rafId;
 
@@ -190,16 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
        4. EFFET PARALLAXE
        ======================================================= */
     const parallaxElements = document.querySelectorAll('[data-parallax]');
-    
+
     if (parallaxElements.length > 0) {
         let ticking = false;
         let lastScrollY = window.scrollY;
-        
+
         parallaxElements.forEach(el => {
             const speed = parseFloat(el.getAttribute('data-parallax')) || 0.2;
             el.style.transform = `translateY(${lastScrollY * speed}px)`;
         });
-        
+
         window.addEventListener('scroll', () => {
             lastScrollY = window.scrollY;
             if (!ticking) {

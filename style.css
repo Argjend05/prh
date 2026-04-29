@@ -7,13 +7,20 @@
 /* =====================================================
    RESET
    ===================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 /* Scrollbar native masquée — remplacée par la barre de progression custom */
-html { scrollbar-width: none; }
-html::-webkit-scrollbar { display: none; }
+html {
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
 
 body {
     margin: 0;
@@ -23,23 +30,42 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin-top: 0;
     margin-bottom: 0.75em;
     line-height: 1.25;
     font-weight: 700;
 }
 
-h1 { font-size: 2.25rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.35rem; }
-h4 { font-size: 1.1rem; }
+h1 {
+    font-size: 2.25rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.35rem;
+}
+
+h4 {
+    font-size: 1.1rem;
+}
 
 p {
     margin-top: 0;
@@ -410,7 +436,9 @@ body .prh-mobile-nav-list li a {
     border-bottom-color: #fff;
 }
 
-.acc-def-box p { margin: 0; }
+.acc-def-box p {
+    margin: 0;
+}
 
 .acc-def-note {
     font-size: .8rem;
@@ -1351,15 +1379,138 @@ body .color-violet {
     margin-top: 0.5em;
 }
 
-.cdot-orange    { background: var(--orange); }
-.cdot-turquoise { background: var(--turquoise); }
-.cdot-violet    { background: var(--violet); }
+.cdot-orange {
+    background: var(--orange);
+}
+
+.cdot-turquoise {
+    background: var(--turquoise);
+}
+
+.cdot-violet {
+    background: var(--violet);
+}
 
 .obs-cycle-list li strong {
     font-size: .92rem;
     color: var(--text-dark);
     font-weight: 600;
     line-height: 1.45;
+}
+
+/* =====================================================
+   RÉSULTATS ANNUELS
+   ===================================================== */
+.obs-resultats {
+    padding: 80px 20px;
+    background: #f9f9fb;
+}
+
+.obs-resultats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 48px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.obs-resultat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 12px rgba(75, 75, 139, .08);
+}
+
+.obs-res-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.obs-res-annee {
+    font-family: var(--montserrat);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.obs-res-desc {
+    margin: 0;
+    font-size: .95rem;
+    color: var(--text-muted, #666);
+}
+
+.obs-res-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-family: var(--ubuntu);
+    font-weight: 600;
+    font-size: .95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background .2s, transform .2s;
+}
+
+.obs-res-btn:hover {
+    transform: translateY(-1px);
+}
+
+.obs-res-btn.obs-btn-orange {
+    background: var(--orange);
+    color: #fff;
+    padding: 13px 24px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0;
+}
+
+.obs-res-btn.obs-btn-turquoise {
+    background: var(--turquoise);
+    color: #fff;
+    padding: 13px 24px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0;
+}
+
+.obs-res-btn.obs-btn-violet {
+    background: var(--violet);
+    color: #fff;
+    padding: 13px 24px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0;
+    line-height: 1.5;
+}
+
+.obs-res-soon {
+    font-size: .88rem;
+    color: var(--text-muted, #999);
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .obs-res-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* =====================================================
