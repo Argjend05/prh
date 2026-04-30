@@ -107,12 +107,53 @@ html {
    HEADER CUSTOM
    ===================================================== */
 .prh-header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    box-sizing: border-box;
     z-index: 1000;
+    isolation: isolate;
     background: #fff;
     box-shadow: 0 2px 16px rgba(0, 0, 0, .07);
+    transition:
+        top          .45s cubic-bezier(.4, 0, .2, 1),
+        left         .45s cubic-bezier(.4, 0, .2, 1),
+        right        .45s cubic-bezier(.4, 0, .2, 1),
+        height       .45s cubic-bezier(.4, 0, .2, 1),
+        border-radius .45s cubic-bezier(.4, 0, .2, 1),
+        background   .35s ease,
+        box-shadow   .35s ease;
 }
+
+.prh-header.is-floating {
+    top: 12px;
+    left: max(16px, calc(50vw - 510px));
+    right: max(16px, calc(50vw - 510px));
+    height: 56px;
+    border-radius: 18px;
+    background: rgba(248, 248, 252, .82);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    box-shadow:
+        0 0 0 1px rgba(75, 75, 139, .16),
+        0 12px 48px rgba(75, 75, 139, .16),
+        0 2px 10px rgba(0, 0, 0, .06),
+        inset 0 1px 0 rgba(255, 255, 255, .95);
+    overflow: hidden;
+}
+
+/* Compense le passage en position: fixed — header-bar hors flux donc 72px suffit */
+body > .wrapper {
+    padding-top: 72px;
+}
+
+/* Quand la barre admin WP est présente, elle ajoute margin-top:32px sur html
+   → le header doit être poussé de 32px pour ne pas être derrière la barre */
+.admin-bar .prh-header         { top: 32px; }
+.admin-bar .prh-header.is-floating { top: 44px; } /* 32px + 12px gap flottant */
+.admin-bar .prh-header.is-floating ~ .prh-mobile-nav { top: 124px; } /* 32+92 */
 
 .prh-header-inner {
     max-width: 1100px;
@@ -123,12 +164,40 @@ html {
     align-items: center;
     justify-content: space-between;
     gap: 24px;
+    transition: height .45s cubic-bezier(.4, 0, .2, 1);
 }
 
-/* Barre décorative bas du header */
+.prh-header.is-floating .prh-header-inner {
+    height: 100%;
+    justify-content: center;
+    position: relative;
+}
+
+/* Logo ancré à gauche hors du flux — la nav reste seule dans le flex et se centre */
+.prh-header.is-floating .prh-header-logo {
+    position: absolute;
+    left: 24px;
+}
+
+.prh-header.is-floating .prh-nav {
+    margin-left: 0;
+    transform: translateX(70px);
+}
+
+/* Barre décorative — hors du flux pour ne pas perturber la hauteur du header */
 .prh-header-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 3px;
     background: linear-gradient(90deg, var(--violet) 0%, var(--turquoise) 100%);
+    transition: opacity .3s ease;
+    pointer-events: none;
+}
+
+.prh-header.is-floating .prh-header-bar {
+    opacity: 0;
 }
 
 body a.prh-header-logo {
@@ -143,6 +212,11 @@ body a.prh-header-logo {
     display: block;
     height: 70px;
     width: auto;
+    transition: height .45s cubic-bezier(.4, 0, .2, 1);
+}
+
+.prh-header.is-floating .prh-header-logo img {
+    height: 42px;
 }
 
 
@@ -189,10 +263,42 @@ body .prh-nav-list li:last-child>a {
     color: #fff;
     padding: 8px 18px;
     border-radius: 8px;
+    transition: background .2s, box-shadow .2s;
 }
 
 .prh-nav-list li:last-child>a:hover {
     background: var(--violet-hover);
+}
+
+/* Nav plus compacte en floating */
+.prh-header.is-floating .prh-nav-list {
+    gap: 2px;
+}
+
+body .prh-header.is-floating .prh-nav-list li a {
+    padding: 7px 10px;
+    font-size: .9rem;
+}
+
+/* Dernier lien redevient texte normal en floating */
+.prh-header.is-floating .prh-nav-list li:last-child>a {
+    background: none;
+    box-shadow: none;
+    color: var(--violet);
+    padding: 7px 10px;
+}
+
+.prh-header.is-floating .prh-nav-list li:last-child>a:hover {
+    background: rgba(75, 75, 139, .08);
+    box-shadow: none;
+    color: var(--violet);
+}
+
+/* Page active en floating : juste la couleur texte, pas de background */
+.prh-header.is-floating .prh-nav-list li.current-menu-item>a,
+.prh-header.is-floating .prh-nav-list li.current_page_item>a {
+    background: none;
+    color: var(--orange-text);
 }
 
 /* Burger */
@@ -235,7 +341,7 @@ body .prh-nav-list li:last-child>a {
 .prh-mobile-nav {
     display: none;
     position: fixed;
-    top: 75px;
+    top: 72px;
     left: 0;
     right: 0;
     background: #fff;
@@ -246,7 +352,15 @@ body .prh-nav-list li:last-child>a {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity .2s, transform .2s, visibility .2s;
+    transition: opacity .2s, transform .2s, visibility .2s, top .45s cubic-bezier(.4,0,.2,1), left .45s cubic-bezier(.4,0,.2,1), right .45s cubic-bezier(.4,0,.2,1), border-radius .45s cubic-bezier(.4,0,.2,1);
+}
+
+/* Le menu mobile suit le header quand il flotte */
+.prh-header.is-floating ~ .prh-mobile-nav {
+    top: 96px;
+    left: max(16px, calc(50vw - 510px));
+    right: max(16px, calc(50vw - 510px));
+    border-radius: 14px;
 }
 
 .prh-mobile-nav.is-open {
@@ -300,6 +414,20 @@ body .prh-mobile-nav-list li a {
 
     .prh-header-brand-name {
         font-size: .9rem;
+    }
+
+    .prh-header.is-floating {
+        top: 8px;
+        left: 10px;
+        right: 10px;
+        border-radius: 14px;
+    }
+
+    .prh-header.is-floating ~ .prh-mobile-nav {
+        top: 82px;
+        left: 10px;
+        right: 10px;
+        border-radius: 12px;
     }
 }
 
