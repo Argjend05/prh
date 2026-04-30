@@ -608,6 +608,7 @@ body .prh-mobile-nav-list li a {
    ===================================================== */
 .wrapper {
     width: 100%;
+    overflow-x: hidden;
 }
 
 .neve-main {
