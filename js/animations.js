@@ -152,6 +152,19 @@
                     ease: 'back.out(1.8)',
                 }, '-=0.25');
             }
+
+            /* Image hero — s'ouvre depuis le coin supérieur droit */
+            const heroImg = document.querySelector('.acc-hero-img');
+            if (heroImg) {
+                gsap.set(heroImg, { clipPath: 'circle(0% at 100% 0%)' });
+                tl.to(heroImg, {
+                    clipPath: 'circle(150% at 100% 0%)',
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: 'power2.out',
+                    clearProps: 'clipPath',
+                }, 0);
+            }
         }
 
         /* ── 2. PARALLAXE HERO MULTI-COUCHES ──────────────────────────────── */
@@ -320,6 +333,93 @@
                 ScrollTrigger.batch(allAcc, {
                     onEnter: batch => gsap.to(batch, {
                         opacity: 1, y: 0, duration: 0.65, stagger: 0.12, ease: 'power2.out', clearProps: 'all',
+                    }),
+                    ...ST,
+                });
+            }
+        }
+
+        /* ── 8a. PAGE ÉVÉNEMENTS ─────────────────────────────────────────── */
+        const agendaHero = document.querySelector('.prh68-agenda-hero');
+        if (agendaHero) {
+            const h1    = agendaHero.querySelector('h1');
+            const heroP = agendaHero.querySelector('p');
+            const tl    = gsap.timeline({ defaults: { ease: 'power4.out', clearProps: 'all' } });
+
+            const wordSpans = wordSplit(h1);
+            if (wordSpans) {
+                tl.from(wordSpans, { y: '115%', duration: 0.7, stagger: 0.06 });
+            } else if (h1) {
+                tl.from(h1, { opacity: 0, y: 40, duration: 0.8 });
+            }
+            if (heroP) {
+                tl.from(heroP, { opacity: 0, y: 22, duration: 0.65, ease: 'power3.out' }, '-=0.35');
+            }
+
+            /* Tabs — glissent depuis le bas en décalé */
+            const tabs = [...document.querySelectorAll('.prh68-tab-btn')];
+            if (tabs.length) {
+                gsap.set(tabs, { opacity: 0, y: 30, scale: 0.92 });
+                gsap.to(tabs, {
+                    opacity: 1, y: 0, scale: 1,
+                    duration: 0.55, stagger: 0.12,
+                    ease: 'back.out(1.8)', clearProps: 'all',
+                    scrollTrigger: { trigger: tabs[0], ...ST },
+                });
+            }
+        }
+
+        /* Event cards — pop décalé à l'entrée dans le viewport */
+        const eventCards = [...document.querySelectorAll('.prh68-event-card')];
+        if (eventCards.length) {
+            eventCards.forEach(el => managed.add(el));
+            gsap.set(eventCards, { opacity: 0, y: 60, scale: 0.92 });
+            ScrollTrigger.batch(eventCards, {
+                onEnter: batch => gsap.to(batch, {
+                    opacity: 1, y: 0, scale: 1,
+                    duration: 0.65,
+                    stagger: { each: 0.1, from: 'start' },
+                    ease: 'power3.out', clearProps: 'all',
+                }),
+                ...ST,
+            });
+        }
+
+        /* ── 8b. PAGE SACS PÉDAGOGIQUES ──────────────────────────────────── */
+        const kitsContainer = document.querySelector('.prh68-kits-container');
+        if (kitsContainer) {
+            const kitsTitle    = kitsContainer.querySelector('.prh68-title');
+            const kitsSubtitle = kitsContainer.querySelector('.prh68-subtitle');
+            const kitsSearch   = kitsContainer.querySelector('.prh68-search-container');
+
+            /* Titre — word split + glisse depuis le bas */
+            const tlKits = gsap.timeline({ defaults: { ease: 'power4.out', clearProps: 'all' } });
+            const kitsWords = wordSplit(kitsTitle);
+            if (kitsWords) {
+                tlKits.from(kitsWords, { y: '115%', duration: 0.7, stagger: 0.06 });
+            } else if (kitsTitle) {
+                tlKits.from(kitsTitle, { opacity: 0, y: 36, duration: 0.75 });
+            }
+            if (kitsSubtitle) {
+                tlKits.from(kitsSubtitle, { opacity: 0, y: 20, duration: 0.6, ease: 'power3.out' }, '-=0.3');
+            }
+            if (kitsSearch) {
+                tlKits.from(kitsSearch, { opacity: 0, y: 18, duration: 0.5, ease: 'power2.out' }, '-=0.2');
+            }
+
+            /* Kit cards — vague de pop depuis la gauche */
+            const kitCards = [...kitsContainer.querySelectorAll('.prh68-kit-card')];
+            if (kitCards.length) {
+                kitCards.forEach(el => managed.add(el));
+                kitCards.forEach((el, i) => {
+                    gsap.set(el, { opacity: 0, y: 55, scale: 0.88, rotation: [-3, 0, 3, -1][i % 4] });
+                });
+                ScrollTrigger.batch(kitCards, {
+                    onEnter: batch => gsap.to(batch, {
+                        opacity: 1, y: 0, scale: 1, rotation: 0,
+                        duration: 0.7,
+                        stagger: { each: 0.08, from: 'start' },
+                        ease: 'back.out(1.6)', clearProps: 'all',
                     }),
                     ...ST,
                 });

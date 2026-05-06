@@ -3,7 +3,7 @@
  * Sur les pages NON-observatoire, Neve ouvre <main class="neve-main"> et
  * <div class="wrapper"> dans son header. Il faut les fermer ici avant le footer.
  */
-$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php'];
+$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php', 'page-temoignages.php'];
 if (!is_page_template($custom_templates)):
     do_action('neve_before_primary_end');
     ?>
@@ -17,7 +17,7 @@ endif;
     <div class="obs-container obs-footer-grid">
         <div class="obs-footer-brand">
             <div class="obs-footer-logo">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/logo.svg" alt="Logo PRH68" width="52"
+                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/logo.svg" alt="Logo PRH68" width="52"
                     height="56">
                 <div>
                     <strong>Pôle Ressources Handicap</strong>
@@ -35,6 +35,14 @@ endif;
                     </svg>
                 </a>
             </div>
+
+            <a href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/docs/flyer-prh68.pdf' ); ?>"
+               class="obs-footer-flyer" download target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM12 17l-4-4h2.5v-3h3v3H16l-4 4z"/>
+                </svg>
+                Télécharger notre flyer
+            </a>
         </div>
 
         <div class="obs-footer-col">
@@ -107,26 +115,32 @@ endif;
             <p class="obs-footer-financeurs-label">Nos financeurs</p>
             <?php $uri = get_stylesheet_directory_uri(); ?>
             <div class="obs-footer-financeurs-logos">
+                <a href="https://caf.fr/allocataires/caf-du-haut-rhin" target="_blank" rel="noopener noreferrer">
+                    <picture>
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/caf.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/caf.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/caf.webp' ); ?>" alt="CAF du Haut-Rhin" width="55" height="80" loading="lazy">
+                    </picture>
+                </a>
+                <a href="https://www.alsace.eu/" target="_blank" rel="noopener noreferrer">
+                    <picture>
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/alsace.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/alsace.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/alsace.webp' ); ?>" alt="Alsace Collectivité européenne" width="66" height="80" loading="lazy">
+                    </picture>
+                </a>
                 <picture>
-                    <source srcset="<?php echo esc_url( $uri . '/logos/caf.avif' ); ?>" type="image/avif">
-                    <source srcset="<?php echo esc_url( $uri . '/logos/caf.webp' ); ?>" type="image/webp">
-                    <img src="<?php echo esc_url( $uri . '/logos/caf.webp' ); ?>" alt="CAF du Haut-Rhin" width="55" height="80" loading="lazy">
+                    <source srcset="<?php echo esc_url( $uri . '/assets/logos/academie.avif' ); ?>" type="image/avif">
+                    <source srcset="<?php echo esc_url( $uri . '/assets/logos/academie.webp' ); ?>" type="image/webp">
+                    <img src="<?php echo esc_url( $uri . '/assets/logos/academie.webp' ); ?>" alt="Direction des services départementaux – Haut-Rhin" width="251" height="80" loading="lazy">
                 </picture>
-                <picture>
-                    <source srcset="<?php echo esc_url( $uri . '/logos/alsace.avif' ); ?>" type="image/avif">
-                    <source srcset="<?php echo esc_url( $uri . '/logos/alsace.webp' ); ?>" type="image/webp">
-                    <img src="<?php echo esc_url( $uri . '/logos/alsace.webp' ); ?>" alt="Alsace Collectivité européenne" width="66" height="80" loading="lazy">
-                </picture>
-                <picture>
-                    <source srcset="<?php echo esc_url( $uri . '/logos/academie.avif' ); ?>" type="image/avif">
-                    <source srcset="<?php echo esc_url( $uri . '/logos/academie.webp' ); ?>" type="image/webp">
-                    <img src="<?php echo esc_url( $uri . '/logos/academie.webp' ); ?>" alt="Direction des services départementaux – Haut-Rhin" width="251" height="80" loading="lazy">
-                </picture>
-                <picture>
-                    <source srcset="<?php echo esc_url( $uri . '/logos/msa.avif' ); ?>" type="image/avif">
-                    <source srcset="<?php echo esc_url( $uri . '/logos/msa.webp' ); ?>" type="image/webp">
-                    <img src="<?php echo esc_url( $uri . '/logos/msa.webp' ); ?>" alt="MSA – Santé Famille Retraite Services" width="133" height="80" loading="lazy">
-                </picture>
+                <a href="https://alsace.msa.fr/lfp" target="_blank" rel="noopener noreferrer">
+                    <picture>
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/msa.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/msa.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/msa.webp' ); ?>" alt="MSA – Santé Famille Retraite Services" width="133" height="80" loading="lazy">
+                    </picture>
+                </a>
             </div>
         </div>
     </div>
@@ -143,7 +157,7 @@ endif;
     </div>
 </footer>
 
-<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php')): ?>
+<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php') && !is_page_template('page-temoignages.php')): ?>
     </div><!--/.wrapper-->
 <?php endif; ?>
 

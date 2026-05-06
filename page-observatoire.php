@@ -93,12 +93,12 @@ get_header();
                 <p data-reveal="text-soft" data-reveal-delay="150"><?php echo esc_html($hero_subtitle); ?></p>
                 <a href="#questionnaires" class="obs-btn-violet" data-magnetic>
                     <span><?php echo esc_html($hero_btn); ?></span>
-                    <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
+                    <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg'); ?>" alt=""
                         width="18" height="15" class="obs-btn-arrow">
                 </a>
             </div>
             <div class="obs-hero-deco" data-parallax="0.15">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/img/Carte.svg" alt="Carte du Haut-Rhin"
+                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Carte.svg" alt="Carte du Haut-Rhin"
                     class="obs-hero-carte">
             </div>
         </div>
@@ -120,7 +120,7 @@ get_header();
 
                 <div class="obs-mission-card bg-violet" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="obs-mission-icon-wrap">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Enfant.svg" alt="Enfants"
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/icons/enfant.svg" alt="Enfants"
                             width="36" height="36">
                     </div>
                     <h3><?php echo esc_html($m1_title); ?></h3>
@@ -129,7 +129,7 @@ get_header();
 
                 <div class="obs-mission-card bg-turquoise" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                     <div class="obs-mission-icon-wrap">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Parents.svg" alt="Parents"
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/icons/parents.svg" alt="Parents"
                             width="36" height="36">
                     </div>
                     <h3><?php echo esc_html($m2_title); ?></h3>
@@ -138,7 +138,7 @@ get_header();
 
                 <div class="obs-mission-card bg-orange" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                     <div class="obs-mission-icon-wrap">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Professionnels.svg"
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/icons/professionnels.svg"
                             alt="Professionnels" width="36" height="36">
                     </div>
                     <h3><?php echo esc_html($m3_title); ?></h3>
@@ -158,7 +158,7 @@ get_header();
 
                 <div class="obs-participez-card border-orange">
                     <div class="obs-part-icon-wrap bg-orange">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Professionnels.svg"
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/icons/professionnels.svg"
                             alt="Professionnels" width="32" height="32">
                     </div>
                     <h3><?php echo esc_html($pro_title); ?></h3>
@@ -170,14 +170,14 @@ get_header();
                     </ul>
                     <a href="<?php echo esc_url($url_pro); ?>" class="obs-btn-orange" data-magnetic>
                         <span>Répondre au Questionnaire</span>
-                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
+                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg'); ?>" alt=""
                             width="18" height="15" class="obs-btn-arrow-right">
                     </a>
                 </div>
 
                 <div class="obs-participez-card border-turquoise">
                     <div class="obs-part-icon-wrap bg-turquoise">
-                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/icons/Parents.svg" alt="Parents"
+                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/icons/parents.svg" alt="Parents"
                             width="32" height="32">
                     </div>
                     <h3><?php echo esc_html($par_title); ?></h3>
@@ -189,7 +189,7 @@ get_header();
                     </ul>
                     <a href="<?php echo esc_url($url_parents); ?>" class="obs-btn-turquoise" data-magnetic>
                         <span>Répondre au Questionnaire</span>
-                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt=""
+                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg'); ?>" alt=""
                             width="18" height="15" class="obs-btn-arrow-right">
                     </a>
                 </div>
@@ -261,7 +261,7 @@ get_header();
                        class="obs-res-btn obs-btn-<?php echo esc_attr($col); ?>"
                        <?php echo $is_pdf ? 'download' : 'target="_blank" rel="noopener"'; ?>>
                         <span><?php echo esc_html($label); ?></span>
-                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg'); ?>" alt="" width="16" height="13" class="obs-btn-arrow-right">
+                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg'); ?>" alt="" width="16" height="13" class="obs-btn-arrow-right">
                     </a>
                     <?php else : ?>
                     <span class="obs-res-soon">Disponible prochainement</span>

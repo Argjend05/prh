@@ -1,7 +1,30 @@
 <?php
 require_once get_stylesheet_directory() . '/inc/acf-fields.php';
 require_once get_stylesheet_directory() . '/inc/scripts.php';
+require_once get_stylesheet_directory() . '/inc/cpt.php';
 
+/* ── Supprime les items de menu dropdown sans enfants ─── */
+add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
+    // Collecte les IDs des items qui ont au moins un enfant
+    $parents_with_children = [];
+    foreach ( $items as $item ) {
+        $pid = (int) $item->menu_item_parent;
+        if ( $pid > 0 ) {
+            $parents_with_children[ $pid ] = true;
+        }
+    }
+
+    return array_values( array_filter( $items, function ( $item ) use ( $parents_with_children ) {
+        // Garde tous les enfants tels quels
+        if ( (int) $item->menu_item_parent !== 0 ) return true;
+
+        // Pour les top-level : supprime si URL vide/# ET aucun enfant
+        $no_real_url = in_array( trim( $item->url ), [ '#', '', 'javascript:void(0)' ], true );
+        $no_children = ! isset( $parents_with_children[ (int) $item->ID ] );
+
+        return ! ( $no_real_url && $no_children );
+    } ) );
+}, 10, 2 );
 
 /* CPT — Résultats enquête observatoire */
 add_action( 'init', function () {

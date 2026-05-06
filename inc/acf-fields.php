@@ -360,4 +360,173 @@ function prh68_acf_register_groups() {
             [ 'key' => 'field_prh68_pro_cta_email', 'label' => 'Email',            'name' => 'prh68_pro_cta_email', 'type' => 'text',     'default_value' => 'contact@prh68.fr' ],
         ],
     ] );
+
+    /* ── CPT TÉMOIGNAGE ────────────────────────────────── */
+    $loc_tem = [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'temoignage' ] ] ];
+    acf_add_local_field_group( [
+        'key'      => 'group_prh68_temoignage',
+        'title'    => 'Détails du témoignage',
+        'position' => 'normal',
+        'location' => $loc_tem,
+        'instructions' => 'Le titre du témoignage (en haut) sert uniquement de référence interne. Les informations affichées sur le site sont remplies ci-dessous.',
+        'fields'   => [
+            [
+                'key' => 'field_prh68_temoig_category',
+                'label' => 'Catégorie',
+                'name' => 'temoig_category',
+                'type' => 'select',
+                'required' => 1,
+                'choices' => [
+                    'parent'               => 'Parent',
+                    'professionnel'        => 'Professionnel',
+                    'personne_accompagnee' => 'Personne accompagnée',
+                ],
+                'default_value' => 'parent',
+                'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_prh68_temoig_quote',
+                'label' => 'Citation',
+                'name' => 'temoig_quote',
+                'type' => 'textarea',
+                'rows' => 5,
+                'required' => 1,
+                'instructions' => 'Le contenu du témoignage. Pas besoin d\'ajouter les guillemets, ils sont gérés par le design.',
+            ],
+            [
+                'key' => 'field_prh68_temoig_person_name',
+                'label' => 'Nom de la personne',
+                'name' => 'temoig_person_name',
+                'type' => 'text',
+                'required' => 1,
+                'instructions' => 'Ex : "Sophie D." — Vous pouvez modifier le prénom pour préserver l\'anonymat.',
+            ],
+            [
+                'key' => 'field_prh68_temoig_person_role',
+                'label' => 'Qualité / Fonction',
+                'name' => 'temoig_person_role',
+                'type' => 'text',
+                'instructions' => 'Ex : "Mère d\'un enfant porteur de trisomie 21", "Éducateur spécialisé", "Médecin de PMI"',
+            ],
+            [
+                'key' => 'field_prh68_temoig_type',
+                'label' => 'Type de témoignage',
+                'name' => 'temoig_type',
+                'type' => 'select',
+                'choices' => [
+                    'texte'       => 'Texte uniquement',
+                    'video'       => 'Vidéo',
+                    'audio'       => 'Audio',
+                    'video_audio' => 'Vidéo + Audio',
+                ],
+                'default_value' => 'texte',
+                'return_format' => 'value',
+                'instructions' => 'La citation reste obligatoire dans tous les cas (transcription pour les médias).',
+            ],
+
+            // ── Champs vidéo ─────────────────────────────────
+            [
+                'key' => 'field_prh68_temoig_video_url',
+                'label' => 'URL de la vidéo',
+                'name' => 'temoig_video_url',
+                'type' => 'url',
+                'instructions' => 'YouTube, Vimeo ou fichier MP4 hébergé.',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
+                'key' => 'field_prh68_temoig_video_thumb',
+                'label' => 'Miniature de la vidéo',
+                'name' => 'temoig_video_thumb',
+                'type' => 'image',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'instructions' => 'Image affichée avant lecture (optionnel mais recommandé).',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
+                'key' => 'field_prh68_temoig_video_duration',
+                'label' => 'Durée de la vidéo',
+                'name' => 'temoig_video_duration',
+                'type' => 'text',
+                'instructions' => 'Format : 2:34 (optionnel).',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+
+            // ── Champs audio ─────────────────────────────────
+            [
+                'key' => 'field_prh68_temoig_audio_file',
+                'label' => 'Fichier audio',
+                'name' => 'temoig_audio_file',
+                'type' => 'file',
+                'return_format' => 'array',
+                'mime_types' => 'mp3,m4a,wav,ogg',
+                'instructions' => 'Uploadez un fichier audio (MP3 recommandé). Laissez vide si vous utilisez plutôt un lien externe ci-dessous.',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'audio' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
+                'key' => 'field_prh68_temoig_audio_url',
+                'label' => 'URL audio externe (alternative au fichier)',
+                'name' => 'temoig_audio_url',
+                'type' => 'url',
+                'instructions' => 'Lien direct vers un fichier audio (MP3, WAV, OGG…). Utilisé uniquement si aucun fichier n\'est uploadé ci-dessus.',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'audio' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
+                'key' => 'field_prh68_temoig_audio_duration',
+                'label' => 'Durée de l\'audio',
+                'name' => 'temoig_audio_duration',
+                'type' => 'text',
+                'instructions' => 'Format : 1:45 (optionnel).',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'audio' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
+                'key' => 'field_prh68_temoig_featured',
+                'label' => 'Mettre en avant',
+                'name' => 'temoig_featured',
+                'type' => 'true_false',
+                'ui' => 1,
+                'instructions' => 'Si activé, ce témoignage apparaît dans une grande carte mise en avant en haut de la grille.',
+            ],
+        ],
+    ] );
+
+    /* ── PAGE TÉMOIGNAGES ──────────────────────────────── */
+    $loc_temp = [ [ [ 'param' => 'page_template', 'operator' => '==', 'value' => 'page-temoignages.php' ] ] ];
+
+    acf_add_local_field_group( [
+        'key' => 'group_prh68_temp_hero', 'title' => 'Hero — Page Témoignages', 'menu_order' => 40, 'position' => 'normal', 'location' => $loc_temp,
+        'fields' => [
+            [ 'key' => 'field_prh68_temp_hero_title',    'label' => 'Titre principal', 'name' => 'prh68_temp_hero_title',    'type' => 'text',     'default_value' => 'Paroles & Témoignages' ],
+            [ 'key' => 'field_prh68_temp_hero_subtitle', 'label' => 'Sous-titre',      'name' => 'prh68_temp_hero_subtitle', 'type' => 'textarea', 'rows' => 2, 'default_value' => "Des histoires vraies partagées par des parents, des professionnels et des personnes accompagnées. Chaque parcours est unique, chaque voix compte." ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
+        'key' => 'group_prh68_temp_cta', 'title' => 'CTA — Page Témoignages', 'menu_order' => 41, 'position' => 'normal', 'location' => $loc_temp,
+        'fields' => [
+            [ 'key' => 'field_prh68_temp_cta_title',  'label' => 'Titre',         'name' => 'prh68_temp_cta_title',  'type' => 'text',     'default_value' => "Votre témoignage peut aider d'autres familles" ],
+            [ 'key' => 'field_prh68_temp_cta_sub',    'label' => 'Sous-texte',    'name' => 'prh68_temp_cta_sub',    'type' => 'textarea', 'rows' => 2, 'default_value' => "Vous souhaitez échanger avec notre équipe ou partager votre expérience ? Nous serions honorés de vous entendre." ],
+            [ 'key' => 'field_prh68_temp_cta_btn1',   'label' => 'Bouton 1',      'name' => 'prh68_temp_cta_btn1',   'type' => 'text',     'default_value' => 'Partager mon témoignage' ],
+            [ 'key' => 'field_prh68_temp_cta_btn2',   'label' => 'Bouton 2',      'name' => 'prh68_temp_cta_btn2',   'type' => 'text',     'default_value' => 'Nous contacter' ],
+            [ 'key' => 'field_prh68_temp_legal',      'label' => 'Mention légale','name' => 'prh68_temp_legal',      'type' => 'textarea', 'rows' => 2, 'default_value' => "Les témoignages sont publiés avec l'accord explicite des personnes concernées. Certains prénoms ont été modifiés pour préserver l'anonymat." ],
+        ],
+    ] );
 }

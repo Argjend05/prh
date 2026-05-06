@@ -54,13 +54,13 @@ $pro_classes = [
     'acc-pro-icon--violet',
 ];
 $pro_icons = [
-    'EAJE.svg',
-    'Relais-petite-enfance.svg',
-    'Assistante-maternelle.svg',
-    'Périscolaire.svg',
-    'Accueil-de-loisirs.svg',
-    'Accueil-jeunes.svg',
-    'Collectivite-territoriale.svg',
+    'eaje.svg',
+    'relais-petite-enfance.svg',
+    'assistante-maternelle.svg',
+    'periscolaire.svg',
+    'accueil-de-loisirs.svg',
+    'accueil-jeunes.svg',
+    'collectivite-territoriale.svg',
 ];
 
 // Services
@@ -120,42 +120,6 @@ get_header();
 
     <!-- ===================== HERO ===================== -->
     <section class="acc-hero">
-        <div class="acc-hero-blobs" aria-hidden="true" data-parallax="0.25">
-            <div class="acc-blob acc-blob-1"></div>
-            <div class="acc-blob acc-blob-2"></div>
-            <div class="acc-blob acc-blob-3"></div>
-        </div>
-
-        <!-- Décorations animées -->
-        <div class="acc-hero-deco" aria-hidden="true" data-parallax="0.15">
-            <div class="acc-ring acc-ring-1"></div>
-            <div class="acc-ring acc-ring-2"></div>
-            <div class="acc-ring acc-ring-3"></div>
-            <div class="acc-dots-grid"></div>
-
-            <div class="acc-float-card acc-fcard-1">
-                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Accueil-jeunes.svg'); ?>"
-                                alt="" width="26" height="26">
-            </div>
-            <div class="acc-float-card acc-fcard-2">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                </svg>
-            </div>
-            <div class="acc-float-card acc-fcard-3">
-                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Partagez-vos-besoins-et-questionnements.svg'); ?>"
-                                alt="" width="26" height="26">
-            </div>
-
-            <div class="acc-float-pill acc-fpill-1">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Haut-Rhin 68
-            </div>
-            <div class="acc-float-pill acc-fpill-2">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                0 – 17 ans
-            </div>
-        </div>
 
         <div class="acc-hero-wrap">
             <div class="acc-hero-content">
@@ -175,6 +139,17 @@ get_header();
                 </div>
             </div>
         </div>
+
+        <!-- Image bannière -->
+        <div class="acc-hero-img" aria-hidden="true">
+            <?php $uri = get_stylesheet_directory_uri(); ?>
+            <picture>
+                <source srcset="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" type="image/avif">
+                <img src="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>"
+                     alt="" width="960" height="1080" fetchpriority="high" decoding="async">
+            </picture>
+        </div>
+
         <div class="acc-hero-wave">
             <svg viewBox="0 0 2880 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0,35 C360,70 1080,0 1440,35 C1800,70 2520,0 2880,35 L2880,70 L0,70 Z" fill="#ffffff" />
@@ -212,19 +187,19 @@ get_header();
                 <?php $uri = get_stylesheet_directory_uri(); ?>
                 <div class="acc-logos-partenaires">
                     <picture data-reveal="fade-up" data-reveal-delay="150" data-tilt>
-                        <source srcset="<?php echo esc_url( $uri . '/logos/sinclair.avif' ); ?>" type="image/avif">
-                        <source srcset="<?php echo esc_url( $uri . '/logos/sinclair.webp' ); ?>" type="image/webp">
-                        <img src="<?php echo esc_url( $uri . '/logos/sinclair.webp' ); ?>" alt="Marguerite Sinclair" width="192" height="160" loading="lazy">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/sinclair.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/sinclair.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/sinclair.webp' ); ?>" alt="Marguerite Sinclair" width="192" height="160" loading="lazy">
                     </picture>
                     <picture data-reveal="fade-up" data-reveal-delay="250" data-tilt>
-                        <source srcset="<?php echo esc_url( $uri . '/logos/adapei.avif' ); ?>" type="image/avif">
-                        <source srcset="<?php echo esc_url( $uri . '/logos/adapei.webp' ); ?>" type="image/webp">
-                        <img src="<?php echo esc_url( $uri . '/logos/adapei.webp' ); ?>" alt="ADAPEI Papillons Blancs d'Alsace" width="305" height="160" loading="lazy">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/adapei.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/adapei.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/adapei.webp' ); ?>" alt="ADAPEI Papillons Blancs d'Alsace" width="305" height="160" loading="lazy">
                     </picture>
                     <picture data-reveal="fade-up" data-reveal-delay="350" data-tilt>
-                        <source srcset="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.avif' ); ?>" type="image/avif">
-                        <source srcset="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.webp' ); ?>" type="image/webp">
-                        <img src="<?php echo esc_url( $uri . '/logos/au-fil-de-la-vie.webp' ); ?>" alt="Au Fil de la Vie" width="200" height="159" loading="lazy">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/au-fil-de-la-vie.avif' ); ?>" type="image/avif">
+                        <source srcset="<?php echo esc_url( $uri . '/assets/logos/au-fil-de-la-vie.webp' ); ?>" type="image/webp">
+                        <img src="<?php echo esc_url( $uri . '/assets/logos/au-fil-de-la-vie.webp' ); ?>" alt="Au Fil de la Vie" width="200" height="159" loading="lazy">
                     </picture>
                 </div>
 
@@ -242,7 +217,7 @@ get_header();
                 <div class="acc-info-card acc-card-violet" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="acc-info-card-header">
                         <div class="acc-info-icon acc-icon-violet">
-                            <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Mission.svg'); ?>"
+                            <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/mission.svg'); ?>"
                                 alt="" width="26" height="26">
                         </div>
                         <h3 class="acc-color-violet"><?php echo esc_html($card1_title); ?></h3>
@@ -275,7 +250,7 @@ get_header();
             <div class="acc-pro-items">
                 <?php
                 $pro_url = esc_url(get_permalink(get_page_by_path('professionnel')));
-                $icons_base = get_stylesheet_directory_uri() . '/icons/';
+                $icons_base = get_stylesheet_directory_uri() . '/assets/icons/';
                 foreach ($pro_items as $i => $label):
                     $icon = $pro_icons[$i];
                     ?>
@@ -302,7 +277,7 @@ get_header();
                     <details class="acc-service-card acc-border-orange" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--orange">
-                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Professionnels.svg'); ?>"
+                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/professionnels.svg'); ?>"
                                     alt="" width="22" height="22">
                             </div>
                             <h3><?php echo esc_html($srv1_title); ?></h3>
@@ -325,7 +300,7 @@ get_header();
                     <details class="acc-service-card acc-border-orange" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--orange">
-                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/icons/reseau.svg"); ?>"
+                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/assets/icons/reseau.svg"); ?>"
                                     alt="" width="22" height="22">
                             </div>
                             <h3><?php echo esc_html($srv2_title); ?></h3>
@@ -356,7 +331,7 @@ get_header();
                     <details class="acc-service-card acc-border-violet" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--violet">
-                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/icons/Partagez-vos-besoins-et-questionnements.svg"); ?>"
+                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . "/assets/icons/partagez.svg"); ?>"
                                     alt="" width="22" height="22">
                             </div>
                             <h3><?php echo esc_html($srv3_title); ?></h3>
@@ -379,7 +354,7 @@ get_header();
                     <details class="acc-service-card acc-border-turquoise" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
                         <summary>
                             <div class="acc-service-icon acc-service-icon--turquoise">
-                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Ressources.svg'); ?>"
+                                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/ressources.svg'); ?>"
                                     alt="" width="22" height="22">
                             </div>
                             <h3><?php echo esc_html($srv4_title); ?></h3>

@@ -141,7 +141,9 @@ html {
         0 12px 48px rgba(75, 75, 139, .16),
         0 2px 10px rgba(0, 0, 0, .06),
         inset 0 1px 0 rgba(255, 255, 255, .95);
-    overflow: hidden;
+    /* overflow: visible pour permettre l'affichage des sous-menus dropdown.
+       backdrop-filter clip correctement avec border-radius en mode visible
+       sur tous les navigateurs modernes. */
 }
 
 /* Compense le passage en position: fixed — header-bar hors flux donc 72px suffit */
@@ -301,6 +303,158 @@ body .prh-header.is-floating .prh-nav-list li a {
     color: var(--orange-text);
 }
 
+/* =====================================================
+   SOUS-MENUS DROPDOWN (desktop)
+   ===================================================== */
+.prh-nav-list li.menu-item-has-children {
+    position: relative;
+}
+
+/* Caret après le label du parent */
+.prh-nav-list li.menu-item-has-children > a::after {
+    content: '';
+    display: inline-block;
+    margin-left: 6px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .25s ease;
+    opacity: .7;
+}
+
+.prh-nav-list li.menu-item-has-children:hover > a::after,
+.prh-nav-list li.menu-item-has-children:focus-within > a::after {
+    transform: translateY(0) rotate(225deg);
+    opacity: 1;
+}
+
+/* Le dropdown WP par défaut s'appelle .sub-menu */
+.prh-nav-list .sub-menu {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(75, 75, 139, .18), 0 2px 8px rgba(0, 0, 0, .06);
+    border: 1px solid rgba(75, 75, 139, .08);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s;
+    z-index: 1100;
+}
+
+/* Pont invisible pour éviter la fermeture entre parent et dropdown */
+.prh-nav-list .sub-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+}
+
+.prh-nav-list li.menu-item-has-children:hover > .sub-menu,
+.prh-nav-list li.menu-item-has-children:focus-within > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Liens dans le sous-menu — on déspécifie depuis les règles parents */
+body .prh-nav-list .sub-menu li {
+    width: 100%;
+}
+
+body .prh-nav-list .sub-menu li a {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--violet);
+    background: none;
+    white-space: normal;
+}
+
+body .prh-nav-list .sub-menu li a:hover {
+    background: rgba(75, 75, 139, .08);
+    color: var(--violet);
+}
+
+body .prh-nav-list .sub-menu li.current-menu-item > a,
+body .prh-nav-list .sub-menu li.current_page_item > a {
+    background: rgba(236, 111, 4, .1);
+    color: var(--orange-text);
+}
+
+/* Dernier item du menu principal (= bouton orange) — annule pour le sous-menu */
+body .prh-nav-list li:last-child .sub-menu li a {
+    background: none;
+    color: var(--violet);
+    padding: 10px 14px;
+    border-radius: 8px;
+}
+
+body .prh-nav-list li:last-child .sub-menu li a:hover {
+    background: rgba(75, 75, 139, .08);
+}
+
+/* Pas de caret sur les items qui ont un sous-menu mais sont aussi le dernier item bouton */
+body .prh-nav-list li:last-child.menu-item-has-children > a::after {
+    border-color: #fff;
+}
+
+/* En mode floating : ajustements de taille */
+.prh-header.is-floating .prh-nav-list .sub-menu {
+    top: calc(100% + 4px);
+    min-width: 200px;
+}
+
+.prh-header.is-floating .prh-nav-list li.menu-item-has-children > a::after {
+    width: 6px;
+    height: 6px;
+    margin-left: 4px;
+}
+
+/* =====================================================
+   SOUS-MENUS NAV MOBILE
+   ===================================================== */
+.prh-mobile-nav-list .sub-menu {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0 4px 14px;
+    border-left: 2px solid rgba(75, 75, 139, .15);
+    margin-left: 4px;
+}
+
+body .prh-mobile-nav-list .sub-menu li a {
+    font-size: .92rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .04);
+}
+
+body .prh-mobile-nav-list .sub-menu li:last-child a {
+    border-bottom: none;
+    color: var(--text-muted);
+}
+
+body .prh-mobile-nav-list .sub-menu li.current-menu-item > a,
+body .prh-mobile-nav-list .sub-menu li.current_page_item > a {
+    color: var(--orange-text);
+}
+
 /* Burger */
 .prh-burger {
     display: none;
@@ -454,7 +608,13 @@ body .prh-mobile-nav-list li a {
 .page-template-page-accueil .nv-content-wrap,
 .page-template-page-accueil-php #content,
 .page-template-page-accueil-php .entry-content,
-.page-template-page-accueil-php .nv-content-wrap {
+.page-template-page-accueil-php .nv-content-wrap,
+.page-template-page-temoignages #content,
+.page-template-page-temoignages .entry-content,
+.page-template-page-temoignages .nv-content-wrap,
+.page-template-page-temoignages-php #content,
+.page-template-page-temoignages-php .entry-content,
+.page-template-page-temoignages-php .nv-content-wrap {
     padding: 0;
     max-width: 100%;
     margin: 0;
@@ -1698,6 +1858,28 @@ body .color-violet {
     gap: 10px;
 }
 
+.obs-footer-flyer {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .65);
+    text-decoration: none;
+    line-height: 1;
+    transition: color .2s;
+}
+
+.obs-footer-flyer svg {
+    flex-shrink: 0;
+    display: block;
+}
+
+.obs-footer-flyer:hover {
+    color: #fff;
+}
+
 .obs-social-link {
     display: inline-flex;
     align-items: center;
@@ -1910,4 +2092,124 @@ body ul.obs-footer-contact {
     .obs-hero-content {
         max-width: 1300px;
     }
+}
+
+/* =====================================================
+   PAGE 404
+   ===================================================== */
+.prh-404 {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px;
+    gap: 20px;
+    font-family: var(--ubuntu);
+}
+
+.prh-404-illustration {
+    width: clamp(160px, 30vw, 220px);
+    height: auto;
+    margin-bottom: 8px;
+}
+
+.prh-404-code {
+    font-family: var(--montserrat);
+    font-size: clamp(5rem, 15vw, 9rem);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #4b4b8b, #3fb7ab);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.prh-404-title {
+    font-family: var(--montserrat);
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+}
+
+.prh-404-text {
+    font-size: 1.05rem;
+    color: #666;
+    max-width: 480px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.prh-404-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.prh-404-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 8px;
+    font-size: .95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.prh-404-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+}
+
+.prh-404-btn--primary {
+    background: #4b4b8b;
+    color: #fff;
+}
+
+.prh-404-btn--outline {
+    background: #fff;
+    color: #4b4b8b;
+    border: 2px solid #4b4b8b;
+}
+
+.prh-404-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.prh-404-links a {
+    color: #4b4b8b;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s, color .2s;
+}
+
+.prh-404-links a:hover {
+    border-color: #ec6f04;
+    color: #ec6f04;
+}
+
+@media (max-width: 480px) {
+    .prh-404-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .prh-404-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
 }

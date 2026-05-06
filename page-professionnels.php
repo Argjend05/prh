@@ -35,7 +35,7 @@ $cta_phone = $f('prh68_pro_cta_phone', '03 89 32 81 50');
 $cta_email = $f('prh68_pro_cta_email', 'contact@prh68.fr');
 
 /* ── Chemin icônes ────────────────────────────────────── */
-$icons_base = get_stylesheet_directory_uri() . '/icons/';
+$icons_base = get_stylesheet_directory_uri() . '/assets/icons/';
 
 /* ── Helper : parse "Titre | Description" par ligne ──── */
 $parse_acc_items = function( $raw, $defaults = [] ) {
@@ -110,11 +110,11 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                 </svg>
             </div>
             <div class="pro-float-card pro-fcard-2">
-                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Projets-pro.svg'); ?>"
+                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/projets-pro.svg'); ?>"
                                 alt="" width="26" height="26">
             </div>
             <div class="pro-float-card pro-fcard-3">
-                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/icons/Engrenage-pro.svg'); ?>"
+                <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/engrenage-pro.svg'); ?>"
                                 alt="" width="26" height="26">
             </div>
 
@@ -163,28 +163,28 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
 
                 <div class="pro-why-card pro-why-violet" data-reveal="fade-up" data-reveal-delay="0" data-tilt>
                     <div class="pro-why-icon">
-                        <img src="<?= esc_url($icons_base . 'Engrenage-pro.svg') ?>" alt="" width="28" height="28">
+                        <img src="<?= esc_url($icons_base . 'engrenage-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c1) ?></p>
                 </div>
 
                 <div class="pro-why-card pro-why-turquoise" data-reveal="fade-up" data-reveal-delay="100" data-tilt>
                     <div class="pro-why-icon">
-                        <img src="<?= esc_url($icons_base . 'Question-pro.svg') ?>" alt="" width="28" height="28">
+                        <img src="<?= esc_url($icons_base . 'question-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c2) ?></p>
                 </div>
 
                 <div class="pro-why-card pro-why-orange" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                     <div class="pro-why-icon">
-                        <img src="<?= esc_url($icons_base . 'Ampoule-pro.svg') ?>" alt="" width="28" height="28">
+                        <img src="<?= esc_url($icons_base . 'ampoule-pro.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c3) ?></p>
                 </div>
 
                 <div class="pro-why-card pro-why-dark" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                     <div class="pro-why-icon">
-                        <img src="<?= esc_url($icons_base . 'Ressources.svg') ?>" alt="" width="28" height="28">
+                        <img src="<?= esc_url($icons_base . 'ressources.svg') ?>" alt="" width="28" height="28">
                     </div>
                     <p><?= esc_html($why_c4) ?></p>
                 </div>
@@ -231,7 +231,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                     <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="200" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-violet">
-                                <img src="<?= esc_url($icons_base . 'Sensibilisation-pro.svg') ?>" alt="" width="22"
+                                <img src="<?= esc_url($icons_base . 'sensibilisation-pro.svg') ?>" alt="" width="22"
                                     height="22">
                             </div>
                             <h3><?= esc_html($nvp_acc3_ttl) ?></h3>
@@ -253,7 +253,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                     <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="300" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-orange">
-                                <img src="<?= esc_url($icons_base . 'Sacs-pro.svg') ?>" alt="" width="22" height="22">
+                                <img src="<?= esc_url($icons_base . 'sacs-pro.svg') ?>" alt="" width="22" height="22">
                             </div>
                             <h3><?= esc_html($nvp_acc5_ttl) ?></h3>
                             <svg class="pro-acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -279,7 +279,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                     <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="150" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-violet">
-                                <img src="<?= esc_url($icons_base . 'Appui-pro.svg') ?>" alt="" width="22"
+                                <img src="<?= esc_url($icons_base . 'appui-pro.svg') ?>" alt="" width="22"
                                     height="22">
                             </div>
                             <h3><?= esc_html($nvp_acc2_ttl) ?></h3>
@@ -301,7 +301,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                     <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="250" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-orange">
-                                <img src="<?= esc_url($icons_base . 'Accueil-jeunes-pro.svg') ?>" alt="" width="22"
+                                <img src="<?= esc_url($icons_base . 'accueil-jeunes-pro.svg') ?>" alt="" width="22"
                                     height="22">
                             </div>
                             <h3><?= esc_html($nvp_acc4_ttl) ?></h3>
@@ -323,7 +323,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
                     <details class="pro-acc-card" data-reveal="fade-up" data-reveal-delay="350" data-tilt>
                         <summary>
                             <div class="pro-acc-icon pro-icon-turquoise">
-                                <img src="<?= esc_url($icons_base . 'Projets-pro.svg') ?>" alt="" width="22"
+                                <img src="<?= esc_url($icons_base . 'projets-pro.svg') ?>" alt="" width="22"
                                     height="22">
                             </div>
                             <h3><?= esc_html($nvp_acc6_ttl) ?></h3>
@@ -355,7 +355,7 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
             <p data-reveal="fade-up" data-reveal-delay="100"><?= esc_html($cta_sub) ?></p>
             <a href="<?= esc_url(get_permalink(get_page_by_path('formulaire-contact'))) ?>" class="pro-cta-btn" data-magnetic>
                 <span><?= esc_html($cta_btn) ?></span>
-                <img src="<?= esc_url(get_stylesheet_directory_uri() . '/icons/fleche.svg') ?>" alt="" width="18"
+                <img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg') ?>" alt="" width="18"
                     height="15" class="pro-cta-arrow">
             </a>
             <div class="pro-cta-contact" data-reveal="fade-up" data-reveal-delay="200">

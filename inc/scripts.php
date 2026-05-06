@@ -36,6 +36,11 @@ function prh68_enqueue_styles() {
     if ( is_page_template( 'page-politique-confidentialite.php' ) ) {
         wp_enqueue_style( 'pc-style', $uri . '/css/style-politique-confidentialite.css', [ 'prh68-style' ], $ver );
     }
+
+    if ( is_page_template( 'page-temoignages.php' ) ) {
+        wp_enqueue_style(  'tem-style',  $uri . '/css/style-temoignages.css', [ 'prh68-style' ],   $ver );
+        wp_enqueue_script( 'tem-script', $uri . '/js/temoignages.js',         [ 'common-script' ], $ver, true );
+    }
 }
 
 /* =======================================================
@@ -82,8 +87,8 @@ remove_action( 'wp_head', 'wp_site_icon' );
 
 add_action( 'wp_head', function () {
     $uri = get_stylesheet_directory_uri();
-    $png = esc_url( $uri . '/logos/favicon.png' );
-    $svg = esc_url( $uri . '/logo.svg' );
+    $png = esc_url( $uri . '/assets/img/favicon.png' );
+    $svg = esc_url( $uri . '/assets/img/logo.svg' );
     echo '<link rel="icon" type="image/png" sizes="32x32" href="' . $png . '">' . "\n";
     echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
     echo '<link rel="apple-touch-icon" href="' . $png . '">' . "\n";

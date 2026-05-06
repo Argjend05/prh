@@ -29,18 +29,21 @@
     <meta property="og:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
     <meta property="og:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
     <meta property="og:url"         content="<?php echo esc_url( $prh_og_url ); ?>">
-    <meta property="og:image"       content="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>">
+    <meta property="og:image"       content="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>">
     <meta property="og:image:width"  content="350">
     <meta property="og:image:height" content="140">
     <meta name="twitter:card"        content="summary">
     <meta name="twitter:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
     <meta name="twitter:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
 
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/ubuntu-400-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/ubuntu-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/montserrat-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?php echo esc_url( $uri . '/fonts/montserrat-800-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/ubuntu-400-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/ubuntu-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/montserrat-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/montserrat-800-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>" as="image" type="image/webp" fetchpriority="high">
+    <?php if ( is_page_template( 'page-accueil.php' ) ) : ?>
+    <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
+    <?php endif; ?>
 
     <?php wp_head(); ?>
 </head>
@@ -58,9 +61,9 @@
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="prh-header-logo" aria-label="Accueil">
             <?php $uri = get_stylesheet_directory_uri(); ?>
             <picture>
-                <source srcset="<?php echo esc_url( $uri . '/logo-header.avif' ); ?>" type="image/avif">
-                <source srcset="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>" type="image/webp">
-                <img src="<?php echo esc_url( $uri . '/logo-header.webp' ); ?>"
+                <source srcset="<?php echo esc_url( $uri . '/assets/img/logo-header.avif' ); ?>" type="image/avif">
+                <source srcset="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>" type="image/webp">
+                <img src="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>"
                      alt="PRH68 – Pôle Ressources Handicap" width="350" height="140"
                      fetchpriority="high" decoding="async">
             </picture>
@@ -74,7 +77,7 @@
             'container_class' => 'prh-nav',
             'menu_class'      => 'prh-nav-list',
             'fallback_cb'     => false,
-            'depth'           => 1,
+            'depth'           => 2,
             'walker'          => null,
         ] );
         ?>
@@ -98,7 +101,7 @@
         'container'      => false,
         'menu_class'     => 'prh-mobile-nav-list',
         'fallback_cb'    => false,
-        'depth'          => 1,
+        'depth'          => 2,
     ] );
     ?>
 </nav>
