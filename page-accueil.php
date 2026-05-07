@@ -254,7 +254,7 @@ get_header();
                 foreach ($pro_items as $i => $label):
                     $icon = $pro_icons[$i];
                     ?>
-                    <a href="<?php echo $pro_url; ?>" class="acc-pro-item" style="text-decoration:none;" data-reveal="fade-up" data-reveal-delay="<?php echo $i * 50; ?>" data-tilt>
+                    <a href="<?php echo $pro_url; ?>" class="acc-pro-item" data-reveal="fade-up" data-reveal-delay="<?php echo $i * 50; ?>" data-tilt>
                         <div class="acc-pro-icon <?php echo $pro_classes[$i]; ?>">
                             <img src="<?php echo esc_url($icons_base . $icon); ?>" alt="" width="26" height="26">
                         </div>

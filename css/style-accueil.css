@@ -492,6 +492,7 @@ body .acc-info-card.acc-card-turquoise {
     width: 130px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
     transition: transform .2s, box-shadow .2s;
+    text-decoration: none;
 }
 
 .acc-pro-item:hover {

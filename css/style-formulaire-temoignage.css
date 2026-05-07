@@ -1,0 +1,513 @@
+/* =======================================================
+   PAGE FORMULAIRE TÉMOIGNAGE — préfixe : ftem-
+   ======================================================= */
+
+.ftem-page {
+    font-family: var(--ubuntu);
+    color: var(--text-dark);
+    background: #fff;
+    overflow-x: hidden;
+}
+
+.ftem-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+/* =====================================================
+   HERO
+   ===================================================== */
+.ftem-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1d1d4e 0%, #2a2a68 55%, #1b3d52 100%);
+    padding: 100px 20px 110px;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+}
+
+.ftem-hero-deco {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.ftem-hero-deco::before {
+    content: '';
+    position: absolute;
+    top: -150px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(63, 183, 171, .18) 0%, transparent 65%);
+}
+
+.ftem-hero-deco::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(236, 111, 4, .14) 0%, transparent 65%);
+}
+
+.ftem-hero-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.ftem-hero-eyebrow {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(63, 183, 171, .9);
+    margin-bottom: 18px;
+}
+
+.ftem-hero h1 {
+    font-family: var(--montserrat);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    margin: 0 0 18px;
+    line-height: 1.12;
+    text-wrap: balance;
+}
+
+.ftem-hero p {
+    font-size: clamp(.95rem, 1.2vw, 1.08rem);
+    color: rgba(255, 255, 255, .72);
+    line-height: 1.72;
+    margin: 0 auto;
+    max-width: 580px;
+    text-wrap: balance;
+}
+
+.ftem-hero-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 3;
+}
+.ftem-hero-wave svg {
+    display: block;
+    width: 200%;
+    height: 60px;
+    animation: ftem-wave-flow 8s linear infinite;
+}
+@keyframes ftem-wave-flow {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* =====================================================
+   FORMULAIRE
+   ===================================================== */
+.ftem-form-section {
+    padding: 60px 0 100px;
+    background: #fafafa;
+}
+
+.ftem-form {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 30px rgba(75, 75, 139, .08);
+    padding: 14px 36px 36px;
+    border: 1px solid rgba(75, 75, 139, .08);
+}
+
+.ftem-fieldset {
+    border: none;
+    margin: 0;
+    padding: 28px 0 8px;
+    border-bottom: 1px solid rgba(75, 75, 139, .08);
+}
+.ftem-fieldset:last-of-type { border-bottom: none; }
+
+.ftem-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--montserrat);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    margin-bottom: 22px;
+    padding: 0;
+}
+
+.ftem-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--violet);
+    color: #fff;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    font-size: .9rem;
+    flex-shrink: 0;
+}
+
+/* ── Labels & inputs ── */
+.ftem-label {
+    display: block;
+    font-weight: 600;
+    font-size: .92rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.ftem-required { color: var(--orange); font-weight: 700; }
+
+.ftem-hint {
+    font-weight: 400;
+    font-size: .8rem;
+    color: var(--text-muted);
+    margin-left: 4px;
+}
+
+.ftem-input,
+.ftem-textarea {
+    width: 100%;
+    background: #f7f8fb;
+    border: 1.5px solid rgba(75, 75, 139, .12);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: var(--ubuntu);
+    font-size: .96rem;
+    color: var(--text-dark);
+    transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+.ftem-input:focus,
+.ftem-textarea:focus {
+    outline: none;
+    border-color: var(--violet);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(75, 75, 139, .12);
+}
+
+.ftem-textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+    font-family: var(--ubuntu);
+}
+
+.ftem-counter {
+    text-align: right;
+    font-size: .78rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+.ftem-counter-num.is-warn { color: var(--orange); font-weight: 700; }
+
+.ftem-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+/* ── Radio cards (catégorie) ── */
+.ftem-radio-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.ftem-radio-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 16px;
+    border: 2px solid rgba(75, 75, 139, .14);
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
+    position: relative;
+}
+
+.ftem-radio-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ftem-radio-card:hover {
+    border-color: rgba(75, 75, 139, .35);
+    transform: translateY(-2px);
+}
+
+.ftem-radio-card:has(input:checked) {
+    border-color: var(--violet);
+    background: rgba(75, 75, 139, .04);
+    box-shadow: 0 6px 20px rgba(75, 75, 139, .14);
+}
+
+.ftem-radio-card--parent:has(input:checked)        { border-color: var(--orange); background: rgba(236,111,4,.04); box-shadow: 0 6px 20px rgba(236,111,4,.14); }
+.ftem-radio-card--professionnel:has(input:checked) { border-color: var(--turquoise); background: rgba(63,183,171,.05); box-shadow: 0 6px 20px rgba(63,183,171,.14); }
+
+.ftem-radio-card-title {
+    font-family: var(--montserrat);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.ftem-radio-card-desc {
+    font-size: .8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+/* ── Radio pills (format) ── */
+.ftem-radio-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.ftem-radio-pill {
+    cursor: pointer;
+}
+
+.ftem-radio-pill input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ftem-radio-pill span {
+    display: inline-block;
+    background: #f2f4f8;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: .9rem;
+    padding: 9px 18px;
+    border-radius: 30px;
+    border: 2px solid transparent;
+    transition: background .2s, border-color .2s, color .2s;
+}
+
+.ftem-radio-pill:hover span { background: rgba(75, 75, 139, .07); }
+
+.ftem-radio-pill input:checked + span {
+    background: var(--violet);
+    color: #fff;
+    border-color: var(--violet);
+    box-shadow: 0 4px 12px rgba(75, 75, 139, .25);
+}
+
+/* ── Champs conditionnels ── */
+.ftem-cond {
+    display: none;
+    margin-top: 18px;
+    padding: 18px;
+    background: rgba(75, 75, 139, .04);
+    border-radius: 12px;
+    border: 1px dashed rgba(75, 75, 139, .15);
+    animation: ftem-cond-in .25s ease;
+}
+.ftem-cond.is-active { display: block; }
+
+@keyframes ftem-cond-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ── File upload ── */
+.ftem-file-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ftem-file-wrap input[type="file"] {
+    font-size: .85rem;
+    font-family: var(--ubuntu);
+    color: var(--text-muted);
+}
+
+.ftem-file-wrap input[type="file"]::-webkit-file-upload-button,
+.ftem-file-wrap input[type="file"]::file-selector-button {
+    background: var(--violet);
+    color: #fff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-family: var(--ubuntu);
+    font-weight: 600;
+    font-size: .85rem;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background .2s;
+}
+.ftem-file-wrap input[type="file"]::-webkit-file-upload-button:hover,
+.ftem-file-wrap input[type="file"]::file-selector-button:hover {
+    background: var(--violet-light, #5e5ea5);
+}
+
+.ftem-file-name:empty::before { content: attr(data-empty); color: var(--text-muted); font-size: .82rem; }
+.ftem-file-name { font-size: .82rem; color: var(--text-dark); font-weight: 600; }
+
+/* ── Checkboxes ── */
+.ftem-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 12px 0;
+    font-size: .92rem;
+    line-height: 1.55;
+    color: var(--text-dark);
+}
+
+.ftem-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--violet);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.ftem-checkbox--consent {
+    background: rgba(63, 183, 171, .06);
+    border: 1px solid rgba(63, 183, 171, .2);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: .88rem;
+}
+
+.ftem-checkbox--consent input[type="checkbox"] { accent-color: var(--turquoise); }
+
+/* ── Errors / Success ── */
+.ftem-errors {
+    background: rgba(236, 111, 4, .08);
+    border-left: 4px solid var(--orange);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    color: var(--text-dark);
+}
+.ftem-errors strong { display: block; margin-bottom: 6px; color: var(--orange); }
+.ftem-errors ul { margin: 0; padding-left: 20px; }
+.ftem-errors li { margin: 4px 0; }
+
+.ftem-success {
+    background: #fff;
+    border-radius: 18px;
+    padding: 56px 36px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(63, 183, 171, .12);
+    border: 1px solid rgba(63, 183, 171, .25);
+}
+
+.ftem-success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(63, 183, 171, .12);
+    color: var(--turquoise);
+    margin-bottom: 22px;
+    animation: ftem-pop .5s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@keyframes ftem-pop {
+    0%   { transform: scale(0); opacity: 0; }
+    60%  { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ftem-success h2 {
+    font-family: var(--montserrat);
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0 0 14px;
+    color: var(--text-dark);
+}
+
+.ftem-success p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 auto 28px;
+    max-width: 480px;
+}
+
+/* ── Boutons ── */
+.ftem-submit-wrap {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.ftem-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-family: var(--ubuntu);
+    font-weight: 700;
+    font-size: .98rem;
+    padding: 14px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background .2s, transform .2s, box-shadow .2s;
+}
+
+.ftem-btn--primary {
+    background: var(--orange);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(236, 111, 4, .42);
+}
+.ftem-btn--primary:hover {
+    background: var(--orange-hover, #d46000);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(236, 111, 4, .52);
+}
+
+.ftem-submit-note {
+    font-size: .82rem;
+    color: var(--text-muted);
+    margin: 14px 0 0;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 720px) {
+    .ftem-hero { padding: 70px 16px 90px; }
+    .ftem-form { padding: 8px 22px 28px; }
+    .ftem-radio-cards { grid-template-columns: 1fr; }
+    .ftem-grid-2 { grid-template-columns: 1fr; }
+    .ftem-legend { font-size: 1.05rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ftem-hero-wave svg { animation: none; }
+    .ftem-success-icon { animation: none; }
+    .ftem-cond { animation: none; }
+}

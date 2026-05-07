@@ -530,4 +530,16 @@
     } else {
         init();
     }
+
+    /* Refresh ScrollTrigger après chargement complet des polices + images
+       pour corriger les positions calculées avec des fontes de fallback */
+    Promise.all([
+        document.fonts ? document.fonts.ready : Promise.resolve(),
+        new Promise(resolve => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', resolve, { once: true });
+        }),
+    ]).then(function () {
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    });
 })();

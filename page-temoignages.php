@@ -60,6 +60,9 @@ $cat_icons = [
 ];
 
 $contact_url = get_permalink( get_page_by_path( 'formulaire-contact' ) ) ?: home_url( '/' );
+$submit_url  = get_permalink( get_page_by_path( 'partager-temoignage' ) )
+            ?: get_permalink( get_page_by_path( 'formulaire-temoignage' ) )
+            ?: $contact_url;
 
 /* ── Helper rendu carte ───────────────────────────────── */
 $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, $anim_col = null ) {
@@ -218,10 +221,6 @@ $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, 
                     <span class="tem-hero-stat-num" data-counter="3">0</span>
                     <span class="tem-hero-stat-lbl">publics concernés</span>
                 </div>
-                <div class="tem-hero-stat">
-                    <span class="tem-hero-stat-num" data-counter="68">0</span>
-                    <span class="tem-hero-stat-lbl">Haut-Rhin</span>
-                </div>
             </div>
         </div>
 
@@ -285,7 +284,7 @@ $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, 
             <h2><?php echo esc_html( $cta_title ); ?></h2>
             <p><?php echo esc_html( $cta_sub ); ?></p>
             <div class="tem-cta-btns">
-                <a href="<?php echo esc_url( $contact_url ); ?>" class="tem-btn tem-btn--primary">
+                <a href="<?php echo esc_url( $submit_url ); ?>" class="tem-btn tem-btn--primary">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="17" height="17" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.21a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                     <?php echo esc_html( $cta_btn1 ); ?>
                 </a>

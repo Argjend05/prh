@@ -41,6 +41,11 @@ function prh68_enqueue_styles() {
         wp_enqueue_style(  'tem-style',  $uri . '/css/style-temoignages.css', [ 'prh68-style' ],   $ver );
         wp_enqueue_script( 'tem-script', $uri . '/js/temoignages.js',         [ 'common-script' ], $ver, true );
     }
+
+    if ( is_page_template( 'page-formulaire-temoignage.php' ) ) {
+        wp_enqueue_style(  'ftem-style',  $uri . '/css/style-formulaire-temoignage.css', [ 'prh68-style' ],   $ver );
+        wp_enqueue_script( 'ftem-script', $uri . '/js/formulaire-temoignage.js',         [ 'common-script' ], $ver, true );
+    }
 }
 
 /* =======================================================

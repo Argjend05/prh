@@ -3,9 +3,9 @@ require_once get_stylesheet_directory() . '/inc/acf-fields.php';
 require_once get_stylesheet_directory() . '/inc/scripts.php';
 require_once get_stylesheet_directory() . '/inc/cpt.php';
 
-/* ── Supprime les items de menu dropdown sans enfants ─── */
+/* ── Filtrage des items de menu (dropdowns vides + témoignages) ─── */
 add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
-    // Collecte les IDs des items qui ont au moins un enfant
+    // 1. Map des parents qui ont au moins un enfant
     $parents_with_children = [];
     foreach ( $items as $item ) {
         $pid = (int) $item->menu_item_parent;
@@ -14,15 +14,57 @@ add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
         }
     }
 
+    // 2. Check : existe-t-il au moins un témoignage publié ?
+    $has_temoignages = (bool) get_posts( [
+        'post_type'      => 'temoignage',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'post_status'    => 'publish',
+    ] );
+
+    // 3. Premier passage : on supprime le lien témoignages si pas de témoignages
+    if ( ! $has_temoignages ) {
+        $items = array_filter( $items, function ( $item ) {
+            $url   = trim( $item->url );
+            $title = strtolower( trim( wp_strip_all_tags( $item->title ) ) );
+
+            // Page assignée avec slug "temoignages"
+            if ( $item->object === 'page' ) {
+                $slug = get_post_field( 'post_name', (int) $item->object_id );
+                if ( $slug === 'temoignages' ) return false;
+            }
+            // URL pointant vers /temoignages
+            if ( preg_match( '#/temoignages/?$#i', $url ) ) return false;
+            // Titre exactement "Témoignages"
+            if ( in_array( $title, [ 'témoignages', 'temoignages' ], true ) ) return false;
+
+            return true;
+        } );
+    }
+
+    // 4. Recalcule les parents avec enfants après le filtre témoignages
+    //    (au cas où un témoignage retiré laisserait un parent vide)
+    $parents_with_children = [];
+    foreach ( $items as $item ) {
+        $pid = (int) $item->menu_item_parent;
+        if ( $pid > 0 ) {
+            $parents_with_children[ $pid ] = true;
+        }
+    }
+
+    // 5. Deuxième passage : supprime les top-level dropdowns vides
     return array_values( array_filter( $items, function ( $item ) use ( $parents_with_children ) {
-        // Garde tous les enfants tels quels
+        // Garde tous les enfants
         if ( (int) $item->menu_item_parent !== 0 ) return true;
 
-        // Pour les top-level : supprime si URL vide/# ET aucun enfant
-        $no_real_url = in_array( trim( $item->url ), [ '#', '', 'javascript:void(0)' ], true );
-        $no_children = ! isset( $parents_with_children[ (int) $item->ID ] );
+        // Top-level : supprime si AUCUN enfant (peu importe l'URL)
+        $has_children = isset( $parents_with_children[ (int) $item->ID ] );
+        $is_dropdown_label = in_array( trim( $item->url ), [ '#', '', 'javascript:void(0)' ], true );
 
-        return ! ( $no_real_url && $no_children );
+        // Si c'est un libellé de dropdown (URL = #) sans enfants → supprime
+        if ( $is_dropdown_label && ! $has_children ) return false;
+
+        return true;
     } ) );
 }, 10, 2 );
 

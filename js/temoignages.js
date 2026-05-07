@@ -50,6 +50,10 @@
         function updateResultCount(n) {
             if (!resultNum) return;
             resultNum.textContent = n;
+            var countEl = resultNum.parentElement;
+            if (countEl) {
+                countEl.innerHTML = '<span class="tem-result-num">' + n + '</span> témoignage' + (n !== 1 ? 's' : '');
+            }
         }
 
         function showCard(card) {
@@ -355,12 +359,20 @@
                 modalSlot.appendChild(buildEmbed(url));
                 modal.hidden = false;
                 document.body.style.overflow = 'hidden';
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        modal.classList.add('is-open');
+                    });
+                });
             }
 
             function closeModal() {
-                modal.hidden = true;
-                modalSlot.innerHTML = '';
+                modal.classList.remove('is-open');
                 document.body.style.overflow = '';
+                setTimeout(function () {
+                    modal.hidden = true;
+                    modalSlot.innerHTML = '';
+                }, 280);
             }
 
             triggers.forEach(function (btn) {
