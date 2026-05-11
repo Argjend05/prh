@@ -45,15 +45,35 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- Styles critiques inline : masque le body jusqu'à ce que le loader soit prêt -->
-    <style>
-        body{visibility:hidden}
-        #page-loader,#page-curtain{visibility:visible}
-        #page-loader{position:fixed;inset:0;z-index:99999;background:#fff;display:flex;align-items:center;justify-content:center}
-        html.prh-navigating #page-loader{display:none!important}
-        html.prh-navigating{opacity:0}
+    <!-- Styles critiques inline : masque le contenu de manière robuste -->
+    <style id="prh-critical-styles">
+        /* Couleur de fond par défaut (évite le fond du navigateur) */
+        html { background-color: #fff; }
+        
+        /* Masque tout le contenu direct du body SAUF les loaders/scripts */
+        body > *:not(#page-loader):not(#page-curtain):not(script):not(style) {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* Styles de base du loader */
+        #page-loader {
+            position: fixed; inset: 0; z-index: 99999; 
+            background: #fff; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- En cas de navigation interne --- */
+        html.prh-navigating { background-color: #16152b; } /* Couleur du rideau */
+        html.prh-navigating #page-loader { display: none !important; }
+        
+        /* On force le rideau à couvrir tout de suite sans transition */
+        html.prh-navigating #page-curtain {
+            position: fixed; inset: 0; z-index: 100000; background: #16152b;
+            transform: translateY(0) !important; transition: none !important;
+        }
     </style>
-    <script>(function(){if(sessionStorage.getItem('prh_nav')){document.documentElement.style.opacity='0';document.documentElement.classList.add('prh-navigating');}}());</script>
+    <script>(function(){if(sessionStorage.getItem('prh_nav')){document.documentElement.classList.add('prh-navigating');}}());</script>
 
     <?php wp_head(); ?>
 </head>

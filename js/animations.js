@@ -81,16 +81,18 @@
         if (window._prhIsNavigation) {
             var loader = document.getElementById('page-loader');
             if (loader) loader.remove();
-            document.body.style.visibility = 'visible';
+            
             var curtain = document.getElementById('page-curtain');
             if (curtain) {
                 curtain.classList.add('is-covering');
                 document.documentElement.classList.remove('prh-navigating');
+                document.documentElement.style.backgroundColor = '';
+                
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
-                        /* opacity:1 et is-out dans le même frame — premier rendu visible
-                           = rideau déjà en train de monter, zéro flash */
-                        document.documentElement.style.opacity = '1';
+                        var critStyle = document.getElementById('prh-critical-styles');
+                        if (critStyle) critStyle.remove();
+                        
                         curtain.classList.add('is-out');
                         if (window._prhHeroTl) window._prhHeroTl.play();
                         curtain.addEventListener('transitionend', function () {
@@ -636,8 +638,11 @@
         if (window._prhIsNavigation) {
             /* Hero déjà lancé dans le double rAF synced avec le rideau */
         } else {
-            /* Premier chargement : révèle le body juste avant que le loader sorte */
-            document.body.style.visibility = 'visible';
+            /* Premier chargement : retire les styles critiques juste avant la sortie du loader */
+            var critStyle = document.getElementById('prh-critical-styles');
+            if (critStyle) critStyle.remove();
+            document.documentElement.style.backgroundColor = '';
+            
             var loader = document.getElementById('page-loader');
             if (loader) {
                 loader.classList.add('loader-out');
