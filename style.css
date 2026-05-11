@@ -844,7 +844,7 @@ body .prh-mobile-nav-list li a {
 
 .obs-container {
     max-width: 1100px;
-    margin-left: clamp(24px, 6vw, 80px);
+    margin-left: auto;
     margin-right: auto;
     padding: 0 24px;
 }
@@ -1022,7 +1022,6 @@ body .obs-btn-turquoise {
 
 .obs-hero-content {
     max-width: 1100px;
-    text-align: left;
 }
 
 .obs-hero h1 {
@@ -1033,6 +1032,7 @@ body .obs-btn-turquoise {
     margin: 0;
     line-height: 1.2;
     text-wrap: balance;
+    text-align: left;
 }
 
 .obs-hero p {
