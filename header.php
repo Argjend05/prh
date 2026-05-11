@@ -45,29 +45,26 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- Styles critiques inline : masque le contenu de manière robuste -->
     <style>
-        /* Couleur de fond par défaut (évite le fond du navigateur) */
         html { background-color: #fff; }
         
-        /* Masque tout le contenu direct du body SAUF les loaders/scripts quand la classe prh-loading est là */
-        html.prh-loading body > *:not(#page-loader):not(#page-curtain):not(script):not(style) {
+        html.prh-loading .prh-header,
+        html.prh-loading #prh-mobile-nav,
+        html.prh-loading .wrapper,
+        html.prh-loading .obs-footer {
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none !important;
         }
 
-        /* Styles de base du loader */
         #page-loader {
             position: fixed; inset: 0; z-index: 99999; 
             background: #fff; display: flex; align-items: center; justify-content: center;
         }
 
-        /* --- En cas de navigation interne --- */
-        html.prh-navigating { background-color: #16152b; } /* Couleur du rideau */
+        html.prh-navigating { background-color: #16152b; }
         html.prh-navigating #page-loader { display: none !important; }
         
-        /* On force le rideau à couvrir tout de suite sans transition */
         html.prh-navigating #page-curtain {
             position: fixed; inset: 0; z-index: 100000; background: #16152b;
             transform: translateY(0) !important; transition: none !important;
