@@ -48,6 +48,10 @@
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         if (typeof gsap === 'undefined') return;
 
+        /* Signale que GSAP est opérationnel — les règles CSS .gsap-ready
+           cachent les éléments hero que la timeline va animer. */
+        document.body.classList.add('gsap-ready');
+
         gsap.registerPlugin(ScrollTrigger);
 
         /* ── CSS utilitaire pour le split de mots ─────────────────────────── */
@@ -129,31 +133,55 @@
         if (heroContent) {
             [...heroContent.querySelectorAll('[data-reveal]')].forEach(el => managed.add(el));
 
-            const tl = gsap.timeline({ defaults: { ease: 'power4.out', clearProps: 'all' } });
+            /* Pas de clearProps global : on gère explicitement par tween
+               pour éviter que le nettoyage ne réexpose une opacity:0 CSS. */
+            const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
             const h1 = heroContent.querySelector('h1');
             const wordSpans = wordSplit(h1);
             if (wordSpans) {
-                tl.from(wordSpans, { y: '115%', duration: 0.7, stagger: 0.06 });
+                /* Spans créés dynamiquement — pas de CSS opacity:0, clearProps ok */
+                tl.from(wordSpans, { y: '115%', duration: 0.7, stagger: 0.06, clearProps: 'all' });
             } else if (h1) {
-                tl.from(h1, { opacity: 0, y: 40, duration: 0.8 });
+                /* fromTo explicite : go to opacity:1 sans dépendre du CSS */
+                tl.fromTo(h1,
+                    { opacity: 0, y: 40 },
+                    { opacity: 1, y: 0, duration: 0.8, clearProps: 'y' }
+                );
             }
 
             const subtitle = heroContent.querySelector('p');
             if (subtitle) {
-                tl.from(subtitle, { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out' }, '-=0.35');
+                tl.fromTo(subtitle,
+                    { opacity: 0, y: 24 },
+                    { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', clearProps: 'y' },
+                    '-=0.35'
+                );
             }
 
-            const btns = [...heroContent.querySelectorAll('a, button')];
-            if (btns.length) {
-                tl.from(btns, {
-                    opacity: 0, scale: 0.75, y: 12,
-                    duration: 0.55, stagger: 0.08,
-                    ease: 'back.out(1.8)',
-                }, '-=0.25');
+            /* Accueil : animer le conteneur .acc-hero-btns (CSS opacity:0 via .gsap-ready).
+               Autres pages (pro, obs) : animer les liens individuels. */
+            const btnsContainer = heroContent.querySelector('.acc-hero-btns');
+            if (btnsContainer) {
+                tl.fromTo(btnsContainer,
+                    { opacity: 0, y: 12 },
+                    { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(1.8)', clearProps: 'y' },
+                    '-=0.25'
+                );
+            } else {
+                const btns = [...heroContent.querySelectorAll('a, button')];
+                if (btns.length) {
+                    tl.from(btns, {
+                        opacity: 0, scale: 0.75, y: 12,
+                        duration: 0.55, stagger: 0.08,
+                        ease: 'back.out(1.8)', clearProps: 'all',
+                    }, '-=0.25');
+                }
             }
 
-            /* Image hero — s'ouvre depuis le coin supérieur droit */
+            /* Image hero — s'ouvre depuis le coin supérieur droit.
+               clearProps:'clipPath' seulement (opacity:1 reste inline
+               pour overrider la règle CSS .gsap-ready). */
             const heroImg = document.querySelector('.acc-hero-img');
             if (heroImg) {
                 gsap.set(heroImg, { clipPath: 'circle(0% at 100% 0%)' });

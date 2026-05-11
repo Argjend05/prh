@@ -68,6 +68,39 @@ add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
     } ) );
 }, 10, 2 );
 
+/* ── Auto-création de la page "Partager témoignage" ──── */
+add_action( 'after_switch_theme', 'prh68_create_temoignage_form_page' );
+add_action( 'admin_init',          'prh68_create_temoignage_form_page' );
+function prh68_create_temoignage_form_page() {
+    // Si une page utilise déjà ce template (peu importe son slug) → on ne fait rien
+    $existing = get_posts( [
+        'post_type'      => 'page',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'meta_key'       => '_wp_page_template',
+        'meta_value'     => 'page-formulaire-temoignage.php',
+        'post_status'    => 'any',
+    ] );
+    if ( ! empty( $existing ) ) return;
+
+    // Si une page avec un de ces slugs existe déjà mais sans le template, on l'ignore aussi
+    if ( get_page_by_path( 'partager-temoignage' ) || get_page_by_path( 'formulaire-temoignage' ) ) return;
+
+    $page_id = wp_insert_post( [
+        'post_title'     => 'Partager mon témoignage',
+        'post_name'      => 'partager-temoignage',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'post_content'   => '',
+        'comment_status' => 'closed',
+        'ping_status'    => 'closed',
+    ] );
+
+    if ( $page_id && ! is_wp_error( $page_id ) ) {
+        update_post_meta( $page_id, '_wp_page_template', 'page-formulaire-temoignage.php' );
+    }
+}
+
 /* CPT — Résultats enquête observatoire */
 add_action( 'init', function () {
     register_post_type( 'resultats_enquete', [

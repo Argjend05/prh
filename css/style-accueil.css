@@ -183,12 +183,11 @@ body .acc-page .acc-hero {
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
-    opacity: 0; /* état initial — GSAP anime vers 1 au chargement */
+    /* opacity gérée via .gsap-ready — visible par défaut si GSAP absent */
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .acc-hero-img { opacity: 1 !important; }
-}
+/* GSAP opérationnel : cache l'image, la timeline l'anime vers opacity 1 */
+.gsap-ready .acc-hero-img { opacity: 0; }
 
 .acc-hero-img picture {
     display: block;
@@ -227,6 +226,7 @@ body .acc-page .acc-hero {
     color: #fff;
     line-height: 1.15;
     margin: 0 0 24px;
+    max-width: 900px;
     text-wrap: balance;
 }
 
@@ -238,37 +238,12 @@ body .acc-page .acc-hero {
     text-wrap: balance;
 }
 
-/* --- Animation d'entrée hero --- */
-@keyframes acc-fade-up {
-    from {
-        opacity: 0;
-        transform: translateY(28px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.acc-hero-content h1,
-.acc-hero-content p,
-.acc-hero-content .acc-hero-btns {
+/* État initial hero — caché uniquement si GSAP est opérationnel (.gsap-ready).
+   Sans JS ou si GSAP ne charge pas, tout reste visible immédiatement. */
+.gsap-ready .acc-hero-content h1,
+.gsap-ready .acc-hero-content > p,
+.gsap-ready .acc-hero-content .acc-hero-btns {
     opacity: 0;
-    animation: acc-fade-up .65s cubic-bezier(.22, .61, .36, 1) forwards;
-}
-
-.acc-hero-content h1        { animation-delay:   0ms; }
-.acc-hero-content p         { animation-delay: 160ms; }
-.acc-hero-content .acc-hero-btns { animation-delay: 320ms; }
-
-/* Respect des préférences de réduction de mouvement */
-@media (prefers-reduced-motion: reduce) {
-    .acc-hero-content h1,
-    .acc-hero-content p,
-    .acc-hero-content .acc-hero-btns {
-        opacity: 1;
-        animation: none;
-    }
 }
 
 /* =====================================================
@@ -882,6 +857,12 @@ body .acc-info-card.acc-card-turquoise {
 /* =====================================================
    RESPONSIVE
    ===================================================== */
+@media (max-width: 1024px) {
+    .acc-hero-wrap {
+        padding-left: 40px;
+    }
+}
+
 @media (max-width: 860px) {
     .acc-info-grid {
         grid-template-columns: 1fr;
@@ -897,6 +878,10 @@ body .acc-info-card.acc-card-turquoise {
 
     .acc-hero-wrap {
         padding-left: 24px;
+    }
+
+    .acc-hero-content {
+        max-width: 52%;
     }
 
     .acc-hero-img {
@@ -917,6 +902,11 @@ body .acc-info-card.acc-card-turquoise {
 
     .acc-hero-img {
         display: none;
+    }
+
+    /* Image cachée : le contenu reprend toute la largeur */
+    .acc-hero-content {
+        max-width: 100%;
     }
 
     .acc-hero-btns {

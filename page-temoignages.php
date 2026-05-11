@@ -60,9 +60,20 @@ $cat_icons = [
 ];
 
 $contact_url = get_permalink( get_page_by_path( 'formulaire-contact' ) ) ?: home_url( '/' );
-$submit_url  = get_permalink( get_page_by_path( 'partager-temoignage' ) )
-            ?: get_permalink( get_page_by_path( 'formulaire-temoignage' ) )
-            ?: $contact_url;
+
+/* Détecte automatiquement la page qui utilise le template du formulaire */
+$submit_url = $contact_url;
+$_form_pages = get_posts( [
+    'post_type'      => 'page',
+    'posts_per_page' => 1,
+    'fields'         => 'ids',
+    'meta_key'       => '_wp_page_template',
+    'meta_value'     => 'page-formulaire-temoignage.php',
+    'post_status'    => 'publish',
+] );
+if ( ! empty( $_form_pages ) ) {
+    $submit_url = get_permalink( $_form_pages[0] );
+}
 
 /* ── Helper rendu carte ───────────────────────────────── */
 $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, $anim_col = null ) {

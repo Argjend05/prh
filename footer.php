@@ -3,7 +3,7 @@
  * Sur les pages NON-observatoire, Neve ouvre <main class="neve-main"> et
  * <div class="wrapper"> dans son header. Il faut les fermer ici avant le footer.
  */
-$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php', 'page-temoignages.php'];
+$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php', 'page-temoignages.php', 'page-formulaire-temoignage.php'];
 if (!is_page_template($custom_templates)):
     do_action('neve_before_primary_end');
     ?>
@@ -76,6 +76,23 @@ endif;
                     <li><a href="<?php echo esc_url(site_url('/mentions-legales/')); ?>">Mentions légales</a></li>
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
                     </li>
+                <?php elseif (is_page_template('page-temoignages.php')):
+                    $_form_pages = get_posts([
+                        'post_type' => 'page', 'posts_per_page' => 1, 'fields' => 'ids',
+                        'meta_key' => '_wp_page_template', 'meta_value' => 'page-formulaire-temoignage.php',
+                        'post_status' => 'publish',
+                    ]);
+                    $_submit_url = !empty($_form_pages) ? get_permalink($_form_pages[0]) : '';
+                ?>
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <?php if ($_submit_url): ?>
+                        <li><a href="<?php echo esc_url($_submit_url); ?>">Partager mon témoignage</a></li>
+                    <?php endif; ?>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
+                <?php elseif (is_page_template('page-formulaire-temoignage.php')): ?>
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('temoignages'))); ?>">Voir les témoignages</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
                 <?php else: ?>
                     <li><a href="#mission">Notre Ambition</a></li>
                     <li><a href="#cycle">Les Étapes Clés</a></li>
@@ -157,7 +174,7 @@ endif;
     </div>
 </footer>
 
-<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php') && !is_page_template('page-temoignages.php')): ?>
+<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php') && !is_page_template('page-temoignages.php') && !is_page_template('page-formulaire-temoignage.php')): ?>
     </div><!--/.wrapper-->
 <?php endif; ?>
 
