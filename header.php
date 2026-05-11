@@ -45,27 +45,17 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- Styles critiques inline : anti-FOUC -->
+    <!-- Styles critiques inline : anti-FOUC
+         opacity:0 sur <html> lui-même = seul sélecteur garanti avant le 1er paint Chrome -->
     <style data-no-optimize="1" data-no-minify="1" data-rocket-defer="false">
         html { background-color: #fff; }
-        
-        html.prh-loading .prh-header,
-        html.prh-loading #prh-mobile-nav,
-        html.prh-loading .wrapper,
-        html.prh-loading .obs-footer {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
+        html.prh-loading, html.prh-navigating { opacity: 0; }
 
         #page-loader {
-            position: fixed; inset: 0; z-index: 99999; 
+            position: fixed; inset: 0; z-index: 99999;
             background: #fff; display: flex; align-items: center; justify-content: center;
         }
-
-        html.prh-navigating { background-color: #16152b; }
         html.prh-navigating #page-loader { display: none !important; }
-        
         html.prh-navigating #page-curtain {
             position: fixed; inset: 0; z-index: 100000; background: #16152b;
             transform: translateY(0) !important; transition: none !important;
@@ -106,6 +96,9 @@
     <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>"
          alt="" width="80" height="86" class="curtain-logo">
 </div>
+<!-- Révélation anticipée : loader/curtain sont dans le DOM, on restaure l'opacité
+     avant que les scripts footer (GSAP, CDN…) ne chargent — élimine le FOUC Chrome -->
+<script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">(function(){var d=document.documentElement;d.classList.remove('prh-loading');if(d.classList.contains('prh-navigating'))d.style.opacity='1';}());</script>
 <script>setTimeout(function(){var l=document.getElementById('page-loader');if(l&&!l.classList.contains('loader-out')){l.style.transition='none';l.remove();}},5000);</script>
 
 <!-- Header en dehors du .wrapper pour que position:sticky fonctionne -->

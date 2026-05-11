@@ -81,17 +81,17 @@
         if (window._prhIsNavigation) {
             var loader = document.getElementById('page-loader');
             if (loader) loader.remove();
-            
+
             var curtain = document.getElementById('page-curtain');
             if (curtain) {
+                /* Confirme translateY(0) via classe (CSS l'a déjà positionné) */
                 curtain.classList.add('is-covering');
+                /* Retire la classe navigating — la règle opacity:0 disparaît,
+                   l'inline style opacity:1 posé par le script body prend le relais */
                 document.documentElement.classList.remove('prh-navigating');
-                document.documentElement.style.backgroundColor = '';
-                
+
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
-                        document.documentElement.classList.remove('prh-loading');
-                        
                         curtain.classList.add('is-out');
                         if (window._prhHeroTl) window._prhHeroTl.play();
                         curtain.addEventListener('transitionend', function () {
@@ -99,6 +99,8 @@
                             curtain.classList.remove('is-covering', 'is-out');
                             curtain.offsetHeight;
                             curtain.style.transition = '';
+                            /* Nettoie l'inline style opacity posé par le script body */
+                            document.documentElement.style.opacity = '';
                         }, { once: true });
                     });
                 });
@@ -637,10 +639,8 @@
         if (window._prhIsNavigation) {
             /* Hero déjà lancé dans le double rAF synced avec le rideau */
         } else {
-            /* Premier chargement : retire la classe de chargement juste avant la sortie du loader */
-            document.documentElement.classList.remove('prh-loading');
-            document.documentElement.style.backgroundColor = '';
-            
+            /* Premier chargement : prh-loading déjà retiré par le script inline body,
+               il reste à sortir le loader et lancer le hero. */
             var loader = document.getElementById('page-loader');
             if (loader) {
                 loader.classList.add('loader-out');
