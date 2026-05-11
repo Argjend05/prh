@@ -844,7 +844,8 @@ body .prh-mobile-nav-list li a {
 
 .obs-container {
     max-width: 1100px;
-    margin: 0 auto;
+    margin-left: clamp(24px, 6vw, 80px);
+    margin-right: auto;
     padding: 0 24px;
 }
 

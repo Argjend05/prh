@@ -45,11 +45,29 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
+    <script>(function(){if(sessionStorage.getItem('prh_nav')){document.documentElement.style.opacity='0';document.documentElement.classList.add('prh-navigating');}}());</script>
+
     <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+
+<!-- Page loader -->
+<div id="page-loader" aria-hidden="true">
+    <div class="loader-inner">
+        <div class="loader-glow"></div>
+        <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>"
+             alt="" width="90" height="97" class="loader-logo">
+        <p class="loader-brand">Pôle Ressources Handicap</p>
+        <div class="loader-bar"><span class="loader-bar-fill"></span></div>
+    </div>
+</div>
+<div id="page-curtain" aria-hidden="true">
+    <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>"
+         alt="" width="80" height="86" class="curtain-logo">
+</div>
+<script>setTimeout(function(){var l=document.getElementById('page-loader');if(l&&!l.classList.contains('loader-out')){l.style.transition='none';l.remove();}},5000);</script>
 
 <!-- Header en dehors du .wrapper pour que position:sticky fonctionne -->
 <header class="prh-header" id="prh-header">

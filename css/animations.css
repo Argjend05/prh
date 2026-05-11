@@ -71,3 +71,168 @@
     color: #ec6f04 !important;
     font-weight: 700;
 }
+
+/* =====================================================
+   RIDEAU DE NAVIGATION (navigation interne)
+   ===================================================== */
+
+html.prh-navigating #page-loader { display: none !important; }
+
+#page-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: #16152b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(100%);
+    will-change: transform;
+    pointer-events: none;
+    transition: transform 0.32s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Rideau en place — couvre toute la page */
+#page-curtain.is-covering {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#page-curtain.is-out {
+    transform: translateY(-100%);
+    transition-duration: 0.36s;
+}
+
+/* Sur navigation interne : couvre instantanément (pas de transition) */
+html.prh-navigating #page-curtain {
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: none;
+}
+
+.curtain-logo {
+    width: 80px;
+    height: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.92;
+}
+
+/* =====================================================
+   PAGE LOADER (premier chargement)
+   ===================================================== */
+
+#page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: linear-gradient(160deg, #ffffff 55%, #f2f1fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.65s cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform;
+}
+
+#page-loader::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #4b4a8b, #ed7003);
+}
+
+#page-loader.loader-out {
+    transform: translateY(-100%);
+}
+
+.loader-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loader-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(75, 74, 139, 0.09) 0%, transparent 70%);
+    animation: loader-pulse 2.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes loader-pulse {
+    0%, 100% { transform: translate(-50%, -60%) scale(0.85); opacity: 0.5; }
+    50%       { transform: translate(-50%, -60%) scale(1.15); opacity: 1;   }
+}
+
+.loader-logo {
+    position: relative;
+    z-index: 1;
+    width: 90px;
+    height: auto;
+    opacity: 0;
+    transform: translateY(28px) scale(0.75);
+    animation: loader-logo-in 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s forwards;
+}
+
+@keyframes loader-logo-in {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.loader-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #4b4a8b;
+    margin: 22px 0 0;
+    opacity: 0;
+    animation: loader-fade-in 0.45s ease 0.72s forwards;
+}
+
+@keyframes loader-fade-in {
+    to { opacity: 1; }
+}
+
+.loader-bar {
+    width: 52px;
+    height: 2px;
+    background: rgba(75, 74, 139, 0.1);
+    border-radius: 2px;
+    margin-top: 14px;
+    overflow: hidden;
+    opacity: 0;
+    animation: loader-fade-in 0.01s linear 0.72s forwards;
+}
+
+.loader-bar-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #4b4a8b, #ed7003);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: loader-bar-grow 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.75s forwards;
+}
+
+@keyframes loader-bar-grow {
+    to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #page-loader { transition-duration: 0.01ms; }
+    .loader-glow { animation: none; }
+    .loader-logo, .loader-brand, .loader-bar, .loader-bar-fill {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}

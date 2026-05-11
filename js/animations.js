@@ -1,6 +1,38 @@
 (function () {
     function init() {
 
+        /* ── NAVIGATION INTERNE ───────────────────────────────────────────── */
+        window._prhIsNavigation = sessionStorage.getItem('prh_nav') === '1';
+        if (window._prhIsNavigation) sessionStorage.removeItem('prh_nav');
+
+        /* Intercepte les liens internes : rideau monte depuis le bas → navigate.
+           Phase de capture (true) pour court-circuiter un éventuel stopPropagation
+           du thème parent sur les liens de navigation. */
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest('a[href]');
+            if (!a) return;
+            try {
+                var url = new URL(a.href);
+                if (url.hostname !== window.location.hostname) return;
+                if (a.target === '_blank') return;
+                if (a.getAttribute('download') !== null) return;
+                if (url.pathname === window.location.pathname && url.hash) return;
+                e.preventDefault();
+                sessionStorage.setItem('prh_nav', '1');
+                var curtain = document.getElementById('page-curtain');
+                if (curtain) {
+                    var dest = a.href;
+                    curtain.offsetHeight; /* force reflow — déclenche la transition CSS */
+                    curtain.classList.add('is-covering');
+                    curtain.addEventListener('transitionend', function () {
+                        window.location.href = dest;
+                    }, { once: true });
+                } else {
+                    window.location.href = a.href;
+                }
+            } catch (err) {}
+        }, true); /* capture phase */
+
         /* ── RETOUR EN HAUT ───────────────────────────────────────────────── */
         const topBtn = document.createElement('button');
         topBtn.id = 'prh-back-to-top';
@@ -41,6 +73,31 @@
                     });
                 }, { rootMargin: '-35% 0px -60% 0px' });
                 spySections.forEach(({ sec }) => spyObs.observe(sec));
+            }
+        }
+
+        /* Navigation interne : rideau déjà en place (CSS), on le soulève.
+           Doit tourner avant les checks GSAP — ne dépend pas de GSAP. */
+        if (window._prhIsNavigation) {
+            document.documentElement.style.opacity = '1';
+            var loader = document.getElementById('page-loader');
+            if (loader) loader.remove();
+            var curtain = document.getElementById('page-curtain');
+            if (curtain) {
+                curtain.classList.add('is-covering');
+                document.documentElement.classList.remove('prh-navigating');
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        curtain.classList.add('is-out');
+                        if (window._prhHeroTl) window._prhHeroTl.play();
+                        curtain.addEventListener('transitionend', function () {
+                            curtain.style.transition = 'none';
+                            curtain.classList.remove('is-covering', 'is-out');
+                            curtain.offsetHeight;
+                            curtain.style.transition = '';
+                        }, { once: true });
+                    });
+                });
             }
         }
 
@@ -133,9 +190,8 @@
         if (heroContent) {
             [...heroContent.querySelectorAll('[data-reveal]')].forEach(el => managed.add(el));
 
-            /* Pas de clearProps global : on gère explicitement par tween
-               pour éviter que le nettoyage ne réexpose une opacity:0 CSS. */
-            const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+            /* Timeline en pause — lancée quand le loader sort (voir Promise.all). */
+            const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, paused: true });
 
             const h1 = heroContent.querySelector('h1');
             const wordSpans = wordSplit(h1);
@@ -193,6 +249,7 @@
                     clearProps: 'clipPath',
                 }, 0);
             }
+            window._prhHeroTl = tl;
         }
 
         /* ── 2. PARALLAXE HERO MULTI-COUCHES ──────────────────────────────── */
@@ -559,15 +616,34 @@
         init();
     }
 
-    /* Refresh ScrollTrigger après chargement complet des polices + images
-       pour corriger les positions calculées avec des fontes de fallback */
+    /* Refresh ScrollTrigger + dismiss du loader après polices + images chargés.
+       Le timer de 900ms garantit que l'animation d'entrée du loader est visible
+       même sur connexions très rapides. */
     Promise.all([
         document.fonts ? document.fonts.ready : Promise.resolve(),
         new Promise(resolve => {
             if (document.readyState === 'complete') resolve();
             else window.addEventListener('load', resolve, { once: true });
         }),
+        /* Pas de délai minimum sur navigation interne (tout est en cache) */
+        new Promise(resolve => setTimeout(resolve, window._prhIsNavigation ? 0 : 900)),
     ]).then(function () {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+
+        if (window._prhIsNavigation) {
+            /* Hero déjà lancé dans le double rAF synced avec le rideau */
+        } else {
+            /* Premier chargement : rideau qui monte, hero 300ms après */
+            var loader = document.getElementById('page-loader');
+            if (loader) {
+                loader.classList.add('loader-out');
+                loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
+                if (typeof gsap !== 'undefined' && window._prhHeroTl) {
+                    gsap.delayedCall(0.3, function () { window._prhHeroTl.play(); });
+                }
+            } else if (typeof gsap !== 'undefined' && window._prhHeroTl) {
+                window._prhHeroTl.play();
+            }
+        }
     });
 })();
