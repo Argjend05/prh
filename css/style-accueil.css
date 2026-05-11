@@ -880,57 +880,56 @@ body .acc-info-card.acc-card-turquoise {
         gap: 16px;
     }
 
-    .acc-hero-content {
-        max-width: 52%;
-    }
-
-    .acc-hero-img {
-        width: 55%;
-        height: 80%;
-        border-bottom-left-radius: 80px;
-    }
-
     .acc-stats-grid {
         gap: 16px;
     }
 }
 
-@media (max-width: 640px) {
-    body .acc-page .acc-hero {
-        /* Mobile : hauteur naturelle du contenu, pas besoin de 100vh */
-        min-height: 0;
-        padding: 60px 0 40px;
-    }
-
+/* Tablette : on cache l'image dès 768px pour que le contenu
+   hero ait de l'espace et reste lisible */
+@media (max-width: 768px) {
     .acc-hero-img {
         display: none;
     }
 
-    /* Image cachée : le contenu reprend toute la largeur, offset supprimé */
     .acc-hero-content {
         max-width: 100%;
-    }
-
-    .acc-hero-content h1 {
-        text-align: center;
-    }
-
-    .acc-hero-content p {
-        text-align: center;
     }
 
     .acc-hero-wrap {
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .acc-hero-content h1,
+    .acc-hero-content p {
         text-align: center;
     }
 
     .acc-hero-btns {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        gap: 12px;
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Désactive la vague animée sur mobile : continu GPU, inutile sur petit écran */
+    .acc-hero-btns a,
+    .acc-hero-btns button {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    body .acc-page .acc-hero {
+        /* Plein écran sur mobile — flex center appliqué via le breakpoint 768px */
+        min-height: calc(100vh - 72px);
+        padding: 60px 0 70px; /* 60 haut + 70 bas (vague ~55px + marge) */
+    }
+
+    /* Désactive la vague animée sur mobile : GPU continu inutile */
     .acc-hero-wave svg {
         animation: none;
         transform: translateX(0);

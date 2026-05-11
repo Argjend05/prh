@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.4.0
+ Version:      1.4.1
 */
 
 /* =====================================================
@@ -2062,25 +2062,44 @@ body ul.obs-footer-contact {
     }
 }
 
+/* Tablette : centrage du hero observatoire dès 768px */
+@media (max-width: 768px) {
+    .obs-hero .obs-hero-inner {
+        width: 100%;
+        margin-left: auto;
+        justify-content: center;
+    }
+
+    .obs-hero-content {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .obs-hero h1 {
+        text-align: center;
+    }
+
+    /* Le container parent (.obs-hero-content) est flex + align-items:center,
+       donc le bouton inline-flex se centre automatiquement */
+    body .obs-btn-violet {
+        margin-top: 28px;
+    }
+}
+
 @media (max-width: 640px) {
-    /* Mobile : hauteur naturelle, pas besoin de 100vh */
+    /* Plein écran sur mobile — centrage héros déjà hérité du breakpoint 768px */
     .obs-hero {
-        min-height: 0;
+        min-height: calc(100vh - 72px);
+        padding: 60px 20px 70px;
     }
 
     /* Désactive la vague animée sur mobile */
     .obs-hero-wave svg {
         animation: none;
         transform: translateX(0);
-    }
-
-    .obs-hero-content {
-        text-align: center;
-    }
-
-    /* text-align:left explicite sur h1 doit être réinitialisé sur mobile */
-    .obs-hero h1 {
-        text-align: center;
     }
 
     .obs-mission-grid,

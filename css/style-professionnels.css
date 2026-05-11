@@ -491,11 +491,32 @@ details[open] .pro-acc-chevron {
     }
 }
 
+/* Tablette : centrage du hero dès 768px */
+@media (max-width: 768px) {
+    .pro-hero .pro-container {
+        margin-left: auto;
+        text-align: center;
+    }
+
+    .pro-hero-content h1,
+    .pro-hero-content p {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    /* Bouton hero : centré via le text-align:center du container parent.
+       On force aussi une largeur max pour qu'il ne s'étire pas trop. */
+    body .pro-hero-btn {
+        max-width: 320px;
+    }
+}
+
 @media (max-width: 640px) {
-    /* Mobile : hauteur naturelle du contenu */
+    /* Plein écran sur mobile */
     .pro-page .pro-hero {
-        min-height: 0;
-        padding: 60px 0 40px;
+        min-height: calc(100vh - 72px);
+        padding: 60px 0 70px; /* marge basse pour la vague */
+        align-items: center;
     }
 
     /* Désactive la vague animée sur mobile */
@@ -511,19 +532,6 @@ details[open] .pro-acc-chevron {
 
     .pro-why-grid {
         grid-template-columns: 1fr;
-    }
-
-    /* Hero pleine largeur sur mobile : offset supprimé */
-    .pro-hero .pro-container {
-        margin-left: auto;
-    }
-
-    .pro-hero-content h1 {
-        text-align: center;
-    }
-
-    .pro-hero-content p {
-        text-align: center;
     }
 }
 
