@@ -45,8 +45,8 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- Styles critiques inline : anti-FOUC (attributs data-no-optimize pour WP Rocket / Litespeed) -->
-    <style data-no-optimize="1" data-no-minify="1">
+    <!-- Styles critiques inline : anti-FOUC -->
+    <style data-no-optimize="1" data-no-minify="1" data-rocket-defer="false">
         html { background-color: #fff; }
         
         html.prh-loading .prh-header,
@@ -71,7 +71,7 @@
             transform: translateY(0) !important; transition: none !important;
         }
     </style>
-    <script data-no-optimize="1" data-no-minify="1" data-cfasync="false">
+    <script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">
         (function(){
             document.documentElement.classList.add('prh-loading');
             if(sessionStorage.getItem('prh_nav')){
