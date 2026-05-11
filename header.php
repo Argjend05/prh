@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?> style="opacity:0">
 
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
@@ -46,10 +46,10 @@
     <?php endif; ?>
 
     <!-- Styles critiques inline : anti-FOUC
-         opacity:0 sur <html> lui-même = seul sélecteur garanti avant le 1er paint Chrome -->
+         L'attribut style="opacity:0" sur <html> (balise PHP ci-dessus) est la seule
+         garantie absolue : il est là avant tout paint, avant tout JS. -->
     <style data-no-optimize="1" data-no-minify="1" data-rocket-defer="false">
         html { background-color: #fff; }
-        html.prh-loading, html.prh-navigating { opacity: 0; }
 
         #page-loader {
             position: fixed; inset: 0; z-index: 99999;
@@ -61,9 +61,9 @@
             transform: translateY(0) !important; transition: none !important;
         }
     </style>
+    <!-- Ajoute prh-navigating si retour depuis une navigation interne -->
     <script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">
         (function(){
-            document.documentElement.classList.add('prh-loading');
             if(sessionStorage.getItem('prh_nav')){
                 document.documentElement.classList.add('prh-navigating');
             }
@@ -71,7 +71,7 @@
     </script>
     <noscript>
         <style>
-            .prh-header, #prh-mobile-nav, .wrapper, .obs-footer { opacity: 1 !important; visibility: visible !important; }
+            html { opacity: 1 !important; }
             #page-loader, #page-curtain { display: none !important; }
         </style>
     </noscript>
@@ -96,9 +96,10 @@
     <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>"
          alt="" width="80" height="86" class="curtain-logo">
 </div>
-<!-- Révélation anticipée : loader/curtain sont dans le DOM, on restaure l'opacité
-     avant que les scripts footer (GSAP, CDN…) ne chargent — élimine le FOUC Chrome -->
-<script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">(function(){var d=document.documentElement;d.classList.remove('prh-loading');if(d.classList.contains('prh-navigating'))d.style.opacity='1';}());</script>
+<!-- Révélation : loader ET curtain sont dans le DOM, on retire l'opacity:0 inline.
+     Le loader couvre le contenu (1er chargement) ou le rideau le couvre (navigation).
+     Aucune dépendance GSAP / CDN. -->
+<script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">document.documentElement.style.opacity='';</script>
 <script>setTimeout(function(){var l=document.getElementById('page-loader');if(l&&!l.classList.contains('loader-out')){l.style.transition='none';l.remove();}},5000);</script>
 
 <!-- Header en dehors du .wrapper pour que position:sticky fonctionne -->

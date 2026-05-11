@@ -622,6 +622,29 @@
         init();
     }
 
+    /* ── RETOUR ARRIÈRE (bfcache) ─────────────────────────────────────────
+       Quand l'utilisateur appuie sur ←, Chrome restaure la page depuis le
+       bfcache dans l'état exact où elle était au moment du départ : le rideau
+       avait reçu is-covering juste avant window.location.href. On le remet
+       hors-écran en bas (état initial) et on nettoie toutes les classes/styles
+       résiduels. */
+    window.addEventListener('pageshow', function (e) {
+        if (!e.persisted) return;
+        var d = document.documentElement;
+        d.classList.remove('prh-navigating');
+        d.style.opacity = '';
+        sessionStorage.removeItem('prh_nav');
+        var curtain = document.getElementById('page-curtain');
+        if (curtain) {
+            curtain.style.transition = 'none';
+            curtain.classList.remove('is-covering', 'is-out');
+            curtain.offsetHeight; /* force reflow avant de réactiver la transition */
+            curtain.style.transition = '';
+        }
+        var loader = document.getElementById('page-loader');
+        if (loader) loader.remove();
+    });
+
     /* Refresh ScrollTrigger + dismiss du loader après polices + images chargés.
        Le timer de 900ms garantit que l'animation d'entrée du loader est visible
        même sur connexions très rapides. */
