@@ -90,8 +90,7 @@
                 
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
-                        var critStyle = document.getElementById('prh-critical-styles');
-                        if (critStyle) critStyle.remove();
+                        document.documentElement.classList.remove('prh-loading');
                         
                         curtain.classList.add('is-out');
                         if (window._prhHeroTl) window._prhHeroTl.play();
@@ -638,9 +637,8 @@
         if (window._prhIsNavigation) {
             /* Hero déjà lancé dans le double rAF synced avec le rideau */
         } else {
-            /* Premier chargement : retire les styles critiques juste avant la sortie du loader */
-            var critStyle = document.getElementById('prh-critical-styles');
-            if (critStyle) critStyle.remove();
+            /* Premier chargement : retire la classe de chargement juste avant la sortie du loader */
+            document.documentElement.classList.remove('prh-loading');
             document.documentElement.style.backgroundColor = '';
             
             var loader = document.getElementById('page-loader');

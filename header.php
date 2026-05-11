@@ -46,12 +46,12 @@
     <?php endif; ?>
 
     <!-- Styles critiques inline : masque le contenu de manière robuste -->
-    <style id="prh-critical-styles">
+    <style>
         /* Couleur de fond par défaut (évite le fond du navigateur) */
         html { background-color: #fff; }
         
-        /* Masque tout le contenu direct du body SAUF les loaders/scripts */
-        body > *:not(#page-loader):not(#page-curtain):not(script):not(style) {
+        /* Masque tout le contenu direct du body SAUF les loaders/scripts quand la classe prh-loading est là */
+        html.prh-loading body > *:not(#page-loader):not(#page-curtain):not(script):not(style) {
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none !important;
@@ -73,7 +73,14 @@
             transform: translateY(0) !important; transition: none !important;
         }
     </style>
-    <script>(function(){if(sessionStorage.getItem('prh_nav')){document.documentElement.classList.add('prh-navigating');}}());</script>
+    <script>
+        (function(){
+            document.documentElement.classList.add('prh-loading');
+            if(sessionStorage.getItem('prh_nav')){
+                document.documentElement.classList.add('prh-navigating');
+            }
+        }());
+    </script>
 
     <?php wp_head(); ?>
 </head>
