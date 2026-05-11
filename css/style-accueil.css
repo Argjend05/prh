@@ -123,7 +123,7 @@ body .acc-page .acc-hero {
     min-height: calc(100vh - 80px);
     display: flex;
     align-items: center;
-    padding: 80px 24px 80px;
+    padding: 80px 0;
     position: relative;
     overflow: hidden;
 }
@@ -161,8 +161,9 @@ body .acc-page .acc-hero {
 }
 
 .acc-hero-wrap {
-    padding-left: 80px;
-    padding-top: 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -857,11 +858,6 @@ body .acc-info-card.acc-card-turquoise {
 /* =====================================================
    RESPONSIVE
    ===================================================== */
-@media (max-width: 1024px) {
-    .acc-hero-wrap {
-        padding-left: 40px;
-    }
-}
 
 @media (max-width: 860px) {
     .acc-info-grid {
@@ -874,10 +870,6 @@ body .acc-info-card.acc-card-turquoise {
 
     .acc-services-col {
         gap: 16px;
-    }
-
-    .acc-hero-wrap {
-        padding-left: 24px;
     }
 
     .acc-hero-content {
@@ -897,7 +889,7 @@ body .acc-info-card.acc-card-turquoise {
 
 @media (max-width: 640px) {
     body .acc-page .acc-hero {
-        padding: 60px 20px;
+        padding: 60px 0;
     }
 
     .acc-hero-img {
