@@ -65,6 +65,11 @@
     padding: 0 24px;
 }
 
+/* Hero uniquement : décalage à gauche */
+.pro-hero .pro-container {
+    margin-left: clamp(24px, 6vw, 80px);
+}
+
 .pro-hero-content h1 {
     font-family: var(--montserrat);
     font-size: clamp(1.6rem, 3.8vw, 3.5rem);
@@ -489,6 +494,11 @@ details[open] .pro-acc-chevron {
 @media (max-width: 640px) {
     .pro-why-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Hero pleine largeur sur mobile : offset supprimé */
+    .pro-hero .pro-container {
+        margin-left: auto;
     }
 }
 

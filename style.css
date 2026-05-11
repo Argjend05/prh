@@ -1020,6 +1020,13 @@ body .obs-btn-turquoise {
     width: 100%;
 }
 
+/* Ancre le héro à gauche (override obs-container centré) */
+.obs-hero .obs-hero-inner {
+    width: auto;
+    margin-left: clamp(24px, 6vw, 80px);
+    margin-right: auto;
+}
+
 .obs-hero-content {
     max-width: 1100px;
 }
@@ -2028,6 +2035,12 @@ body ul.obs-footer-contact {
         display: none;
     }
 
+    /* Carte cachée : le conteneur reprend toute la largeur, offset supprimé */
+    .obs-hero .obs-hero-inner {
+        width: 100%;
+        margin-left: auto;
+    }
+
     .obs-cycle-grid {
         flex-direction: column;
         align-items: center;
@@ -2051,6 +2064,11 @@ body ul.obs-footer-contact {
 
 @media (max-width: 640px) {
     .obs-hero-content {
+        text-align: center;
+    }
+
+    /* text-align:left explicite sur h1 doit être réinitialisé sur mobile */
+    .obs-hero h1 {
         text-align: center;
     }
 
