@@ -227,7 +227,7 @@ body .acc-page .acc-hero {
     line-height: 1.15;
     margin: 0 0 24px;
     max-width: 900px;
-    text-wrap: balance;
+    text-wrap: pretty;
 }
 
 .acc-hero-content p {
