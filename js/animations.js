@@ -79,7 +79,6 @@
         /* Navigation interne : rideau déjà en place (CSS), on le soulève.
            Doit tourner avant les checks GSAP — ne dépend pas de GSAP. */
         if (window._prhIsNavigation) {
-            document.documentElement.style.opacity = '1';
             var loader = document.getElementById('page-loader');
             if (loader) loader.remove();
             var curtain = document.getElementById('page-curtain');
@@ -88,6 +87,9 @@
                 document.documentElement.classList.remove('prh-navigating');
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
+                        /* opacity:1 et is-out dans le même frame — premier rendu visible
+                           = rideau déjà en train de monter, zéro flash */
+                        document.documentElement.style.opacity = '1';
                         curtain.classList.add('is-out');
                         if (window._prhHeroTl) window._prhHeroTl.play();
                         curtain.addEventListener('transitionend', function () {

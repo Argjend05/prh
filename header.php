@@ -45,6 +45,12 @@
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/img/banniere-accueil.avif' ); ?>" as="image" type="image/avif" fetchpriority="high">
     <?php endif; ?>
 
+    <!-- Styles critiques inline : couvre la page dès le 1er pixel, avant tout CSS externe -->
+    <style>
+        #page-loader{position:fixed;inset:0;z-index:99999;background:#fff;display:flex;align-items:center;justify-content:center}
+        html.prh-navigating #page-loader{display:none!important}
+        html.prh-navigating{opacity:0}
+    </style>
     <script>(function(){if(sessionStorage.getItem('prh_nav')){document.documentElement.style.opacity='0';document.documentElement.classList.add('prh-navigating');}}());</script>
 
     <?php wp_head(); ?>
