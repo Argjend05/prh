@@ -110,19 +110,15 @@
         /* ── GSAP ─────────────────────────────────────────────────────────── */
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         if (typeof gsap === 'undefined') return;
+        /* Pas d'animations GSAP sur petits écrans : économise CPU et évite le CLS
+           (word-split innerHTML + gsap-ready opacity:0 → shifts perceptibles) */
+        if (window.innerWidth < 769) return;
 
         /* Signale que GSAP est opérationnel — les règles CSS .gsap-ready
            cachent les éléments hero que la timeline va animer. */
         document.body.classList.add('gsap-ready');
 
         gsap.registerPlugin(ScrollTrigger);
-
-        /* ── CSS utilitaire pour le split de mots ─────────────────────────── */
-        const splitStyle = document.createElement('style');
-        splitStyle.textContent =
-            '.prh-word{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.15;}' +
-            '.prh-word-inner{display:inline-block;}';
-        document.head.appendChild(splitStyle);
 
         /* ── Helper : découpe un élément texte mot par mot ─────────────────── */
         function wordSplit(el) {
@@ -545,12 +541,16 @@
         document.querySelectorAll('[data-counter]').forEach(el => {
             const target = parseInt(el.dataset.counter, 10);
             if (isNaN(target)) return;
-            el.textContent = '0'; /* évite le flash valeur réelle → 0 au démarrage */
+            /* La valeur réelle est dans le HTML (visible sans GSAP / mobile).
+               GSAP repart de 0 et restaure l'opacity (masquée par
+               .gsap-ready .acc-stat-number dans le CSS). */
+            el.textContent = '0';
             const obj = { n: 0 };
             gsap.to(obj, {
                 n: target,
                 duration: 2.2,
                 ease: 'power2.out',
+                onStart()  { gsap.to(el, { opacity: 1, duration: 0.3 }); },
                 onUpdate() { el.textContent = Math.round(obj.n); },
                 scrollTrigger: { trigger: el, ...ST },
             });
@@ -654,8 +654,10 @@
             if (document.readyState === 'complete') resolve();
             else window.addEventListener('load', resolve, { once: true });
         }),
-        /* Pas de délai minimum sur navigation interne (tout est en cache) */
-        new Promise(resolve => setTimeout(resolve, window._prhIsNavigation ? 0 : 900)),
+        /* Pas de délai minimum sur navigation interne (tout est en cache).
+           Sur mobile : 0ms — on affiche le contenu dès que le DOM est prêt.
+           Sur desktop : 900ms pour laisser l'animation du loader se dérouler. */
+        new Promise(resolve => setTimeout(resolve, window._prhIsNavigation ? 0 : (window.innerWidth < 769 ? 0 : 900))),
     ]).then(function () {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
 

@@ -5,22 +5,32 @@
 /* Les états initiaux des [data-reveal] sont gérés par GSAP en JS.
    Ici uniquement les propriétés CSS statiques et les composants UI. */
 
-/* 1. TILT 3D */
+/* 1. WORD SPLIT — styles statiques pour les .prh-word générés par GSAP.
+   Définis ici (pas en JS) pour éviter le dynamic style injection + layout recalc. */
+.prh-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 1.15;
+}
+.prh-word-inner { display: inline-block; }
+
+/* 3. TILT 3D */
 [data-tilt] {
     transform-style: preserve-3d;
 }
 
-/* 2. BOUTONS MAGNÉTIQUES */
+/* 4. BOUTONS MAGNÉTIQUES */
 [data-magnetic] {
     display: inline-block;
 }
 
-/* 3. COMPTEURS */
+/* 5. COMPTEURS */
 [data-counter] {
     font-variant-numeric: tabular-nums;
 }
 
-/* 4. BARRE DE PROGRESSION */
+/* 6. BARRE DE PROGRESSION */
 #prh-progress-bar {
     position: fixed;
     top: 0;
@@ -33,7 +43,7 @@
     pointer-events: none;
 }
 
-/* 5. BOUTON RETOUR EN HAUT */
+/* 7. BOUTON RETOUR EN HAUT */
 #prh-back-to-top {
     position: fixed;
     bottom: 32px;
@@ -65,7 +75,7 @@
     #prh-back-to-top { bottom: 20px; right: 16px; width: 40px; height: 40px; }
 }
 
-/* 6. SCROLL SPY */
+/* 8. SCROLL SPY */
 .prh-nav-list a.spy-active,
 .prh-mobile-nav-list a.spy-active {
     color: #ec6f04 !important;
@@ -234,5 +244,25 @@ html.prh-navigating #page-curtain {
         animation: none;
         opacity: 1;
         transform: none;
+    }
+}
+
+/* Mobile : loader réduit au strict minimum pour ne pas bloquer le LCP.
+   Le logo et la barre apparaissent instantanément, la sortie est rapide. */
+@media (max-width: 768px) {
+    #page-loader {
+        transition-duration: 0.2s;
+    }
+    .loader-glow { display: none; }
+    .loader-logo {
+        animation-delay: 0s;
+        animation-duration: 0.3s;
+    }
+    .loader-brand {
+        animation-delay: 0.25s;
+        animation-duration: 0.2s;
+    }
+    .loader-bar {
+        display: none;
     }
 }

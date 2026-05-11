@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.3.0
+ Version:      1.4.0
 */
 
 /* =====================================================
@@ -2063,6 +2063,17 @@ body ul.obs-footer-contact {
 }
 
 @media (max-width: 640px) {
+    /* Mobile : hauteur naturelle, pas besoin de 100vh */
+    .obs-hero {
+        min-height: 0;
+    }
+
+    /* Désactive la vague animée sur mobile */
+    .obs-hero-wave svg {
+        animation: none;
+        transform: translateX(0);
+    }
+
     .obs-hero-content {
         text-align: center;
     }

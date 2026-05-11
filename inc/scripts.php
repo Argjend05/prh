@@ -12,12 +12,20 @@ function prh68_enqueue_styles() {
     wp_enqueue_style( 'local-fonts', $uri . '/css/fonts.css', [ 'prh68-style' ], $ver );
     wp_enqueue_style( 'animations-style', $uri . '/css/animations.css', [ 'prh68-style' ], $ver );
 
-    wp_enqueue_script( 'gsap',              'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',          [],             null, true );
-    wp_enqueue_script( 'gsap-st',           'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', [ 'gsap' ],      null, true );
+    /* GSAP : seulement sur desktop (réduit bandwidth + CLS sur mobile) */
+    if ( ! wp_is_mobile() ) {
+        wp_enqueue_script( 'gsap',    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',          [],        null, true );
+        wp_enqueue_script( 'gsap-st', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', [ 'gsap' ], null, true );
+    }
 
-    wp_enqueue_script( 'header-script',     $uri . '/js/header.js',     [],                              $ver, true );
-    wp_enqueue_script( 'common-script',     $uri . '/js/common.js',     [ 'header-script' ],             $ver, true );
-    wp_enqueue_script( 'animations-script', $uri . '/js/animations.js', [ 'common-script', 'gsap-st' ], $ver, true );
+    wp_enqueue_script( 'header-script',     $uri . '/js/header.js',     [],                  $ver, true );
+    wp_enqueue_script( 'common-script',     $uri . '/js/common.js',     [ 'header-script' ], $ver, true );
+
+    $anim_deps = [ 'common-script' ];
+    if ( ! wp_is_mobile() ) {
+        $anim_deps[] = 'gsap-st';
+    }
+    wp_enqueue_script( 'animations-script', $uri . '/js/animations.js', $anim_deps, $ver, true );
 
     if ( is_page_template( 'page-accueil.php' ) ) {
         wp_enqueue_style(  'accueil-style',  $uri . '/css/style-accueil.css', [ 'prh68-style' ],   $ver );

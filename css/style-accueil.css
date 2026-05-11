@@ -249,6 +249,12 @@ body .acc-page .acc-hero {
     opacity: 0;
 }
 
+/* Compteurs : sur desktop avec GSAP, on cache la valeur HTML le temps de l'animation
+   (évite le flash valeur→0 quand GSAP réinitialise le textContent) */
+.gsap-ready .acc-stat-number {
+    opacity: 0;
+}
+
 /* =====================================================
    CHIFFRES CLÉS
    ===================================================== */
@@ -891,7 +897,9 @@ body .acc-info-card.acc-card-turquoise {
 
 @media (max-width: 640px) {
     body .acc-page .acc-hero {
-        padding: 60px 0;
+        /* Mobile : hauteur naturelle du contenu, pas besoin de 100vh */
+        min-height: 0;
+        padding: 60px 0 40px;
     }
 
     .acc-hero-img {
@@ -903,14 +911,29 @@ body .acc-info-card.acc-card-turquoise {
         max-width: 100%;
     }
 
+    .acc-hero-content h1 {
+        text-align: center;
+    }
+
+    .acc-hero-content p {
+        text-align: center;
+    }
+
     .acc-hero-wrap {
         margin-left: auto;
         margin-right: auto;
+        text-align: center;
     }
 
     .acc-hero-btns {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+    }
+
+    /* Désactive la vague animée sur mobile : continu GPU, inutile sur petit écran */
+    .acc-hero-wave svg {
+        animation: none;
+        transform: translateX(0);
     }
 
     .acc-stats {

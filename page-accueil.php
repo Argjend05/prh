@@ -162,15 +162,15 @@ get_header();
         <div class="acc-container">
             <div class="acc-stats-grid">
                 <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="0">
-                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat1_num); ?>">0</span>
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat1_num); ?>"><?php echo esc_html($stat1_num); ?></span>
                     <span class="acc-stat-label"><?php echo esc_html($stat1_lbl); ?></span>
                 </div>
                 <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="100">
-                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat2_num); ?>">0</span>
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat2_num); ?>"><?php echo esc_html($stat2_num); ?></span>
                     <span class="acc-stat-label"><?php echo esc_html($stat2_lbl); ?></span>
                 </div>
                 <div class="acc-stat" data-reveal="fade-up" data-reveal-delay="200">
-                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat3_num); ?>">0</span>
+                    <span class="acc-stat-number" data-counter="<?php echo esc_attr($stat3_num); ?>"><?php echo esc_html($stat3_num); ?></span>
                     <span class="acc-stat-label"><?php echo esc_html($stat3_lbl); ?></span>
                 </div>
             </div>

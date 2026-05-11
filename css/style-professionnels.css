@@ -492,6 +492,23 @@ details[open] .pro-acc-chevron {
 }
 
 @media (max-width: 640px) {
+    /* Mobile : hauteur naturelle du contenu */
+    .pro-page .pro-hero {
+        min-height: 0;
+        padding: 60px 0 40px;
+    }
+
+    /* Désactive la vague animée sur mobile */
+    .pro-hero-wave svg {
+        animation: none;
+        transform: translateX(0);
+    }
+
+    /* Désactive les décorations animées sur mobile (rings/blobs) */
+    .pro-hero-deco {
+        display: none;
+    }
+
     .pro-why-grid {
         grid-template-columns: 1fr;
     }
@@ -499,6 +516,14 @@ details[open] .pro-acc-chevron {
     /* Hero pleine largeur sur mobile : offset supprimé */
     .pro-hero .pro-container {
         margin-left: auto;
+    }
+
+    .pro-hero-content h1 {
+        text-align: center;
+    }
+
+    .pro-hero-content p {
+        text-align: center;
     }
 }
 
