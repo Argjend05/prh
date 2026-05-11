@@ -81,6 +81,7 @@
         if (window._prhIsNavigation) {
             var loader = document.getElementById('page-loader');
             if (loader) loader.remove();
+            document.body.style.visibility = 'visible';
             var curtain = document.getElementById('page-curtain');
             if (curtain) {
                 curtain.classList.add('is-covering');
@@ -635,7 +636,8 @@
         if (window._prhIsNavigation) {
             /* Hero déjà lancé dans le double rAF synced avec le rideau */
         } else {
-            /* Premier chargement : rideau qui monte, hero 300ms après */
+            /* Premier chargement : révèle le body juste avant que le loader sorte */
+            document.body.style.visibility = 'visible';
             var loader = document.getElementById('page-loader');
             if (loader) {
                 loader.classList.add('loader-out');
