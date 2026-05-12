@@ -55,24 +55,11 @@
             position: fixed; inset: 0; z-index: 99999;
             background: #fff; display: flex; align-items: center; justify-content: center;
         }
-        html.prh-navigating #page-loader { display: none !important; }
-        html.prh-navigating #page-curtain {
-            position: fixed; inset: 0; z-index: 100000; background: #16152b;
-            transform: translateY(0) !important; transition: none !important;
-        }
     </style>
-    <!-- Ajoute prh-navigating si retour depuis une navigation interne -->
-    <script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">
-        (function(){
-            if(sessionStorage.getItem('prh_nav')){
-                document.documentElement.classList.add('prh-navigating');
-            }
-        }());
-    </script>
     <noscript>
         <style>
             html { opacity: 1 !important; }
-            #page-loader, #page-curtain { display: none !important; }
+            #page-loader { display: none !important; }
         </style>
     </noscript>
 
@@ -82,7 +69,7 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<!-- Page loader -->
+<!-- Page loader (premier chargement uniquement) -->
 <div id="page-loader" aria-hidden="true">
     <div class="loader-inner">
         <div class="loader-glow"></div>
@@ -92,13 +79,7 @@
         <div class="loader-bar"><span class="loader-bar-fill"></span></div>
     </div>
 </div>
-<div id="page-curtain" aria-hidden="true">
-    <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>"
-         alt="" width="80" height="86" class="curtain-logo">
-</div>
-<!-- Révélation : loader ET curtain sont dans le DOM, on retire l'opacity:0 inline.
-     Le loader couvre le contenu (1er chargement) ou le rideau le couvre (navigation).
-     Aucune dépendance GSAP / CDN. -->
+<!-- Révélation : retire l'opacity:0 inline dès que le loader est dans le DOM. -->
 <script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">document.documentElement.style.opacity='';</script>
 <script>setTimeout(function(){var l=document.getElementById('page-loader');if(l&&!l.classList.contains('loader-out')){l.style.transition='none';l.remove();}},5000);</script>
 

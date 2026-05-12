@@ -5,9 +5,8 @@
         window._prhIsNavigation = sessionStorage.getItem('prh_nav') === '1';
         if (window._prhIsNavigation) sessionStorage.removeItem('prh_nav');
 
-        /* Intercepte les liens internes : rideau monte depuis le bas → navigate.
-           Phase de capture (true) pour court-circuiter un éventuel stopPropagation
-           du thème parent sur les liens de navigation. */
+        /* Marque les navigations internes pour sauter le timer du loader
+           (navigation = contenu en cache, pas besoin d'attendre 900ms). */
         document.addEventListener('click', function (e) {
             var a = e.target.closest('a[href]');
             if (!a) return;
@@ -17,21 +16,10 @@
                 if (a.target === '_blank') return;
                 if (a.getAttribute('download') !== null) return;
                 if (url.pathname === window.location.pathname && url.hash) return;
-                e.preventDefault();
                 sessionStorage.setItem('prh_nav', '1');
-                var curtain = document.getElementById('page-curtain');
-                if (curtain) {
-                    var dest = a.href;
-                    curtain.offsetHeight; /* force reflow — déclenche la transition CSS */
-                    curtain.classList.add('is-covering');
-                    curtain.addEventListener('transitionend', function () {
-                        window.location.href = dest;
-                    }, { once: true });
-                } else {
-                    window.location.href = a.href;
-                }
+                /* Navigation native — pas de rideau */
             } catch (err) {}
-        }, true); /* capture phase */
+        }, true);
 
         /* ── RETOUR EN HAUT ───────────────────────────────────────────────── */
         const topBtn = document.createElement('button');
@@ -76,35 +64,11 @@
             }
         }
 
-        /* Navigation interne : rideau déjà en place (CSS), on le soulève.
-           Doit tourner avant les checks GSAP — ne dépend pas de GSAP. */
+        /* Navigation interne : supprime le loader immédiatement
+           (la page est déjà en cache, pas besoin d'animation d'entrée). */
         if (window._prhIsNavigation) {
             var loader = document.getElementById('page-loader');
             if (loader) loader.remove();
-
-            var curtain = document.getElementById('page-curtain');
-            if (curtain) {
-                /* Confirme translateY(0) via classe (CSS l'a déjà positionné) */
-                curtain.classList.add('is-covering');
-                /* Retire la classe navigating — la règle opacity:0 disparaît,
-                   l'inline style opacity:1 posé par le script body prend le relais */
-                document.documentElement.classList.remove('prh-navigating');
-
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        curtain.classList.add('is-out');
-                        if (window._prhHeroTl) window._prhHeroTl.play();
-                        curtain.addEventListener('transitionend', function () {
-                            curtain.style.transition = 'none';
-                            curtain.classList.remove('is-covering', 'is-out');
-                            curtain.offsetHeight;
-                            curtain.style.transition = '';
-                            /* Nettoie l'inline style opacity posé par le script body */
-                            document.documentElement.style.opacity = '';
-                        }, { once: true });
-                    });
-                });
-            }
         }
 
         /* ── GSAP ─────────────────────────────────────────────────────────── */
@@ -252,6 +216,14 @@
                 }, 0);
             }
             window._prhHeroTl = tl;
+
+            /* Sur navigation interne, les fonts/images sont déjà en cache :
+               on joue immédiatement sans attendre Promise.all (window.load).
+               Sans ça, les éléments resteraient opacity:0 pendant que
+               window.load résout les nouvelles images de la page. */
+            if (window._prhIsNavigation) {
+                requestAnimationFrame(function () { tl.play(); });
+            }
         }
 
         /* ── 2. PARALLAXE HERO MULTI-COUCHES ──────────────────────────────── */
@@ -623,24 +595,12 @@
     }
 
     /* ── RETOUR ARRIÈRE (bfcache) ─────────────────────────────────────────
-       Quand l'utilisateur appuie sur ←, Chrome restaure la page depuis le
-       bfcache dans l'état exact où elle était au moment du départ : le rideau
-       avait reçu is-covering juste avant window.location.href. On le remet
-       hors-écran en bas (état initial) et on nettoie toutes les classes/styles
-       résiduels. */
+       Sur ←, Chrome restaure la page depuis le bfcache. On nettoie
+       le sessionStorage et on s'assure que le loader ne bloque pas l'écran. */
     window.addEventListener('pageshow', function (e) {
         if (!e.persisted) return;
-        var d = document.documentElement;
-        d.classList.remove('prh-navigating');
-        d.style.opacity = '';
         sessionStorage.removeItem('prh_nav');
-        var curtain = document.getElementById('page-curtain');
-        if (curtain) {
-            curtain.style.transition = 'none';
-            curtain.classList.remove('is-covering', 'is-out');
-            curtain.offsetHeight; /* force reflow avant de réactiver la transition */
-            curtain.style.transition = '';
-        }
+        document.documentElement.style.opacity = '';
         var loader = document.getElementById('page-loader');
         if (loader) loader.remove();
     });
@@ -661,21 +621,18 @@
     ]).then(function () {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
 
-        if (window._prhIsNavigation) {
-            /* Hero déjà lancé dans le double rAF synced avec le rideau */
-        } else {
-            /* Premier chargement : prh-loading déjà retiré par le script inline body,
-               il reste à sortir le loader et lancer le hero. */
-            var loader = document.getElementById('page-loader');
-            if (loader) {
-                loader.classList.add('loader-out');
-                loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
-                if (typeof gsap !== 'undefined' && window._prhHeroTl) {
-                    gsap.delayedCall(0.3, function () { window._prhHeroTl.play(); });
-                }
-            } else if (typeof gsap !== 'undefined' && window._prhHeroTl) {
-                window._prhHeroTl.play();
+        /* Loader de premier chargement : on le fait sortir par le haut,
+           puis on lance l'animation hero. Sur navigation interne le loader
+           a déjà été supprimé dans init(). */
+        var loader = document.getElementById('page-loader');
+        if (loader) {
+            loader.classList.add('loader-out');
+            loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
+            if (typeof gsap !== 'undefined' && window._prhHeroTl) {
+                gsap.delayedCall(0.3, function () { window._prhHeroTl.play(); });
             }
+        } else if (typeof gsap !== 'undefined' && window._prhHeroTl) {
+            window._prhHeroTl.play();
         }
     });
 })();
