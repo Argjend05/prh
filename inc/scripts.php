@@ -12,19 +12,20 @@ function prh68_enqueue_styles() {
     wp_enqueue_style( 'local-fonts', $uri . '/css/fonts.css', [ 'prh68-style' ], $ver );
     wp_enqueue_style( 'animations-style', $uri . '/css/animations.css', [ 'prh68-style' ], $ver );
 
-    /* GSAP : seulement sur desktop (réduit bandwidth + CLS sur mobile) */
+    /* GSAP chargé sur tous les supports pour les transitions et animations de base */
+    wp_enqueue_script( 'gsap',    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',          [],        null, true );
+    wp_enqueue_script( 'gsap-st', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', [ 'gsap' ], null, true );
+    
+    /* Lenis : seulement sur desktop (pas utile sur mobile, conflit avec le scroll tactile natif) */
     if ( ! wp_is_mobile() ) {
-        wp_enqueue_script( 'gsap',    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',          [],        null, true );
-        wp_enqueue_script( 'gsap-st', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', [ 'gsap' ], null, true );
         wp_enqueue_script( 'lenis',   'https://unpkg.com/lenis@1.1.20/dist/lenis.min.js',                   [],        null, true );
     }
 
     wp_enqueue_script( 'header-script',     $uri . '/js/header.js',     [],                  $ver, true );
     wp_enqueue_script( 'common-script',     $uri . '/js/common.js',     [ 'header-script' ], $ver, true );
 
-    $anim_deps = [ 'common-script' ];
+    $anim_deps = [ 'common-script', 'gsap-st' ];
     if ( ! wp_is_mobile() ) {
-        $anim_deps[] = 'gsap-st';
         $anim_deps[] = 'lenis';
     }
     wp_enqueue_script( 'animations-script', $uri . '/js/animations.js', $anim_deps, $ver, true );

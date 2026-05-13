@@ -109,9 +109,8 @@
         /* ── GSAP ─────────────────────────────────────────────────────────── */
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         if (typeof gsap === 'undefined') return;
-        /* Pas d'animations GSAP sur petits écrans : économise CPU et évite le CLS
-           (word-split innerHTML + gsap-ready opacity:0 → shifts perceptibles) */
-        if (window.innerWidth < 769) return;
+        
+        const isMobile = window.innerWidth < 769;
 
         /* Signale que GSAP est opérationnel — les règles CSS .gsap-ready
            cachent les éléments hero que la timeline va animer. */
@@ -179,7 +178,7 @@
             const subtitle = (next && (next.tagName === 'P' || next.dataset.reveal)) ? next : null;
             if (subtitle) managed.add(subtitle);
 
-            const wordSpans = wordSplit(titleEl);
+            const wordSpans = !isMobile ? wordSplit(titleEl) : null;
 
             const tl = gsap.timeline({
                 scrollTrigger: { trigger: titleEl, start: 'top 85%', once: true },
@@ -231,7 +230,7 @@
             const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, paused: true });
 
             const h1 = heroContent.querySelector('h1');
-            const wordSpans = wordSplit(h1);
+            const wordSpans = !isMobile ? wordSplit(h1) : null;
             if (wordSpans) {
                 /* Spans créés dynamiquement — pas de CSS opacity:0, clearProps ok */
                 tl.from(wordSpans, { y: '115%', duration: 0.7, stagger: 0.06, clearProps: 'all' });
@@ -299,7 +298,7 @@
 
         /* ── 2. PARALLAXE HERO MULTI-COUCHES ──────────────────────────────── */
         const heroSection = document.querySelector('.acc-hero, .obs-hero, .pro-hero');
-        if (heroSection) {
+        if (!isMobile && heroSection) {
             const parallaxMap = [
                 ['.acc-blob-1, .pro-blob-1',  -22, 15],
                 ['.acc-blob-2, .pro-blob-2',  -12, 0],
@@ -476,7 +475,7 @@
             const heroP = agendaHero.querySelector('p');
             const tl    = gsap.timeline({ defaults: { ease: 'power4.out', clearProps: 'all' } });
 
-            const wordSpans = wordSplit(h1);
+            const wordSpans = !isMobile ? wordSplit(h1) : null;
             if (wordSpans) {
                 tl.from(wordSpans, { y: '115%', duration: 0.7, stagger: 0.06 });
             } else if (h1) {
@@ -524,7 +523,7 @@
 
             /* Titre — word split + glisse depuis le bas */
             const tlKits = gsap.timeline({ defaults: { ease: 'power4.out', clearProps: 'all' } });
-            const kitsWords = wordSplit(kitsTitle);
+            const kitsWords = !isMobile ? wordSplit(kitsTitle) : null;
             if (kitsWords) {
                 tlKits.from(kitsWords, { y: '115%', duration: 0.7, stagger: 0.06 });
             } else if (kitsTitle) {
@@ -619,20 +618,22 @@
         });
 
         /* ── 10. DATA-PARALLAX (éléments individuels) ─────────────────────── */
-        document.querySelectorAll('[data-parallax]').forEach(el => {
-            const speed = parseFloat(el.dataset.parallax) || 0.2;
-            gsap.to(el, {
-                y: () => -(window.innerHeight * speed * 0.4),
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: el.closest('section') || el.parentElement,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 1.5,
-                    invalidateOnRefresh: true,
-                },
+        if (!isMobile) {
+            document.querySelectorAll('[data-parallax]').forEach(el => {
+                const speed = parseFloat(el.dataset.parallax) || 0.2;
+                gsap.to(el, {
+                    y: () => -(window.innerHeight * speed * 0.4),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: el.closest('section') || el.parentElement,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1.5,
+                        invalidateOnRefresh: true,
+                    },
+                });
             });
-        });
+        }
 
         /* ── 11. CURSEUR GSAP + TILT + BOUTONS MAGNÉTIQUES ────────────── */
         if (window.matchMedia('(pointer: fine)').matches) {
