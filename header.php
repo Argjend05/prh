@@ -55,6 +55,7 @@
             position: fixed; inset: 0; z-index: 99999;
             background: #fff; display: flex; align-items: center; justify-content: center;
         }
+        .loader-logo, .loader-brand, .loader-bar, .loader-glow { opacity: 0; }
 
         /* Styles critiques pour le rideau de transition (doivent être inline pour éviter le FOUC) */
         .prh-curtain {
