@@ -722,13 +722,21 @@
 
     /* ── RETOUR ARRIÈRE (bfcache) ─────────────────────────────────────────
        Sur ←, Chrome restaure la page depuis le bfcache. On nettoie
-       le sessionStorage et on s'assure que le loader ne bloque pas l'écran. */
+       le sessionStorage et on s'assure que le loader/rideau ne bloque pas l'écran. */
     window.addEventListener('pageshow', function (e) {
         if (!e.persisted) return;
         sessionStorage.removeItem('prh_nav');
         document.documentElement.style.opacity = '';
         var loader = document.getElementById('page-loader');
         if (loader) loader.remove();
+        
+        // Reset du rideau de transition SVG s'il était resté actif
+        var curtainPath = document.querySelector('.prh-curtain-path');
+        var curtainContent = document.querySelector('.prh-curtain-content');
+        var curtainEl = document.getElementById('page-curtain');
+        if (curtainPath) curtainPath.setAttribute('d', 'M 0 100 V 100 Q 50 100 100 100 V 100 z');
+        if (curtainContent) curtainContent.style.opacity = '0';
+        if (curtainEl) curtainEl.style.pointerEvents = 'none';
     });
 
     /* Refresh ScrollTrigger + dismiss du loader après polices + images chargés.
