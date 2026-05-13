@@ -624,6 +624,9 @@
     line-height: 1.72;
     margin: 0;
     font-style: italic;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    overflow: hidden;
 }
 
 /* =====================================================

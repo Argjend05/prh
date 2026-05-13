@@ -126,16 +126,6 @@ add_action( 'init', function () {
     ] );
 } );
 
-add_action( 'phpmailer_init', function ( $phpmailer ) {
-    $phpmailer->SMTPOptions = [
-        'ssl' => [
-            'verify_peer'       => false,
-            'verify_peer_name'  => false,
-            'allow_self_signed' => true,
-        ],
-    ];
-} );
-
 /* Support thème */
 add_action( 'after_setup_theme', function () {
     add_theme_support( 'title-tag' );

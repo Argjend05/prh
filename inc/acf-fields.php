@@ -519,6 +519,128 @@ function prh68_acf_register_groups() {
         ],
     ] );
 
+    /* ── CPT OUTIL DE TERRAIN ────────────────────────────── */
+    $loc_ot = [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'outil_terrain' ] ] ];
+
+    acf_add_local_field_group( [
+        'key'        => 'group_ot_infos',
+        'title'      => 'Informations principales',
+        'menu_order' => 1,
+        'position'   => 'normal',
+        'location'   => $loc_ot,
+        'fields'     => [
+            [
+                'key' => 'field_ot_category', 'label' => 'Catégorie', 'name' => 'ot_category', 'type' => 'select',
+                'choices' => [
+                    'scolaire'      => 'Scolaire',
+                    'observation'   => 'Observation',
+                    'communication' => 'Communication',
+                    'urgence'       => 'Urgence',
+                    'accueil'       => 'Accueil',
+                    'soutien'       => 'Soutien',
+                ],
+                'default_value' => 'scolaire', 'allow_null' => 0, 'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_ot_envs', 'label' => 'Environnements', 'name' => 'ot_envs', 'type' => 'checkbox',
+                'choices' => [
+                    'urbain'   => 'Urbain',
+                    'rural'    => 'Rural',
+                    'domicile' => 'Domicile',
+                    'eaje'     => 'EAJE',
+                    'rue'      => 'Rue',
+                ],
+                'layout' => 'horizontal', 'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_ot_structure', 'label' => 'Type de structure', 'name' => 'ot_structure', 'type' => 'select',
+                'choices' => [
+                    'tous'  => 'Toutes',
+                    'école' => 'École',
+                    'eaje'  => 'EAJE / Crèche',
+                    'sessad'=> 'SESSAD',
+                    'itep'  => 'ITEP / IME',
+                ],
+                'default_value' => 'tous', 'allow_null' => 0, 'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_ot_description', 'label' => 'Description courte', 'name' => 'ot_description',
+                'type' => 'textarea', 'rows' => 3, 'instructions' => 'Affiché sur la carte (2-3 lignes max)',
+            ],
+            [
+                'key' => 'field_ot_extra_tags', 'label' => 'Tags supplémentaires', 'name' => 'ot_extra_tags',
+                'type' => 'text', 'instructions' => 'Séparés par des virgules (ex : ACM, SESSAD)',
+            ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
+        'key'        => 'group_ot_scores',
+        'title'      => 'Scores & Évaluation',
+        'menu_order' => 2,
+        'position'   => 'normal',
+        'location'   => $loc_ot,
+        'fields'     => [
+            [
+                'key' => 'field_ot_usage', 'label' => "Fréquence d'usage", 'name' => 'ot_usage',
+                'type' => 'number', 'min' => 0, 'max' => 5, 'step' => 0.1,
+                'instructions' => 'Note sur 5 (ex : 4.8)',
+            ],
+            [
+                'key' => 'field_ot_deploy', 'label' => 'Facilité de déploiement', 'name' => 'ot_deploy',
+                'type' => 'number', 'min' => 0, 'max' => 5, 'step' => 0.1,
+                'instructions' => 'Note sur 5 (ex : 3.5)',
+            ],
+            [
+                'key' => 'field_ot_difficulty', 'label' => 'Score de difficulté', 'name' => 'ot_difficulty',
+                'type' => 'number', 'min' => 0, 'max' => 100, 'step' => 1,
+                'instructions' => 'De 0 (très facile) à 100 (très difficile)',
+            ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
+        'key'        => 'group_ot_contenu',
+        'title'      => "Contenu de la fiche",
+        'menu_order' => 3,
+        'position'   => 'normal',
+        'location'   => $loc_ot,
+        'fields'     => [
+            [
+                'key' => 'field_ot_story', 'label' => "L'Histoire", 'name' => 'ot_story',
+                'type' => 'textarea', 'rows' => 5,
+                'instructions' => 'Contexte et genèse de cet outil (affiché dans la fiche détaillée)',
+            ],
+            [
+                'key'          => 'field_ot_specs',
+                'label'        => 'Spécifications techniques',
+                'name'         => 'ot_specs',
+                'type'         => 'repeater',
+                'min'          => 0,
+                'max'          => 8,
+                'layout'       => 'table',
+                'button_label' => 'Ajouter une ligne',
+                'sub_fields'   => [
+                    [ 'key' => 'field_ot_spec_label', 'label' => 'Intitulé', 'name' => 'spec_label', 'type' => 'text', 'column_width' => 35 ],
+                    [ 'key' => 'field_ot_spec_value', 'label' => 'Valeur',   'name' => 'spec_value', 'type' => 'text', 'column_width' => 65 ],
+                ],
+            ],
+        ],
+    ] );
+
+    acf_add_local_field_group( [
+        'key'        => 'group_ot_contact',
+        'title'      => 'Structure contributrice',
+        'menu_order' => 4,
+        'position'   => 'normal',
+        'location'   => $loc_ot,
+        'fields'     => [
+            [ 'key' => 'field_ot_contact_name', 'label' => 'Nom du contact',  'name' => 'ot_contact_name', 'type' => 'text' ],
+            [ 'key' => 'field_ot_contact_role', 'label' => 'Rôle / Fonction', 'name' => 'ot_contact_role', 'type' => 'text' ],
+            [ 'key' => 'field_ot_contact_org',  'label' => 'Nom de la structure', 'name' => 'ot_contact_org', 'type' => 'text' ],
+        ],
+    ] );
+
     acf_add_local_field_group( [
         'key' => 'group_prh68_temp_cta', 'title' => 'CTA — Page Témoignages', 'menu_order' => 41, 'position' => 'normal', 'location' => $loc_temp,
         'fields' => [

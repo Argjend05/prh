@@ -3,7 +3,7 @@
  * Sur les pages NON-observatoire, Neve ouvre <main class="neve-main"> et
  * <div class="wrapper"> dans son header. Il faut les fermer ici avant le footer.
  */
-$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php', 'page-temoignages.php', 'page-formulaire-temoignage.php'];
+$custom_templates = ['page-observatoire.php', 'page-accueil.php', 'page-mentions-legales.php', 'page-professionnels.php', 'page-politique-confidentialite.php', 'page-temoignages.php', 'page-formulaire-temoignage.php', 'page-outils-terrain.php', 'page-formulaire-outil.php'];
 if (!is_page_template($custom_templates)):
     do_action('neve_before_primary_end');
     ?>
@@ -93,12 +93,32 @@ endif;
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('temoignages'))); ?>">Voir les témoignages</a></li>
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
+                <?php elseif (is_page_template('page-outils-terrain.php')): ?>
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnels'))); ?>">Espace Professionnels</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('temoignages'))); ?>">Témoignages</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
+                <?php elseif (is_page_template('page-formulaire-outil.php')):
+                    $_ot_pages = get_posts([
+                        'post_type' => 'page', 'posts_per_page' => 1, 'fields' => 'ids',
+                        'meta_key' => '_wp_page_template', 'meta_value' => 'page-outils-terrain.php',
+                        'post_status' => 'publish',
+                    ]);
+                    $_ot_url = !empty($_ot_pages) ? get_permalink($_ot_pages[0]) : '';
+                ?>
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <?php if ($_ot_url): ?>
+                        <li><a href="<?php echo esc_url($_ot_url); ?>">Outils de Terrain</a></li>
+                    <?php endif; ?>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnels'))); ?>">Espace Professionnels</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
                 <?php else: ?>
-                    <li><a href="#mission">Notre Ambition</a></li>
-                    <li><a href="#cycle">Les Étapes Clés</a></li>
-                    <li><a href="#questionnaires">Questionnaires</a></li>
-                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a>
-                    </li>
+                    <!-- Navigation générique — pages sans section d'ancres dédiée -->
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnels'))); ?>">Espace Professionnels</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('observatoire'))); ?>">Observatoire</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('temoignages'))); ?>">Témoignages</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -174,7 +194,7 @@ endif;
     </div>
 </footer>
 
-<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php') && !is_page_template('page-temoignages.php') && !is_page_template('page-formulaire-temoignage.php')): ?>
+<?php if (!is_page_template('page-observatoire.php') && !is_page_template('page-professionnels.php') && !is_page_template('page-temoignages.php') && !is_page_template('page-formulaire-temoignage.php') && !is_page_template('page-outils-terrain.php') && !is_page_template('page-formulaire-outil.php')): ?>
     </div><!--/.wrapper-->
 <?php endif; ?>
 

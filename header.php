@@ -69,6 +69,21 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<!-- Curseur personnalisé GSAP -->
+<div id="prh-cursor" class="prh-cursor">
+    <div class="prh-cursor-inner"></div>
+</div>
+
+<!-- Rideau SVG Morphing pour navigation -->
+<div id="page-curtain" class="prh-curtain" aria-hidden="true">
+    <svg class="prh-curtain-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path class="prh-curtain-path" d="M 0 100 V 100 Q 50 100 100 100 V 100 z" />
+    </svg>
+    <div class="prh-curtain-content">
+        <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/logo.svg' ); ?>" alt="" width="80" height="86" class="curtain-logo">
+    </div>
+</div>
+
 <!-- Page loader (premier chargement uniquement) -->
 <div id="page-loader" aria-hidden="true">
     <div class="loader-inner">
@@ -79,8 +94,20 @@
         <div class="loader-bar"><span class="loader-bar-fill"></span></div>
     </div>
 </div>
-<!-- Révélation : retire l'opacity:0 inline dès que le loader est dans le DOM. -->
-<script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">document.documentElement.style.opacity='';</script>
+<!-- Révélation instantanée et synchronisée -->
+<script data-no-optimize="1" data-no-minify="1" data-cfasync="false" data-rocket-delay-js="false">
+    if (sessionStorage.getItem('prh_nav')) {
+        var loader = document.getElementById('page-loader');
+        if (loader) loader.style.display = 'none';
+        
+        var path = document.querySelector('.prh-curtain-path');
+        if (path) path.setAttribute('d', 'M 0 100 V 0 Q 50 0 100 0 V 100 z');
+        
+        var content = document.querySelector('.prh-curtain-content');
+        if (content) content.style.opacity = '1';
+    }
+    document.documentElement.style.opacity = '';
+</script>
 <script>setTimeout(function(){var l=document.getElementById('page-loader');if(l&&!l.classList.contains('loader-out')){l.style.transition='none';l.remove();}},5000);</script>
 
 <!-- Header en dehors du .wrapper pour que position:sticky fonctionne -->

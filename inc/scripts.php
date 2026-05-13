@@ -16,6 +16,7 @@ function prh68_enqueue_styles() {
     if ( ! wp_is_mobile() ) {
         wp_enqueue_script( 'gsap',    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',          [],        null, true );
         wp_enqueue_script( 'gsap-st', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', [ 'gsap' ], null, true );
+        wp_enqueue_script( 'lenis',   'https://unpkg.com/lenis@1.1.20/dist/lenis.min.js',                   [],        null, true );
     }
 
     wp_enqueue_script( 'header-script',     $uri . '/js/header.js',     [],                  $ver, true );
@@ -24,6 +25,7 @@ function prh68_enqueue_styles() {
     $anim_deps = [ 'common-script' ];
     if ( ! wp_is_mobile() ) {
         $anim_deps[] = 'gsap-st';
+        $anim_deps[] = 'lenis';
     }
     wp_enqueue_script( 'animations-script', $uri . '/js/animations.js', $anim_deps, $ver, true );
 
@@ -50,9 +52,19 @@ function prh68_enqueue_styles() {
         wp_enqueue_script( 'tem-script', $uri . '/js/temoignages.js',         [ 'common-script' ], $ver, true );
     }
 
+    if ( is_page_template( 'page-outils-terrain.php' ) ) {
+        wp_enqueue_style(  'ot-style',  $uri . '/css/style-outils-terrain.css', [ 'prh68-style' ],   $ver );
+        wp_enqueue_script( 'ot-script', $uri . '/js/outils-terrain.js',         [ 'common-script' ], $ver, true );
+    }
+
     if ( is_page_template( 'page-formulaire-temoignage.php' ) ) {
         wp_enqueue_style(  'ftem-style',  $uri . '/css/style-formulaire-temoignage.css', [ 'prh68-style' ],   $ver );
         wp_enqueue_script( 'ftem-script', $uri . '/js/formulaire-temoignage.js',         [ 'common-script' ], $ver, true );
+    }
+
+    if ( is_page_template( 'page-formulaire-outil.php' ) ) {
+        wp_enqueue_style(  'fot-style',  $uri . '/css/style-formulaire-outil.css', [ 'prh68-style' ],   $ver );
+        wp_enqueue_script( 'fot-script', $uri . '/js/formulaire-outil.js',         [ 'common-script' ], $ver, true );
     }
 }
 

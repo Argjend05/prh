@@ -1,7 +1,7 @@
 /*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.4.1
+ Version:      1.5.1
 */
 
 /* =====================================================
@@ -80,7 +80,6 @@ p:last-child {
    VARIABLES
    ===================================================== */
 html {
-    scroll-behavior: smooth;
     scroll-padding-top: 90px;
 }
 
