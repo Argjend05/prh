@@ -54,7 +54,9 @@
         window.addEventListener('scroll', () => {
             topBtn.classList.toggle('is-visible', window.scrollY > 400);
         }, { passive: true });
-        topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        /* Le click handler sera surchargé par Lenis si disponible (voir ci-dessous) */
+        topBtn._scrollFn = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        topBtn.addEventListener('click', () => topBtn._scrollFn());
 
         /* ── BARRE DE PROGRESSION ─────────────────────────────────────────── */
         const progressBar = document.createElement('div');
@@ -131,14 +133,16 @@
             gsap.ticker.lagSmoothing(0);
             window._prhLenis = lenis;
             
-            // Remplacer scrollTo par Lenis
-            const topBtn = document.getElementById('prh-back-to-top');
-            if (topBtn) {
-                topBtn.replaceWith(topBtn.cloneNode(true));
-                document.getElementById('prh-back-to-top').addEventListener('click', () => {
-                    lenis.scrollTo(0, { duration: 1.5 });
-                });
+            // Remplacer scrollTo natif par Lenis — on surcharge juste _scrollFn,
+            // la référence DOM et le scroll listener de visibilité restent intacts
+            const topBtnEl = document.getElementById('prh-back-to-top');
+            if (topBtnEl) {
+                topBtnEl._scrollFn = () => lenis.scrollTo(0, { duration: 1.5 });
             }
+            // Lenis émet aussi un événement scroll : on l'utilise pour la visibilité
+            lenis.on('scroll', ({ scroll }) => {
+                topBtn.classList.toggle('is-visible', scroll > 400);
+            });
             
             document.querySelectorAll('a[href^="#"]').forEach(a => {
                 a.addEventListener('click', function(e) {
