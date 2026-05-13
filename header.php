@@ -55,6 +55,18 @@
             position: fixed; inset: 0; z-index: 99999;
             background: #fff; display: flex; align-items: center; justify-content: center;
         }
+
+        /* Styles critiques pour le rideau de transition (doivent être inline pour éviter le FOUC) */
+        .prh-curtain {
+            position: fixed; inset: 0; z-index: 100000; pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .prh-curtain-svg {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; fill: #16152b;
+        }
+        .prh-curtain-content {
+            position: relative; z-index: 1; opacity: 0;
+        }
     </style>
     <noscript>
         <style>

@@ -737,12 +737,16 @@
     Promise.all([
         document.fonts ? document.fonts.ready : Promise.resolve(),
         new Promise(resolve => {
-            if (document.readyState === 'complete') resolve();
-            else window.addEventListener('load', resolve, { once: true });
+            if (document.readyState === 'complete') {
+                resolve();
+            } else {
+                let isResolved = false;
+                const forceResolve = () => { if (!isResolved) { isResolved = true; resolve(); } };
+                window.addEventListener('load', forceResolve, { once: true });
+                // Fallback si la page met trop de temps (ex: iframe ou image bloquée)
+                setTimeout(forceResolve, 2500);
+            }
         }),
-        /* Pas de délai minimum sur navigation interne (tout est en cache).
-           Sur mobile : 0ms — on affiche le contenu dès que le DOM est prêt.
-           Sur desktop : 900ms pour laisser l'animation du loader se dérouler. */
         new Promise(resolve => setTimeout(resolve, window._prhIsNavigation ? 0 : (window.innerWidth < 769 ? 0 : 900))),
     ]).then(function () {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
