@@ -70,6 +70,11 @@
     margin-left: clamp(24px, 6vw, 80px);
 }
 
+.pro-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
 .pro-hero-content h1 {
     font-family: var(--montserrat);
     font-size: clamp(1.6rem, 3.8vw, 3.5rem);
@@ -121,7 +126,6 @@ body .pro-hero-btn {
 }
 
 .pro-hero-btn-arrow {
-    /* Laisse la couleur naturelle du SVG (orange) comme accent */
     transform: rotate(90deg);
     transition: transform .2s;
 }
@@ -129,6 +133,44 @@ body .pro-hero-btn {
 .pro-hero-btn:hover .pro-hero-btn-arrow {
     transform: rotate(90deg) translateX(3px);
 }
+
+/* Image bannière — coin supérieur droit */
+.pro-hero-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 75%;
+    height: 96%;
+    border-bottom-left-radius: 180px;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.gsap-ready .pro-hero-img { opacity: 0; }
+
+.pro-hero-img picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.pro-hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0% 50%;
+    display: block;
+    -webkit-mask-image: radial-gradient(ellipse 110% 95% at 100% 25%,
+        black 62%,
+        rgba(0, 0, 0, .45) 78%,
+        transparent 92%);
+    mask-image: radial-gradient(ellipse 110% 95% at 100% 25%,
+        black 62%,
+        rgba(0, 0, 0, .45) 78%,
+        transparent 92%);
+}
+
 
 .pro-hero-wave {
     position: absolute;
@@ -148,13 +190,8 @@ body .pro-hero-btn {
 }
 
 @keyframes pro-wave-scroll {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-50%);
-    }
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
 }
 
 /* ── POURQUOI ─────────────────────────────────────────── */
@@ -493,6 +530,10 @@ details[open] .pro-acc-chevron {
 
 /* Tablette : centrage du hero dès 768px */
 @media (max-width: 768px) {
+    .pro-hero-img {
+        display: none;
+    }
+
     .pro-hero .pro-container {
         margin-left: auto;
         text-align: center;
@@ -549,6 +590,11 @@ details[open] .pro-acc-chevron {
 
     .pro-hero-content p {
         max-width: 940px;
+    }
+
+    .pro-hero-img {
+        width: 60%;
+        border-bottom-left-radius: 140px;
     }
 }
 

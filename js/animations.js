@@ -274,7 +274,7 @@
             /* Image hero — s'ouvre depuis le coin supérieur droit.
                clearProps:'clipPath' seulement (opacity:1 reste inline
                pour overrider la règle CSS .gsap-ready). */
-            const heroImg = document.querySelector('.acc-hero-img');
+            const heroImg = document.querySelector('.acc-hero-img, .pro-hero-img');
             if (heroImg) {
                 gsap.set(heroImg, { clipPath: 'circle(0% at 100% 0%)' });
                 tl.to(heroImg, {
