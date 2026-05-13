@@ -124,6 +124,19 @@ add_action( 'wp_head', function () {
    OPTIMISATIONS
    ======================================================= */
 
+// 0. Defer les scripts lourds de plugins tiers (non bloquants pour le rendu)
+add_filter( 'script_loader_tag', function( $tag, $handle ) {
+    $defer = [
+        'accessibility-onetap',   // 200 Ko — widget accessibilité
+        'onetap-hotkeys-library', // dépendance du widget
+    ];
+    if ( in_array( $handle, $defer, true ) ) {
+        // Remplace <script src="..."> par <script defer src="...">
+        return str_replace( ' src=', ' defer src=', $tag );
+    }
+    return $tag;
+}, 10, 2 );
+
 // 1. Supprimer le CSS inutilisé
 add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );
