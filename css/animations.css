@@ -5,6 +5,17 @@
 /* Les états initiaux des [data-reveal] sont gérés par GSAP en JS.
    Ici uniquement les propriétés CSS statiques et les composants UI. */
 
+/* 0. OFFSET HEADER FLOTTANT — empêche les ancres / le scroll-spy de
+   faire atterrir les titres sous le header sticky (~80px + marge). */
+html { scroll-padding-top: 110px; }
+section[id],
+[data-reveal],
+.acc-section-title,
+.obs-section-title,
+.pro-section-title {
+    scroll-margin-top: 110px;
+}
+
 /* 1. WORD SPLIT — styles statiques pour les .prh-word générés par GSAP.
    Définis ici (pas en JS) pour éviter le dynamic style injection + layout recalc. */
 .prh-word {

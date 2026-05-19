@@ -95,7 +95,7 @@ endif;
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
                 <?php elseif (is_page_template('page-outils-terrain.php')): ?>
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Accueil</a></li>
-                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnels'))); ?>">Espace Professionnels</a></li>
+                    <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('professionnel'))); ?>">Espace Professionnels</a></li>
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('temoignages'))); ?>">Témoignages</a></li>
                     <li><a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>">Contact</a></li>
                 <?php elseif (is_page_template('page-formulaire-outil.php')):

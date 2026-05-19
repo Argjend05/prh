@@ -46,6 +46,17 @@
         var featured    = document.querySelector('.tem-featured-wrap');
         var emptyMsg    = document.querySelector('.tem-empty-filtered');
         var resultNum   = document.querySelector('.tem-result-num');
+        var grid        = document.querySelector('.tem-grid');
+
+        /* Colonnes adaptatives : reste cohérent avec le PHP
+           (1 → 1 col, 2-4 → 2 col, 5+ → 3 col). Recalculé à chaque
+           filtrage pour ne pas laisser de colonne vide. */
+        function applyGridCols(n) {
+            if (!grid) return;
+            var c = n <= 1 ? 1 : (n <= 4 ? 2 : 3);
+            grid.classList.remove('tem-grid--c1', 'tem-grid--c2', 'tem-grid--c3');
+            grid.classList.add('tem-grid--c' + c);
+        }
 
         function updateResultCount(n) {
             if (!resultNum) return;
@@ -90,16 +101,22 @@
                     });
 
                     var visible = 0;
+                    var gridVisible = 0;
 
                     cards.forEach(function (card) {
                         var match = target === 'all' || card.dataset.cat === target;
                         if (match) {
                             showCard(card);
                             visible++;
+                            if (!card.classList.contains('tem-card--featured')) gridVisible++;
                         } else {
                             hideCard(card);
                         }
                     });
+
+                    /* Adapte le nombre de colonnes au nombre de cartes
+                       réellement visibles dans la grille après filtrage. */
+                    applyGridCols(gridVisible);
 
                     // Carte featured
                     if (featured) {

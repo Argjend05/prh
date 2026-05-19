@@ -272,10 +272,16 @@ $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, 
                 </div>
             <?php endif; ?>
 
-            <?php if ( ! empty( $normaux ) ) : ?>
-                <div class="tem-grid">
+            <?php if ( ! empty( $normaux ) ) :
+                /* Colonnes adaptatives : la grille reste dense même avec peu
+                   de témoignages (1 → 1 col centrée, 2-4 → 2 col, 5+ → 3 col). */
+                $_n = count( $normaux );
+                $grid_cols  = $_n <= 1 ? 1 : ( $_n <= 4 ? 2 : 3 );
+                $grid_class = 'tem-grid tem-grid--c' . $grid_cols;
+            ?>
+                <div class="<?php echo esc_attr( $grid_class ); ?>">
                     <?php foreach ( $normaux as $i => $post_obj ) :
-                        $render_card( $post_obj, $cat_labels, $cat_icons, false, $i % 3 );
+                        $render_card( $post_obj, $cat_labels, $cat_icons, false, $i % $grid_cols );
                     endforeach; ?>
                 </div>
             <?php elseif ( ! $featured ) : ?>

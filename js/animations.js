@@ -19,10 +19,17 @@
         };
 
         document.addEventListener('click', function (e) {
-            var a = e.target.closest('a[href]');
+            let a = e.target.closest('a[href]');
             if (!a) return;
+
+            /* Liens non navigants : ancre vide "#" (ex. parent de menu
+               déroulant "Ressources"). On bloque le saut en haut de page
+               par défaut mais SANS déclencher le rideau de transition. */
+            let rawHref = a.getAttribute('href');
+            if (!rawHref || rawHref === '#') { e.preventDefault(); return; }
+
             try {
-                var url = new URL(a.href);
+                let url = new URL(a.href);
                 if (url.hostname !== window.location.hostname) return;
                 if (a.target === '_blank') return;
                 if (a.getAttribute('download') !== null) return;
@@ -91,7 +98,7 @@
 
         /* Navigation interne (Arrivée sur la nouvelle page) */
         if (window._prhIsNavigation) {
-            var loader = document.getElementById('page-loader');
+            let loader = document.getElementById('page-loader');
             if (loader) loader.remove();
             
             // Jouer le SVG morphing d'ouverture
@@ -584,9 +591,9 @@
                 el.parentNode.insertBefore(wrap, el);
                 wrap.appendChild(el);
                 
-                gsap.fromTo(el, 
+                gsap.fromTo(el,
                     { scale: 1.2, y: '20%' },
-                    { 
+                    {
                         scale: 1, y: '0%', duration: 1.2, delay: delay, ease: 'power3.out',
                         scrollTrigger: { trigger: wrap, ...ST }
                     }
@@ -732,13 +739,13 @@
         if (!e.persisted) return;
         sessionStorage.removeItem('prh_nav');
         document.documentElement.style.opacity = '';
-        var loader = document.getElementById('page-loader');
+        let loader = document.getElementById('page-loader');
         if (loader) loader.remove();
         
         // Reset du rideau de transition SVG s'il était resté actif
-        var curtainPath = document.querySelector('.prh-curtain-path');
-        var curtainContent = document.querySelector('.prh-curtain-content');
-        var curtainEl = document.getElementById('page-curtain');
+        let curtainPath = document.querySelector('.prh-curtain-path');
+        let curtainContent = document.querySelector('.prh-curtain-content');
+        let curtainEl = document.getElementById('page-curtain');
         if (curtainPath) curtainPath.setAttribute('d', 'M 0 100 V 100 Q 50 100 100 100 V 100 z');
         if (curtainContent) curtainContent.style.opacity = '0';
         if (curtainEl) curtainEl.style.pointerEvents = 'none';
@@ -762,12 +769,22 @@
         }),
         new Promise(resolve => setTimeout(resolve, window._prhIsNavigation ? 0 : (window.innerWidth < 769 ? 0 : 900))),
     ]).then(function () {
-        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+        if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+
+            /* Recalculs de position différés : la police web (swap) et le
+               widget d'accessibilité injectent du DOM APRÈS ce premier
+               refresh, ce qui décale la position de certains triggers et
+               peut les laisser bloqués. Recalcul invisible (n'altère
+               aucune animation, ne fait que recalculer les start/end). */
+            gsap.delayedCall(0.6, function () { ScrollTrigger.refresh(); });
+            gsap.delayedCall(1.6, function () { ScrollTrigger.refresh(); });
+        }
 
         /* Loader de premier chargement : on le fait sortir par le haut,
            puis on lance l'animation hero. Sur navigation interne le loader
            a déjà été supprimé dans init(). */
-        var loader = document.getElementById('page-loader');
+        let loader = document.getElementById('page-loader');
         if (loader) {
             loader.classList.add('loader-out');
             loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
