@@ -131,17 +131,23 @@ add_action( 'wp_head', function () {
    FAVICON
    ======================================================= */
 
-// Empêche WordPress d'afficher son propre favicon
-remove_action( 'wp_head', 'wp_site_icon' );
+/* Si une "Icône du site" est définie dans Customizer › Identité du
+   site, on laisse WordPress générer le markup standard (toutes les
+   tailles), c'est ce que Google reconnaît le mieux. Sinon, fallback
+   maison CORRIGÉ : taille déclarée = taille réelle (192px, multiple
+   de 48 → conforme aux exigences favicon de Google). */
+if ( ! has_site_icon() ) {
+    remove_action( 'wp_head', 'wp_site_icon' );
 
-add_action( 'wp_head', function () {
-    $uri = get_stylesheet_directory_uri();
-    $png = esc_url( $uri . '/assets/img/favicon.png' );
-    $svg = esc_url( $uri . '/assets/img/logo.svg' );
-    echo '<link rel="icon" type="image/png" sizes="32x32" href="' . $png . '">' . "\n";
-    echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
-    echo '<link rel="apple-touch-icon" href="' . $png . '">' . "\n";
-}, 1 );
+    add_action( 'wp_head', function () {
+        $uri  = get_stylesheet_directory_uri();
+        $png  = esc_url( $uri . '/assets/img/favicon-192.png' );
+        $svg  = esc_url( $uri . '/assets/img/logo.svg' );
+        echo '<link rel="icon" type="image/png" sizes="192x192" href="' . $png . '">' . "\n";
+        echo '<link rel="icon" type="image/svg+xml" href="' . $svg . '">' . "\n";
+        echo '<link rel="apple-touch-icon" sizes="192x192" href="' . $png . '">' . "\n";
+    }, 1 );
+}
 
 /* =======================================================
    OPTIMISATIONS
