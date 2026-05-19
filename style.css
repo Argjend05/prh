@@ -100,6 +100,18 @@ html {
     --violet-light: #5c5ca8;
     --orange-text: #b35300;
     --turquoise-text: #22756d;
+
+    /* ── Échelle de rayons (cartes) ──────────────────────────
+       Valeurs alignées sur l'existant pour ne PAS dénaturer la
+       charte : on harmonise, on ne redessine pas. */
+    --radius-card: 18px;   /* carte de contenu principale */
+    --radius-md:   14px;   /* sous-carte / conteneur d'icône */
+    --radius-sm:   10px;   /* boutons, champs */
+
+    /* ── Ombres (teintées violet marque, douces) ──────────── */
+    --shadow-sm:         0 2px 12px rgba(75, 75, 139, .06);
+    --shadow-card:       0 3px 18px rgba(75, 75, 139, .07);
+    --shadow-card-hover: 0 14px 40px rgba(75, 75, 139, .14);
 }
 
 /* =====================================================
@@ -1370,19 +1382,33 @@ body .obs-btn-turquoise {
     flex: 1;
     min-width: 240px;
     max-width: 320px;
-    border-radius: 14px;
+    border-radius: var(--radius-card);
     padding: 36px 28px;
-    color: #fff;
+    color: var(--text-dark);
     display: flex;
     flex-direction: column;
     gap: 14px;
+}
+
+/* Couleur de marque par carte → accent + fond doux teinté + texte
+   foncé lisible (cohérent avec les cartes "pro-why"). Le sélecteur
+   [class*="bg-"] passe devant la règle utilitaire .bg-* (plus spécifique). */
+.obs-mission-card.bg-violet    { --pw: var(--violet); }
+.obs-mission-card.bg-turquoise { --pw: var(--turquoise); }
+.obs-mission-card.bg-orange    { --pw: var(--orange); }
+
+.obs-mission-card[class*="bg-"] {
+    background: color-mix(in srgb, var(--pw) 6%, #fff);
+    border: 1px solid color-mix(in srgb, var(--pw) 22%, #fff);
+    border-left: 4px solid var(--pw);
+    box-shadow: var(--shadow-card);
 }
 
 .obs-mission-card h3 {
     font-family: var(--montserrat);
     font-size: 1.25rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-dark);
     margin: 0;
     padding: 0;
 }
@@ -1402,7 +1428,7 @@ body .obs-btn-turquoise {
 
 .obs-mission-bullets li {
     font-size: .88rem;
-    color: rgba(255, 255, 255, .92);
+    color: var(--text-muted);
     line-height: 1.5;
     padding-left: 16px;
     position: relative;
@@ -1412,19 +1438,24 @@ body .obs-btn-turquoise {
     content: '–';
     position: absolute;
     left: 0;
-    color: rgba(255, 255, 255, .6);
+    color: var(--pw);
+    font-weight: 700;
 }
 
 
 .obs-mission-icon-wrap {
     width: 52px;
     height: 52px;
-    background: rgba(255, 255, 255, .2);
-    border-radius: 12px;
+    background: var(--pw);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+}
+
+.obs-mission-icon-wrap img {
+    filter: brightness(0) invert(1);
 }
 
 .bg-violet {

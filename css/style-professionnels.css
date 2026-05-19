@@ -231,34 +231,37 @@ body .pro-hero-btn {
     margin: 0 auto;
 }
 
+/* Cartes : fond doux teinté de la couleur de marque + accent plein
+   + texte foncé lisible (corrige le contraste blanc/turquoise tout
+   en gardant l'identité couleur de chaque carte). */
 .pro-why-card {
-    border-radius: 20px;
+    border-radius: var(--radius-card);
     padding: 32px;
-    color: #fff;
+    color: var(--text-dark);
+    background: color-mix(in srgb, var(--pw) 6%, #fff);
+    border: 1px solid color-mix(in srgb, var(--pw) 22%, #fff);
+    border-left: 4px solid var(--pw);
+    box-shadow: var(--shadow-card);
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.pro-why-violet {
-    background: var(--violet);
+.pro-why-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
 }
 
-.pro-why-turquoise {
-    background: var(--turquoise);
-}
+.pro-why-violet    { --pw: var(--violet); }
+.pro-why-turquoise { --pw: var(--turquoise); }
+.pro-why-orange    { --pw: var(--orange); }
+.pro-why-dark      { --pw: var(--footer-bg); } /* #2e2e6e — violet foncé du footer */
 
-.pro-why-orange {
-    background: var(--orange);
-}
-
-.pro-why-dark {
-    background: var(--footer-bg);
-    /* #2e2e6e — violet foncé du footer */
-}
-
+/* Pastille d'icône : aplat plein de la couleur (élément décoratif,
+   icône blanche dessus — le contraste texte reste assuré par le corps). */
 .pro-why-icon {
     width: 52px;
     height: 52px;
-    background: rgba(255, 255, 255, .2);
-    border-radius: 12px;
+    background: var(--pw);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -281,7 +284,7 @@ body .pro-hero-btn {
     font-size: 1.05rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #fff;
+    color: var(--text-dark);
     margin: 0;
 }
 
@@ -317,9 +320,9 @@ body .pro-hero-btn {
 /* Carte accordéon */
 .pro-acc-card {
     background: #fff;
-    border-radius: 12px;
+    border-radius: var(--radius-card);
     border-left: 4px solid transparent;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
 }
 
@@ -496,7 +499,17 @@ details[open] .pro-acc-chevron {
     box-shadow: 0 16px 32px rgba(0, 0, 0, .2);
 }
 
+/* data-magnetic enveloppe le contenu dans .magnetic-inline (inline-block
+   via JS) → l'icône retombe sur la baseline du texte. On rétablit un
+   alignement flex centré sur ce wrapper pour ce bouton. */
+.pro-cta-btn .magnetic-inner {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 12px;
+}
+
 .pro-cta-arrow {
+    display: block;
     transition: transform 0.2s ease;
 }
 

@@ -332,30 +332,27 @@ body .acc-page .acc-hero {
     margin-bottom: 0;
 }
 
+/* Bande partenaires : léger, sans boîte. Le vrai souci "pas fini"
+   était le grisé délavé → logos pleine couleur, bien espacés,
+   sur une seule ligne. */
 .acc-logos-partenaires {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 48px;
-    margin: 40px 0;
     flex-wrap: wrap;
-    padding: 32px 0;
-    border-top: 1px solid #e4e4ee;
-    border-bottom: 1px solid #e4e4ee;
+    gap: clamp(40px, 7vw, 88px);
+    max-width: 780px;
+    margin: 44px auto;
 }
 
 .acc-logos-partenaires img {
-    max-height: 80px;
-    max-width: 180px;
+    max-height: 84px;
+    max-width: 175px;
     object-fit: contain;
-    filter: grayscale(30%);
-    opacity: .85;
-    transition: filter .3s, opacity .3s, transform .3s;
+    transition: transform .3s ease;
 }
 
 .acc-logos-partenaires img:hover {
-    filter: grayscale(0%);
-    opacity: 1;
     transform: scale(1.05);
 }
 
@@ -382,8 +379,8 @@ body .acc-page .acc-hero {
     gap: 16px;
     padding: 32px;
     border: 1.5px solid #e8e8f0;
-    border-radius: 14px;
-    box-shadow: 0 2px 16px rgba(75, 75, 139, .07);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
     background: #fff;
 }
 
@@ -570,11 +567,11 @@ body .acc-info-card.acc-card-turquoise {
 
 /* Accordéon service */
 .acc-service-card {
-    border-radius: 12px;
+    border-radius: var(--radius-card);
     border: 1.5px solid #ebebf3;
     border-left-width: 4px;
     background: #fff;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
     transition: box-shadow .2s,
                 opacity  1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -811,7 +808,7 @@ body .acc-info-card.acc-card-turquoise {
     background: rgba(255, 255, 255, .1);
     border: 1px solid rgba(255, 255, 255, .2);
     backdrop-filter: blur(10px);
-    border-radius: 16px;
+    border-radius: var(--radius-card);
     padding: 44px 48px;
     max-width: 650px;
     margin: 0 auto;

@@ -236,9 +236,9 @@
    ===================================================== */
 .fot-step {
     background: #fff;
-    border-radius: 20px;
+    border-radius: var(--radius-card);
     padding: 40px 44px 36px;
-    box-shadow: 0 4px 24px rgba(10,46,80,.07);
+    box-shadow: var(--shadow-card);
     animation: fotStepIn .28s ease both;
 }
 
