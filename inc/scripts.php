@@ -94,12 +94,35 @@ if ( ! function_exists( 'ml_nl2br' ) ) {
    ======================================================= */
 
 add_action( 'wp_head', function () {
+    $logo = get_stylesheet_directory_uri() . '/assets/img/logo.svg';
+
+    /* Organization + WebSite : Organization.logo est LE signal que
+       Google utilise pour l'image représentative du site (vignette
+       SERP). Sans ça, Google scrape une image de la page — ici le
+       logo Adapei — ce qui laisse croire à une dépendance. */
     $schema = [
         '@context' => 'https://schema.org',
-        '@type'    => 'WebSite',
-        'name'     => 'PRH68',
-        'alternateName' => 'Pôle Ressources Handicap du Haut-Rhin',
-        'url'      => home_url( '/' ),
+        '@graph'   => [
+            [
+                '@type' => 'Organization',
+                '@id'   => home_url( '/#organization' ),
+                'name'  => 'PRH68 – Pôle Ressources Handicap du Haut-Rhin',
+                'url'   => home_url( '/' ),
+                'logo'  => [
+                    '@type' => 'ImageObject',
+                    'url'   => $logo,
+                ],
+                'image' => $logo,
+            ],
+            [
+                '@type'         => 'WebSite',
+                '@id'           => home_url( '/#website' ),
+                'name'          => 'PRH68',
+                'alternateName' => 'Pôle Ressources Handicap du Haut-Rhin',
+                'url'           => home_url( '/' ),
+                'publisher'     => [ '@id' => home_url( '/#organization' ) ],
+            ],
+        ],
     ];
     echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
 }, 1 );

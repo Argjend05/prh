@@ -30,11 +30,15 @@
     <meta property="og:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
     <meta property="og:url"         content="<?php echo esc_url( $prh_og_url ); ?>">
     <meta property="og:image"       content="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>">
+    <meta property="og:image:type"   content="image/webp">
     <meta property="og:image:width"  content="350">
     <meta property="og:image:height" content="140">
+    <meta property="og:image:alt"    content="PRH68 – Pôle Ressources Handicap du Haut-Rhin">
     <meta name="twitter:card"        content="summary">
     <meta name="twitter:title"       content="<?php echo esc_attr( $prh_og_title ); ?>">
     <meta name="twitter:description" content="<?php echo esc_attr( wp_strip_all_tags( $prh_meta_description ) ); ?>">
+    <meta name="twitter:image"       content="<?php echo esc_url( $uri . '/assets/img/logo-header.webp' ); ?>">
+    <meta name="twitter:image:alt"   content="PRH68 – Pôle Ressources Handicap du Haut-Rhin">
 
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/ubuntu-400-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="<?php echo esc_url( $uri . '/assets/fonts/ubuntu-700-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
