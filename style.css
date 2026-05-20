@@ -116,6 +116,33 @@ html {
        marque pour une présence visible (vs une ombre noire fade). */
     --shadow-btn:        0 8px 22px rgba(46, 46, 110, .28);
     --shadow-btn-hover:  0 14px 32px rgba(46, 46, 110, .38);
+
+    /* ── Indicateur de focus clavier (accessibilité) ────────
+       Orange marque : contraste largement AA sur clair et sombre.
+       N'apparaît qu'au Tab (jamais au clic souris) — invisible
+       pour les utilisateurs souris. */
+    --focus-ring-color: #ec6f04;
+}
+
+/* ── Focus clavier global ────────────────────────────────
+   Filet de sécurité pour les éléments interactifs qui n'ont
+   PAS de focus custom déjà défini. Les composants qui ont
+   leur propre :focus-visible (ot-env-pill, etc.) gardent
+   leur style via une spécificité supérieure. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+details:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="listitem"]:focus-visible {
+    outline: 3px solid var(--focus-ring-color);
+    outline-offset: 3px;
+    border-radius: inherit;
 }
 
 /* =====================================================
