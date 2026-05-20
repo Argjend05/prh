@@ -55,7 +55,17 @@
             if (show) visible++;
         });
         noResultsEl.hidden = visible > 0;
+        applyGridCols(visible);
         renderActiveFilters();
+    }
+
+    /* Colonnes adaptatives : aligné sur le PHP (1 → 1 col,
+       2-4 → 2 cols, 5+ → 3 cols). Évite les colonnes vides à droite. */
+    function applyGridCols(n) {
+        if (!grid) return;
+        var c = n <= 1 ? 1 : (n <= 4 ? 2 : 3);
+        grid.classList.remove('ot-grid--c1', 'ot-grid--c2', 'ot-grid--c3');
+        grid.classList.add('ot-grid--c' + c);
     }
 
     /* ── Chips filtres actifs ───────────────────────────── */
@@ -162,10 +172,6 @@
             return '<span class="ot-modal-tag">' + escHtml(ucFirst(t)) + '</span>';
         }).join('');
 
-        /* Difficulty */
-        var diffCls = tool.difficulty <= 35 ? 'easy' : (tool.difficulty <= 65 ? 'med' : 'hard');
-        var diffLbl = tool.difficulty <= 35 ? 'Facile' : (tool.difficulty <= 65 ? 'Modéré' : 'Avancé');
-
         /* Initiales avatar */
         var initials = tool.contact_name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
 
@@ -187,18 +193,16 @@
             +   '<div class="ot-modal-metric">'
             +     '<span class="ot-modal-metric-label">Fréquence d\'usage</span>'
             +     usageStars
-            +     '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.usage.toFixed(1) + '/5</span>'
+            +     ( tool.usage > 0
+                ? '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.usage.toFixed(1) + '/5</span>'
+                : '' )
             +   '</div>'
             +   '<div class="ot-modal-metric">'
             +     '<span class="ot-modal-metric-label">Facilité déploiement</span>'
             +     deployStars
-            +     '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.deploy.toFixed(1) + '/5</span>'
-            +   '</div>'
-            +   '<div class="ot-modal-metric">'
-            +     '<span class="ot-modal-metric-label">Difficulté</span>'
-            +     '<span class="ot-diff-badge ot-diff--' + diffCls + '" style="font-size:.85rem;margin-top:6px;">'
-            +       diffLbl + ' <strong>' + tool.difficulty + '</strong>/100'
-            +     '</span>'
+            +     ( tool.deploy > 0
+                ? '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.deploy.toFixed(1) + '/5</span>'
+                : '' )
             +   '</div>'
             + '</div>'
 
@@ -233,6 +237,9 @@
     }
 
     function buildStars(score) {
+        if (!score || score <= 0) {
+            return '<span class="ot-stars-empty">Non évalué</span>';
+        }
         var html = '<span class="ot-stars" style="display:flex;gap:2px;justify-content:center;">';
         for (var i = 1; i <= 5; i++) {
             var pct = Math.max(0, Math.min(1, score - (i - 1)));

@@ -112,6 +112,10 @@ html {
     --shadow-sm:         0 2px 12px rgba(75, 75, 139, .06);
     --shadow-card:       0 3px 18px rgba(75, 75, 139, .07);
     --shadow-card-hover: 0 14px 40px rgba(75, 75, 139, .14);
+    /* Boutons blancs posés sur un fond coloré : teinte violet
+       marque pour une présence visible (vs une ombre noire fade). */
+    --shadow-btn:        0 8px 22px rgba(46, 46, 110, .28);
+    --shadow-btn-hover:  0 14px 32px rgba(46, 46, 110, .38);
 }
 
 /* =====================================================

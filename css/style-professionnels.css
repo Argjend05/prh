@@ -115,14 +115,14 @@ body .pro-hero-btn {
     font-size: .95rem;
     border-radius: 10px;
     text-decoration: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+    box-shadow: var(--shadow-btn);
     transition: background .2s, transform .2s, box-shadow .2s;
 }
 
 .pro-hero-btn:hover {
     background: rgba(255, 255, 255, .9);
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, .2);
+    box-shadow: var(--shadow-btn-hover);
 }
 
 .pro-hero-btn-arrow {
@@ -490,13 +490,13 @@ details[open] .pro-acc-chevron {
     font-weight: 600;
     font-size: 1.1rem;
     text-decoration: none;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, .15);
+    box-shadow: var(--shadow-btn);
     transition: transform .2s, box-shadow .2s;
 }
 
 .pro-cta-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, .2);
+    box-shadow: var(--shadow-btn-hover);
 }
 
 /* data-magnetic enveloppe le contenu dans .magnetic-inline (inline-block

@@ -127,6 +127,11 @@ $hero_stat2 = (string) count( $unique_orgs );
 
 /* ── Helper étoiles ─────────────────────────────────────── */
 function ot_stars( float $score ): string {
+    /* Score 0 = pas encore évalué : on ne montre PAS 5 étoiles vides
+       + "0.0" (impression "outil mal noté"), mais un libellé neutre. */
+    if ( $score <= 0 ) {
+        return '<span class="ot-stars-empty">Non évalué</span>';
+    }
     $out = '<span class="ot-stars" aria-label="' . number_format( $score, 1 ) . ' sur 5">';
     for ( $i = 1; $i <= 5; $i++ ) {
         $pct = max( 0.0, min( 1.0, $score - ( $i - 1 ) ) );
@@ -150,34 +155,16 @@ $icons = [
 ];
 ?>
 
-<!-- ══ EN-TÊTE ════════════════════════════════════════════ -->
+<!-- ══ HERO ══════════════════════════════════════════════ -->
 <header class="ot-page-header">
     <div class="ot-container">
-        <div class="ot-page-header-inner">
-            <div class="ot-page-header-text">
-                <div class="ot-page-header-accent" aria-hidden="true"></div>
-                <div>
-                    <h1 id="ot-hero-title"><?php echo esc_html( $hero_title ); ?></h1>
-                    <p class="ot-page-header-sub"><?php echo esc_html( $hero_sub ); ?></p>
-                </div>
-            </div>
-            <?php if ( $hero_stat1 > 0 || $hero_stat2 > 0 ) : ?>
-            <div class="ot-page-header-stats" aria-label="Statistiques">
-                <?php if ( $hero_stat1 > 0 ) : ?>
-                <div class="ot-page-stat">
-                    <strong><?php echo esc_html( $hero_stat1 ); ?></strong>
-                    <span>outil<?php echo $hero_stat1 > 1 ? 's' : ''; ?></span>
-                </div>
-                <?php endif; ?>
-                <?php if ( $hero_stat2 > 0 ) : ?>
-                <div class="ot-page-stat">
-                    <strong><?php echo esc_html( $hero_stat2 ); ?></strong>
-                    <span>structure<?php echo $hero_stat2 > 1 ? 's' : ''; ?></span>
-                </div>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
-        </div>
+        <h1 id="ot-hero-title"><?php echo esc_html( $hero_title ); ?></h1>
+        <p class="ot-page-header-sub"><?php echo esc_html( $hero_sub ); ?></p>
+    </div>
+    <div class="ot-hero-wave" aria-hidden="true">
+        <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C360,80 1080,0 1440,40 C1800,80 2520,0 2880,40 L2880,80 L0,80 Z" fill="#f8f8fc" />
+        </svg>
     </div>
 </header>
 
@@ -235,12 +222,8 @@ $icons = [
 </section>
 
 <!-- ══ GRILLE OUTILS ═════════════════════════════════════ -->
-<section class="ot-grid-section" aria-labelledby="ot-grid-title">
+<section class="ot-grid-section" aria-label="Catalogue des outils de terrain">
     <div class="ot-container">
-        <header class="ot-section-header">
-            <h2 id="ot-grid-title"><?php echo esc_html( $grid_title ); ?></h2>
-            <p><?php echo esc_html( $grid_sub ); ?></p>
-        </header>
 
         <?php if ( empty( $tools ) ) : ?>
         <div class="ot-empty-state">
@@ -251,12 +234,16 @@ $icons = [
                 Proposer un outil
             </a>
         </div>
-        <?php else : ?>
-        <div class="ot-grid" id="ot-grid" role="list">
+        <?php else :
+            /* Colonnes adaptatives : la grille reste dense quel que soit
+               le volume (1 → 1 col centrée, 2-4 → 2 cols, 5+ → 3 cols).
+               Recalculée par JS à chaque filtrage. */
+            $_n = count( $tools );
+            $grid_cols = $_n <= 1 ? 1 : ( $_n <= 4 ? 2 : 3 );
+        ?>
+        <div class="ot-grid ot-grid--c<?php echo (int) $grid_cols; ?>" id="ot-grid" role="list">
             <?php foreach ( $tools as $t ) :
                 $envs_str = implode( ',', $t['envs'] );
-                $diff_cls = $t['difficulty'] <= 35 ? 'easy' : ( $t['difficulty'] <= 65 ? 'med' : 'hard' );
-                $diff_lbl = $t['difficulty'] <= 35 ? 'Facile' : ( $t['difficulty'] <= 65 ? 'Modéré' : 'Avancé' );
             ?>
             <article
                 class="ot-card"
@@ -267,6 +254,9 @@ $icons = [
                 data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['description'] ) ); ?>"
                 tabindex="0"
                 aria-label="<?php echo esc_attr( 'Voir les détails : ' . $t['title'] ); ?>">
+
+                <!-- Glow 3D Ombre Colorée -->
+                <div class="ot-card-glow" style="background:linear-gradient(135deg,<?php echo esc_attr( $t['g1'] ); ?>,<?php echo esc_attr( $t['g2'] ); ?>)" aria-hidden="true"></div>
 
                 <div class="ot-card-visual" style="background:linear-gradient(135deg,<?php echo esc_attr( $t['g1'] ); ?>,<?php echo esc_attr( $t['g2'] ); ?>)" aria-hidden="true">
                     <?php echo $icons[ $t['icon'] ] ?? ''; ?>
@@ -294,12 +284,6 @@ $icons = [
                         <div class="ot-metric">
                             <span class="ot-metric-label">Facilité déploiement</span>
                             <?php echo ot_stars( $t['deploy'] ); ?>
-                        </div>
-                        <div class="ot-metric ot-metric--diff">
-                            <span class="ot-metric-label">Difficulté</span>
-                            <span class="ot-diff-badge ot-diff--<?php echo $diff_cls; ?>" title="<?php echo esc_attr( $diff_lbl ); ?>">
-                                <?php echo esc_html( $diff_lbl ); ?> <strong><?php echo esc_html( $t['difficulty'] ); ?></strong>/100
-                            </span>
                         </div>
                     </div>
                 </div>
