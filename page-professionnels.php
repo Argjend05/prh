@@ -30,7 +30,7 @@ $nvp_acc6_ttl = $f('prh68_pro_acc6_title', 'Projets / Partenariats');
 /* ── CTA ──────────────────────────────────────────────── */
 $cta_title = $f('prh68_pro_cta_title', 'Prêt à développer l\'inclusion dans votre structure ?');
 $cta_sub = $f('prh68_pro_cta_sub', 'Contactez-nous dès aujourd\'hui pour échanger sur vos besoins et construire ensemble un accompagnement sur mesure');
-$cta_btn = $f('prh68_pro_cta_btn', 'Contactez le Pôle Ressources');
+$cta_btn = $f('prh68_pro_cta_btn', 'Contactez nous');
 $cta_phone = $f('prh68_pro_cta_phone', '03 89 32 81 50');
 $cta_email = $f('prh68_pro_cta_email', 'contact@prh68.fr');
 

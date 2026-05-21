@@ -53,6 +53,14 @@ foreach ( $outil_posts as $op ) {
     $extra_raw  = get_field( 'ot_extra_tags', $pid ) ?: '';
     $extra_tags = array_values( array_filter( array_map( 'trim', explode( ',', $extra_raw ) ) ) );
 
+    /* Photos soumises via le formulaire */
+    $photo_ids  = get_post_meta( $pid, '_fot_photos', true ) ?: [];
+    $photo_urls = [];
+    foreach ( (array) $photo_ids as $_att_id ) {
+        $_url = wp_get_attachment_image_url( (int) $_att_id, 'medium_large' );
+        if ( $_url ) $photo_urls[] = $_url;
+    }
+
     $tools[] = [
         'id'           => 'outil-' . $pid,
         'title'        => get_the_title( $pid ),
@@ -64,9 +72,7 @@ foreach ( $outil_posts as $op ) {
         'envs'         => get_field( 'ot_envs',        $pid ) ?: ['urbain'],
         'structure'    => get_field( 'ot_structure',   $pid ) ?: 'tous',
         'description'  => get_field( 'ot_description', $pid ) ?: '',
-        'usage'        => (float) ( get_field( 'ot_usage',      $pid ) ?: 0 ),
-        'deploy'       => (float) ( get_field( 'ot_deploy',     $pid ) ?: 0 ),
-        'difficulty'   => (int)   ( get_field( 'ot_difficulty', $pid ) ?: 0 ),
+        'age_ranges'   => get_field( 'ot_age_ranges',  $pid ) ?: [],
         'story'        => get_field( 'ot_story',        $pid ) ?: '',
         'specs'        => $specs,
         'contact_name' => get_field( 'ot_contact_name', $pid ) ?: '',
@@ -74,6 +80,7 @@ foreach ( $outil_posts as $op ) {
         'contact_org'  => get_field( 'ot_contact_org',  $pid ) ?: '',
         'date'         => get_the_date( 'd/m/Y', $pid ),
         'extra_tags'   => $extra_tags,
+        'photos'       => $photo_urls,
     ];
 }
 
@@ -123,26 +130,31 @@ foreach ( $norm_keys as $candidate ) {
 
 $hero_stat2 = (string) count( $unique_orgs );
 
+/* Détecte automatiquement la page qui utilise le template du
+   formulaire de partage d'outil → CTA pointe sur le bon formulaire,
+   pas sur /contact générique. Fallback : /contact. */
+$submit_url = get_permalink( get_page_by_path( 'formulaire-contact' ) ) ?: home_url( '/' );
+$_form_pages = get_posts( [
+    'post_type'      => 'page',
+    'posts_per_page' => 1,
+    'fields'         => 'ids',
+    'meta_key'       => '_wp_page_template',
+    'meta_value'     => 'page-formulaire-outil.php',
+    'post_status'    => 'publish',
+] );
+if ( ! empty( $_form_pages ) ) {
+    $submit_url = get_permalink( $_form_pages[0] );
+}
+
 /* Fin du bloc données CPT */
 
-/* ── Helper étoiles ─────────────────────────────────────── */
-function ot_stars( float $score ): string {
-    /* Score 0 = pas encore évalué : on ne montre PAS 5 étoiles vides
-       + "0.0" (impression "outil mal noté"), mais un libellé neutre. */
-    if ( $score <= 0 ) {
-        return '<span class="ot-stars-empty">Non évalué</span>';
-    }
-    $out = '<span class="ot-stars" aria-label="' . number_format( $score, 1 ) . ' sur 5">';
-    for ( $i = 1; $i <= 5; $i++ ) {
-        $pct = max( 0.0, min( 1.0, $score - ( $i - 1 ) ) );
-        if ( $pct >= 0.75 )     $cls = 'full';
-        elseif ( $pct >= 0.25 ) $cls = 'half';
-        else                    $cls = 'empty';
-        $out .= '<svg viewBox="0 0 12 12" class="ot-star ot-star--' . $cls . '" aria-hidden="true"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>';
-    }
-    $out .= ' <span class="ot-stars-val">' . number_format( $score, 1 ) . '</span></span>';
-    return $out;
-}
+/* ── Labels tranches d'âge ──────────────────────────────── */
+$age_labels = [
+    '0-3'   => '0-3 ans',
+    '3-6'   => '3-6 ans',
+    '6-12'  => '6-12 ans',
+    '12-18' => '12-18 ans',
+];
 
 /* ── SVG icons inline ───────────────────────────────────── */
 $icons = [
@@ -195,10 +207,11 @@ $icons = [
                     <div class="ot-select-wrap">
                         <select id="ot-structure-select" class="ot-select">
                             <option value="tous">Toutes</option>
-                            <option value="école">École</option>
                             <option value="eaje">EAJE / Crèche</option>
-                            <option value="sessad">SESSAD</option>
-                            <option value="itep">ITEP / IME</option>
+                            <option value="assistante_maternelle">Assistante maternelle</option>
+                            <option value="rpe">RPE</option>
+                            <option value="acm">ACM</option>
+                            <option value="autre">Autre</option>
                         </select>
                         <svg class="ot-select-arrow" viewBox="0 0 12 8" fill="none" aria-hidden="true" width="12"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                     </div>
@@ -230,7 +243,7 @@ $icons = [
             <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" width="56" height="56"><circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="1.5" opacity=".2"/><path d="M22 32h20M32 22v20" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".4" transform="rotate(45 32 32)"/><circle cx="32" cy="32" r="10" stroke="currentColor" stroke-width="1.5" opacity=".3"/></svg>
             <h3>Aucun outil publié pour le moment</h3>
             <p>Les outils partagés par les professionnels du terrain apparaîtront ici après validation par l'équipe PRH68.</p>
-            <a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="ot-cta-btn ot-cta-btn--primary" style="margin-top:8px;">
+            <a href="<?php echo esc_url( $submit_url ); ?>" class="ot-cta-btn ot-cta-btn--primary" style="margin-top:8px;">
                 Proposer un outil
             </a>
         </div>
@@ -251,14 +264,20 @@ $icons = [
                 data-id="<?php echo esc_attr( $t['id'] ); ?>"
                 data-envs="<?php echo esc_attr( $envs_str ); ?>"
                 data-structure="<?php echo esc_attr( $t['structure'] ); ?>"
-                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['description'] ) ); ?>"
+                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['description'] . ' ' . implode( ' ', $t['age_ranges'] ) ) ); ?>"
                 tabindex="0"
                 aria-label="<?php echo esc_attr( 'Voir les détails : ' . $t['title'] ); ?>">
 
                 <!-- Glow 3D Ombre Colorée -->
                 <div class="ot-card-glow" style="background:linear-gradient(135deg,<?php echo esc_attr( $t['g1'] ); ?>,<?php echo esc_attr( $t['g2'] ); ?>)" aria-hidden="true"></div>
 
-                <div class="ot-card-visual" style="background:linear-gradient(135deg,<?php echo esc_attr( $t['g1'] ); ?>,<?php echo esc_attr( $t['g2'] ); ?>)" aria-hidden="true">
+                <?php
+                $has_photo = ! empty( $t['photos'] );
+                $vis_style = $has_photo
+                    ? 'background-color:' . esc_attr( $t['g1'] ) . ';background-image:url(\'' . esc_url( $t['photos'][0] ) . '\');background-size:cover;background-position:center'
+                    : 'background:linear-gradient(135deg,' . esc_attr( $t['g1'] ) . ',' . esc_attr( $t['g2'] ) . ')';
+                ?>
+                <div class="ot-card-visual<?php echo $has_photo ? ' ot-card-visual--photo' : ''; ?>" style="<?php echo $vis_style; ?>" aria-hidden="true">
                     <?php echo $icons[ $t['icon'] ] ?? ''; ?>
                     <span class="ot-card-cat-badge"><?php echo esc_html( $t['category'] ); ?></span>
                 </div>
@@ -276,16 +295,13 @@ $icons = [
                     <h3 class="ot-card-title"><?php echo esc_html( $t['title'] ); ?></h3>
                     <p class="ot-card-desc"><?php echo esc_html( $t['description'] ); ?></p>
 
-                    <div class="ot-card-metrics">
-                        <div class="ot-metric">
-                            <span class="ot-metric-label">Fréquence d'usage</span>
-                            <?php echo ot_stars( $t['usage'] ); ?>
-                        </div>
-                        <div class="ot-metric">
-                            <span class="ot-metric-label">Facilité déploiement</span>
-                            <?php echo ot_stars( $t['deploy'] ); ?>
-                        </div>
+                    <?php if ( ! empty( $t['age_ranges'] ) ) : ?>
+                    <div class="ot-card-ages" aria-label="Tranches d'âge">
+                        <?php foreach ( $t['age_ranges'] as $age ) : ?>
+                        <span class="ot-age-tag"><?php echo esc_html( $age_labels[ $age ] ?? $age ); ?></span>
+                        <?php endforeach; ?>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="ot-card-footer">
@@ -338,7 +354,7 @@ $icons = [
             <h2 id="ot-cta-title"><?php echo esc_html( $cta_title ); ?></h2>
             <p><?php echo esc_html( $cta_sub ); ?></p>
             <div class="ot-cta-btns">
-                <a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="ot-cta-btn ot-cta-btn--primary">
+                <a href="<?php echo esc_url( $submit_url ); ?>" class="ot-cta-btn ot-cta-btn--primary">
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="18" height="18"><path d="M10 13V4M6 7l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14v1a2 2 0 002 2h10a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                     Partager un Outil
                 </a>
@@ -350,6 +366,7 @@ $icons = [
 
 <!-- ══ Données JSON pour le modal JS ═════════════════════ -->
 <script>
+window.prhOutilsContactUrl = <?php echo wp_json_encode( get_permalink( get_page_by_path( 'formulaire-contact' ) ) ?: home_url( '/formulaire-contact/' ) ); ?>;
 window.prhOutils = <?php
     $json_tools = array_map( function( $t ) {
         return [
@@ -363,9 +380,7 @@ window.prhOutils = <?php
             'envs'         => $t['envs'],
             'structure'    => $t['structure'],
             'description'  => $t['description'],
-            'usage'        => $t['usage'],
-            'deploy'       => $t['deploy'],
-            'difficulty'   => $t['difficulty'],
+            'age_ranges'   => $t['age_ranges'],
             'story'        => $t['story'],
             'specs'        => $t['specs'],
             'contact_name' => $t['contact_name'],
@@ -373,6 +388,7 @@ window.prhOutils = <?php
             'contact_org'  => $t['contact_org'],
             'date'         => $t['date'],
             'extra_tags'   => $t['extra_tags'],
+            'photos'       => $t['photos'],
         ];
     }, $tools );
     echo wp_json_encode( $json_tools, JSON_UNESCAPED_UNICODE );

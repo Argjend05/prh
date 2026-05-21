@@ -162,6 +162,12 @@
         document.body.style.overflow = '';
     }
 
+    /* Libellés des tranches d'âge */
+    var AGE_LABELS = {
+        '0-3': '0-3 ans', '3-6': '3-6 ans',
+        '6-12': '6-12 ans', '12-18': '12-18 ans'
+    };
+
     function populateModal(tool) {
         /* Visual sidebar */
         modalVisual.style.background = 'linear-gradient(135deg,' + tool.g1 + ',' + tool.g2 + ')';
@@ -180,31 +186,35 @@
             return '<tr><th>' + escHtml(s[0]) + '</th><td>' + escHtml(s[1]) + '</td></tr>';
         }).join('');
 
-        /* Stars HTML */
-        var usageStars   = buildStars(tool.usage);
-        var deployStars  = buildStars(tool.deploy);
+        /* Tranches d'âge */
+        var agesHtml = '';
+        if (tool.age_ranges && tool.age_ranges.length) {
+            agesHtml = '<div class="ot-modal-ages">'
+                + tool.age_ranges.map(function (a) {
+                    return '<span class="ot-age-tag">' + escHtml(AGE_LABELS[a] || a) + '</span>';
+                }).join('')
+                + '</div>';
+        }
+
+        /* Galerie photos */
+        var photosHtml = '';
+        if (tool.photos && tool.photos.length) {
+            var isSingle = tool.photos.length === 1;
+            photosHtml = '<div class="ot-modal-gallery' + (isSingle ? ' ot-modal-gallery--single' : '') + '">'
+                + tool.photos.map(function (url) {
+                    return '<img class="ot-modal-gallery-img" src="' + escHtml(url) + '" alt="" loading="lazy">';
+                }).join('')
+                + '</div>';
+        }
 
         modalContent.innerHTML =
             '<h2 class="ot-modal-title" id="ot-modal-title">' + escHtml(tool.title) + '</h2>'
             + '<p class="ot-modal-meta">Partagé par ' + escHtml(tool.contact_org)
             + ' &middot; Mis à jour le ' + escHtml(tool.date) + '</p>'
 
-            + '<div class="ot-modal-metrics">'
-            +   '<div class="ot-modal-metric">'
-            +     '<span class="ot-modal-metric-label">Fréquence d\'usage</span>'
-            +     usageStars
-            +     ( tool.usage > 0
-                ? '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.usage.toFixed(1) + '/5</span>'
-                : '' )
-            +   '</div>'
-            +   '<div class="ot-modal-metric">'
-            +     '<span class="ot-modal-metric-label">Facilité déploiement</span>'
-            +     deployStars
-            +     ( tool.deploy > 0
-                ? '<span style="font-size:.75rem;color:#94a3b8;margin-top:2px;">' + tool.deploy.toFixed(1) + '/5</span>'
-                : '' )
-            +   '</div>'
-            + '</div>'
+            + photosHtml
+
+            + agesHtml
 
             + '<div class="ot-modal-section">'
             +   '<h3 class="ot-modal-section-title">📖 L\'Histoire</h3>'
@@ -228,26 +238,12 @@
             +         '<span class="ot-modal-contact-role">' + escHtml(tool.contact_role) + ' — ' + escHtml(tool.contact_org) + '</span>'
             +       '</div>'
             +     '</div>'
-            +     '<a href="' + homeUrl() + '/contact" class="ot-modal-contact-btn">'
+            +     '<a href="' + contactUrl() + '" class="ot-modal-contact-btn">'
             +       '<svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>'
             +       'Contacter'
             +     '</a>'
             +   '</div>'
             + '</div>';
-    }
-
-    function buildStars(score) {
-        if (!score || score <= 0) {
-            return '<span class="ot-stars-empty">Non évalué</span>';
-        }
-        var html = '<span class="ot-stars" style="display:flex;gap:2px;justify-content:center;">';
-        for (var i = 1; i <= 5; i++) {
-            var pct = Math.max(0, Math.min(1, score - (i - 1)));
-            var cls = pct >= 0.75 ? 'full' : (pct >= 0.25 ? 'half' : 'empty');
-            html += '<svg viewBox="0 0 12 12" class="ot-star ot-star--' + cls + '" aria-hidden="true" width="14" height="14"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>';
-        }
-        html += '</span>';
-        return html;
     }
 
     /* ══════════════════════════════════════════════════════
@@ -266,9 +262,8 @@
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    function homeUrl() {
-        /* Fallback: origin */
-        return window.location.origin;
+    function contactUrl() {
+        return window.prhOutilsContactUrl || (window.location.origin + '/formulaire-contact/');
     }
 
     /* ══════════════════════════════════════════════════════

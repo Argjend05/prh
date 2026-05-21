@@ -19,38 +19,39 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
 
     /* ── Collecte & sanitize ── */
     $d = [
-        'struct_name'   => sanitize_text_field(     $_POST['fot_struct_name']   ?? '' ),
-        'struct_type'   => sanitize_text_field(     $_POST['fot_struct_type']   ?? '' ),
-        'struct_dept'   => sanitize_text_field(     $_POST['fot_struct_dept']   ?? '' ),
-        'ref_name'      => sanitize_text_field(     $_POST['fot_ref_name']      ?? '' ),
-        'ref_role'      => sanitize_text_field(     $_POST['fot_ref_role']      ?? '' ),
-        'ref_email'     => sanitize_email(          $_POST['fot_ref_email']     ?? '' ),
-        'ref_phone'     => sanitize_text_field(     $_POST['fot_ref_phone']     ?? '' ),
-        'outil_name'    => sanitize_text_field(     $_POST['fot_outil_name']    ?? '' ),
-        'outil_desc'    => sanitize_textarea_field( $_POST['fot_outil_desc']    ?? '' ),
-        'outil_context' => sanitize_textarea_field( $_POST['fot_outil_context'] ?? '' ),
-        'outil_envs'    => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_envs'] ?? [] ) ),
-        'outil_freq'    => (int) ( $_POST['fot_outil_freq']  ?? 2 ),
-        'outil_tags'    => sanitize_text_field(     $_POST['fot_outil_tags']    ?? '' ),
-        'consent'       => ! empty( $_POST['fot_consent'] ),
+        'struct_name'        => sanitize_text_field(     $_POST['fot_struct_name']        ?? '' ),
+        'struct_type'        => sanitize_text_field(     $_POST['fot_struct_type']        ?? '' ),
+        'struct_type_autre'  => sanitize_text_field(     $_POST['fot_struct_type_autre']  ?? '' ),
+        'struct_postal'      => sanitize_text_field(     $_POST['fot_struct_postal']      ?? '' ),
+        'ref_name'           => sanitize_text_field(     $_POST['fot_ref_name']           ?? '' ),
+        'ref_role'           => sanitize_text_field(     $_POST['fot_ref_role']           ?? '' ),
+        'ref_email'          => sanitize_email(          $_POST['fot_ref_email']          ?? '' ),
+        'ref_phone'          => sanitize_text_field(     $_POST['fot_ref_phone']          ?? '' ),
+        'outil_name'         => sanitize_text_field(     $_POST['fot_outil_name']         ?? '' ),
+        'outil_desc'         => sanitize_textarea_field( $_POST['fot_outil_desc']         ?? '' ),
+        'outil_context'      => sanitize_textarea_field( $_POST['fot_outil_context']      ?? '' ),
+        'outil_envs'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_envs']  ?? [] ) ),
+        'outil_ages'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_ages']  ?? [] ) ),
+        'outil_tags'         => sanitize_text_field(     $_POST['fot_outil_tags']         ?? '' ),
+        'consent'            => ! empty( $_POST['fot_consent'] ),
     ];
 
     /* ── Validation ── */
-    if ( empty( $d['struct_name'] ) )             $fot_errors[] = "Le nom de la structure est requis.";
-    if ( empty( $d['struct_type'] ) )             $fot_errors[] = "Le type de structure est requis.";
-    if ( empty( $d['ref_name'] ) )                $fot_errors[] = "Le nom du référent est requis.";
-    if ( ! is_email( $d['ref_email'] ) )          $fot_errors[] = "Adresse e-mail invalide.";
-    if ( strlen( $d['outil_name'] ) < 3 )         $fot_errors[] = "Le nom de l'outil est requis.";
-    if ( strlen( $d['outil_desc'] ) < 20 )        $fot_errors[] = "La description doit faire au moins 20 caractères.";
-    if ( strlen( $d['outil_desc'] ) > 400 )       $fot_errors[] = "La description est trop longue (400 car. max).";
-    if ( strlen( $d['outil_context'] ) < 30 )     $fot_errors[] = "Le contexte d'utilisation est requis.";
-    if ( empty( $d['outil_envs'] ) )              $fot_errors[] = "Sélectionnez au moins un environnement.";
-    if ( ! $d['consent'] )                        $fot_errors[] = "Vous devez accepter les conditions avant de soumettre.";
+    if ( empty( $d['struct_name'] ) )                                $fot_errors[] = "Le nom de la structure est requis.";
+    if ( empty( $d['struct_type'] ) )                                $fot_errors[] = "Le type de structure est requis.";
+    if ( $d['struct_type'] === 'autre' && empty( $d['struct_type_autre'] ) ) $fot_errors[] = "Précisez le type de structure.";
+    if ( empty( $d['struct_postal'] ) )                              $fot_errors[] = "Le code postal est requis.";
+    if ( empty( $d['ref_name'] ) )                                   $fot_errors[] = "Le nom du référent est requis.";
+    if ( ! is_email( $d['ref_email'] ) )                             $fot_errors[] = "Adresse e-mail invalide.";
+    if ( strlen( $d['outil_name'] ) < 3 )                            $fot_errors[] = "Le nom de l'outil est requis.";
+    if ( strlen( $d['outil_desc'] ) < 20 )                           $fot_errors[] = "La description doit faire au moins 20 caractères.";
+    if ( strlen( $d['outil_desc'] ) > 400 )                          $fot_errors[] = "La description est trop longue (400 car. max).";
+    if ( strlen( $d['outil_context'] ) < 30 )                        $fot_errors[] = "Le contexte d'utilisation est requis.";
+    if ( empty( $d['outil_envs'] ) )                                 $fot_errors[] = "Sélectionnez au moins un environnement.";
+    if ( ! $d['consent'] )                                           $fot_errors[] = "Vous devez accepter les conditions avant de soumettre.";
 
     /* ── Création du post en attente ── */
     if ( empty( $fot_errors ) ) {
-
-        $freq_labels = [ 1 => 'Rare', 2 => 'Régulier', 3 => 'Quotidien' ];
 
         $post_id = wp_insert_post( [
             'post_title'   => sanitize_text_field( $d['outil_name'] ),
@@ -63,20 +64,23 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
 
             /* ACF */
             if ( function_exists( 'update_field' ) ) {
-                update_field( 'ot_description',   $d['outil_context'], $post_id );
-                update_field( 'ot_story',         $d['outil_context'], $post_id );
-                update_field( 'ot_envs',          $d['outil_envs'],    $post_id );
-                update_field( 'ot_contact_name',  $d['ref_name'],      $post_id );
-                update_field( 'ot_contact_role',  $d['ref_role'],      $post_id );
-                update_field( 'ot_contact_org',   $d['struct_name'],   $post_id );
-                update_field( 'ot_extra_tags',    $d['outil_tags'],    $post_id );
+                update_field( 'ot_description',   $d['outil_context'],    $post_id );
+                update_field( 'ot_story',         $d['outil_context'],    $post_id );
+                update_field( 'ot_envs',          $d['outil_envs'],       $post_id );
+                update_field( 'ot_age_ranges',    $d['outil_ages'],       $post_id );
+                update_field( 'ot_contact_name',  $d['ref_name'],         $post_id );
+                update_field( 'ot_contact_role',  $d['ref_role'],         $post_id );
+                update_field( 'ot_contact_org',   $d['struct_name'],      $post_id );
+                update_field( 'ot_extra_tags',    $d['outil_tags'],       $post_id );
+                if ( ! empty( $d['struct_type'] ) ) {
+                    update_field( 'ot_structure', $d['struct_type'], $post_id );
+                }
             }
 
             /* Méta de soumission (pour l'admin) */
             $meta = array_merge( $d, [
-                'outil_freq_label' => $freq_labels[ $d['outil_freq'] ] ?? 'Régulier',
-                'submitted_at'     => current_time( 'mysql' ),
-                'submitted_ip'     => $_SERVER['REMOTE_ADDR'] ?? '',
+                'submitted_at' => current_time( 'mysql' ),
+                'submitted_ip' => $_SERVER['REMOTE_ADDR'] ?? '',
             ] );
             update_post_meta( $post_id, '_fot_submission', $meta );
 
@@ -111,9 +115,14 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
             $subject     = "[PRH68] Nouvel outil soumis : " . $d['outil_name'];
             $body        = "Un nouvel outil de terrain a été soumis et attend modération.\n\n";
             $body       .= "Outil       : " . $d['outil_name'] . "\n";
-            $body       .= "Structure   : " . $d['struct_name'] . " (" . $d['struct_type'] . ")\n";
+            $struct_display = $d['struct_type'] === 'autre' ? ( 'Autre : ' . $d['struct_type_autre'] ) : $d['struct_type'];
+            $body       .= "Structure   : " . $d['struct_name'] . " (" . $struct_display . ") — CP " . $d['struct_postal'] . "\n";
             $body       .= "Référent    : " . $d['ref_name'] . " — " . $d['ref_email'] . "\n";
-            $body       .= "Environnements : " . implode( ', ', $d['outil_envs'] ) . "\n\n";
+            $body       .= "Environnements : " . implode( ', ', $d['outil_envs'] ) . "\n";
+            if ( ! empty( $d['outil_ages'] ) ) {
+                $body   .= "Tranches d'âge : " . implode( ', ', $d['outil_ages'] ) . "\n";
+            }
+            $body       .= "\n";
             $body       .= "Voir la soumission : " . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "\n";
             wp_mail( $admin_email, $subject, $body );
 
@@ -129,16 +138,19 @@ get_header();
 $uri = get_stylesheet_directory_uri();
 
 $struct_types = [
-    ''           => 'Sélectionnez un type…',
-    'eaje'       => 'EAJE / Crèche / Multi-accueil',
-    'ecole'      => 'École maternelle / élémentaire',
-    'college'    => 'Collège / Lycée',
-    'sessad'     => 'SESSAD',
-    'itep'       => 'ITEP / IME',
-    'service_j'  => 'Service Jeunesse / Centre de loisirs',
-    'assoce'     => 'Association',
-    'hosp'       => 'Établissement de santé',
-    'autre'      => 'Autre',
+    ''                      => 'Sélectionnez un type…',
+    'eaje'                  => 'EAJE',
+    'assistante_maternelle' => 'Assistante maternelle',
+    'rpe'                   => 'RPE (Relais Petite Enfance)',
+    'acm'                   => 'ACM (Accueil Collectif de Mineurs)',
+    'autre'                 => 'Autre',
+];
+
+$age_choices = [
+    '0-3'   => '0-3 ans',
+    '3-6'   => '3-6 ans',
+    '6-12'  => '6-12 ans',
+    '12-18' => '12-18 ans',
 ];
 
 $envs_choices = [
@@ -261,7 +273,7 @@ sort( $_existing_orgs );
                     </div>
 
                     <div class="fot-field">
-                        <label for="fot_struct_type">Type de structure <abbr title="requis">*</abbr></label>
+                        <label for="fot_struct_type">Type de lieu d'accueil <abbr title="requis">*</abbr></label>
                         <div class="fot-select-wrap">
                             <select id="fot_struct_type" name="fot_struct_type" class="fot-select" required>
                                 <?php foreach ( $struct_types as $val => $label ) : ?>
@@ -272,11 +284,19 @@ sort( $_existing_orgs );
                         </div>
                     </div>
 
+                    <div class="fot-field fot-field--full" id="fot-struct-autre-wrap" hidden>
+                        <label for="fot_struct_type_autre">Précisez le type de lieu d'accueil<abbr title="requis">*</abbr></label>
+                        <div class="fot-input-wrap">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16" class="fot-input-icon"><path d="M4 6h12M4 10h8M4 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <input type="text" id="fot_struct_type_autre" name="fot_struct_type_autre" class="fot-input" placeholder="Ex. Maison d'assistantes maternelles, CAMSP…">
+                        </div>
+                    </div>
+
                     <div class="fot-field">
-                        <label for="fot_struct_dept">Département <abbr title="requis">*</abbr></label>
+                        <label for="fot_struct_postal">Code postal <abbr title="requis">*</abbr></label>
                         <div class="fot-input-wrap">
                             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16" class="fot-input-icon"><path d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor" opacity=".4"/></svg>
-                            <input type="text" id="fot_struct_dept" name="fot_struct_dept" class="fot-input" placeholder="Ex. 68 — Haut-Rhin" required>
+                            <input type="text" id="fot_struct_postal" name="fot_struct_postal" class="fot-input" placeholder="Ex. 68100" required inputmode="numeric" maxlength="10">
                         </div>
                     </div>
 
@@ -372,13 +392,17 @@ sort( $_existing_orgs );
                     </div>
 
                     <div class="fot-field fot-field--full">
-                        <label for="fot_outil_freq">Fréquence d'usage</label>
-                        <div class="fot-slider-wrap">
-                            <input type="range" id="fot_outil_freq" name="fot_outil_freq" class="fot-slider" min="1" max="3" value="2" step="1">
-                            <div class="fot-slider-labels" aria-hidden="true">
-                                <span>Rare</span><span>Régulier</span><span>Quotidien</span>
+                        <fieldset>
+                            <legend>Tranche(s) d'âge concernée(s)</legend>
+                            <div class="fot-env-pills">
+                                <?php foreach ( $age_choices as $val => $label ) : ?>
+                                <label class="fot-env-pill">
+                                    <input type="checkbox" name="fot_outil_ages[]" value="<?php echo esc_attr( $val ); ?>">
+                                    <?php echo esc_html( $label ); ?>
+                                </label>
+                                <?php endforeach; ?>
                             </div>
-                        </div>
+                        </fieldset>
                     </div>
 
                     <div class="fot-field fot-field--full">
@@ -489,6 +513,7 @@ sort( $_existing_orgs );
                             <p class="fot-recap-label">OUTIL PARTAGÉ</p>
                             <p class="fot-recap-val" id="fot-recap-outil">—</p>
                             <div id="fot-recap-envs" class="fot-recap-tags"></div>
+                            <div id="fot-recap-ages" class="fot-recap-tags" style="margin-top:6px;"></div>
                         </div>
                         <div class="fot-recap-col fot-recap-col--full">
                             <p class="fot-recap-label">PHOTOS</p>

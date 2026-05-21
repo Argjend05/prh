@@ -87,16 +87,20 @@
         }
 
         if (n === 1) {
-            var sname = stepEl.querySelector('#fot_struct_name');
-            var stype = stepEl.querySelector('#fot_struct_type');
-            var sdept = stepEl.querySelector('#fot_struct_dept');
-            var rname = stepEl.querySelector('#fot_ref_name');
-            var email = stepEl.querySelector('#fot_ref_email');
+            var sname   = stepEl.querySelector('#fot_struct_name');
+            var stype   = stepEl.querySelector('#fot_struct_type');
+            var sautre  = stepEl.querySelector('#fot_struct_type_autre');
+            var spostal = stepEl.querySelector('#fot_struct_postal');
+            var rname   = stepEl.querySelector('#fot_ref_name');
+            var email   = stepEl.querySelector('#fot_ref_email');
 
-            if (!sname.value.trim()) markInvalid(sname, 'Le nom de la structure est requis.');
-            if (!stype.value)        markInvalid(stype, 'Sélectionnez un type de structure.');
-            if (!sdept.value.trim()) markInvalid(sdept, 'Le département est requis.');
-            if (!rname.value.trim()) markInvalid(rname, 'Le nom du référent est requis.');
+            if (!sname.value.trim())   markInvalid(sname,   'Le nom de la structure est requis.');
+            if (!stype.value)          markInvalid(stype,   'Sélectionnez un type de structure.');
+            if (stype.value === 'autre' && sautre && !sautre.value.trim()) {
+                markInvalid(sautre, 'Précisez le type de structure.');
+            }
+            if (!spostal.value.trim()) markInvalid(spostal, 'Le code postal est requis.');
+            if (!rname.value.trim())   markInvalid(rname,   'Le nom du référent est requis.');
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
                 markInvalid(email, 'Adresse e-mail invalide.');
             }
@@ -203,19 +207,27 @@
     }
 
     /* ─────────────────────────────────────────────────────
-       RANGE SLIDER — visual fill
+       TYPE STRUCTURE "AUTRE" — champ conditionnel
     ───────────────────────────────────────────────────── */
-    var slider = document.getElementById('fot_outil_freq');
-    if (slider) {
-        function updateSlider() {
-            var min = parseFloat(slider.min) || 1;
-            var max = parseFloat(slider.max) || 3;
-            var val = parseFloat(slider.value) || 2;
-            var pct = ((val - min) / (max - min)) * 100;
-            slider.style.setProperty('--pct', pct + '%');
+    var structSelect = document.getElementById('fot_struct_type');
+    var autreWrap    = document.getElementById('fot-struct-autre-wrap');
+
+    function toggleAutreField() {
+        if (!structSelect || !autreWrap) return;
+        var show = structSelect.value === 'autre';
+        if (show) {
+            autreWrap.removeAttribute('hidden');
+            autreWrap.querySelector('input').required = true;
+        } else {
+            autreWrap.setAttribute('hidden', '');
+            autreWrap.querySelector('input').required = false;
+            autreWrap.querySelector('input').value = '';
         }
-        slider.addEventListener('input', updateSlider);
-        updateSlider();
+    }
+
+    if (structSelect) {
+        structSelect.addEventListener('change', toggleAutreField);
+        toggleAutreField();
     }
 
     /* ─────────────────────────────────────────────────────
@@ -290,9 +302,18 @@
     var preview     = document.getElementById('fot-photo-preview');
     var photoFiles  = []; // DataTransfer-managed list
 
+    /* Clic sur le bouton "Parcourir" */
     if (browseBtn && fileInput) {
         browseBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
+            e.stopPropagation(); // évite de déclencher aussi le handler dropzone
+            fileInput.click();
+        });
+    }
+
+    /* Clic n'importe où sur la zone de dépôt (hors bouton) */
+    if (dropzone && fileInput) {
+        dropzone.addEventListener('click', function (e) {
+            if (e.target.closest('#fot-browse-btn')) return; // déjà géré ci-dessus
             fileInput.click();
         });
     }
@@ -390,12 +411,19 @@
         'eaje': 'EAJE', 'rue': 'Rue', 'collectivite': 'Collectivité'
     };
 
+    var ageLabels = {
+        '0-3': '0-3 ans', '3-6': '3-6 ans',
+        '6-12': '6-12 ans', '12-18': '12-18 ans'
+    };
+
     function populateRecap() {
         setRecap('fot-recap-struct', val('#fot_struct_name') || '—');
 
-        var typeLabel = optionLabel('#fot_struct_type') || '';
-        var dept      = val('#fot_struct_dept');
-        setRecap('fot-recap-type', [typeLabel, dept].filter(Boolean).join(' · ') || '—');
+        var typeLabel  = optionLabel('#fot_struct_type') || '';
+        var autreLabel = val('#fot_struct_type_autre');
+        if (typeLabel === 'Autre' && autreLabel) typeLabel = autreLabel;
+        var postal = val('#fot_struct_postal');
+        setRecap('fot-recap-type', [typeLabel, postal ? 'CP ' + postal : ''].filter(Boolean).join(' · ') || '—');
 
         setRecap('fot-recap-ref',    val('#fot_ref_name')    || '—');
         var role  = val('#fot_ref_role');
@@ -413,17 +441,31 @@
         var subEl = document.getElementById('fot-recap-photos-sub');
         if (subEl) subEl.textContent = n > 0 ? 'JPG / PNG · En attente de modération' : '';
 
+        // Environnements
         var envsEl = document.getElementById('fot-recap-envs');
         if (envsEl) {
             envsEl.innerHTML = '';
-            var checked = Array.from(form.querySelectorAll('input[name="fot_outil_envs[]"]:checked'));
-            checked.forEach(function (cb) {
+            var checkedEnvs = Array.from(form.querySelectorAll('input[name="fot_outil_envs[]"]:checked'));
+            checkedEnvs.forEach(function (cb) {
                 var chip = document.createElement('span');
                 chip.className = 'fot-recap-tag';
                 chip.textContent = envLabels[cb.value] || cb.value;
                 envsEl.appendChild(chip);
             });
-            if (!checked.length) envsEl.textContent = '—';
+            if (!checkedEnvs.length) envsEl.textContent = '—';
+        }
+
+        // Tranches d'âge
+        var agesEl = document.getElementById('fot-recap-ages');
+        if (agesEl) {
+            agesEl.innerHTML = '';
+            var checkedAges = Array.from(form.querySelectorAll('input[name="fot_outil_ages[]"]:checked'));
+            checkedAges.forEach(function (cb) {
+                var chip = document.createElement('span');
+                chip.className = 'fot-recap-tag';
+                chip.textContent = ageLabels[cb.value] || cb.value;
+                agesEl.appendChild(chip);
+            });
         }
     }
 

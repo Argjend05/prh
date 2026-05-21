@@ -555,11 +555,12 @@ function prh68_acf_register_groups() {
             [
                 'key' => 'field_ot_structure', 'label' => 'Type de structure', 'name' => 'ot_structure', 'type' => 'select',
                 'choices' => [
-                    'tous'  => 'Toutes',
-                    'école' => 'École',
-                    'eaje'  => 'EAJE / Crèche',
-                    'sessad'=> 'SESSAD',
-                    'itep'  => 'ITEP / IME',
+                    'tous'                  => 'Toutes',
+                    'eaje'                  => 'EAJE / Crèche',
+                    'assistante_maternelle' => 'Assistante maternelle',
+                    'rpe'                   => 'RPE (Relais Petite Enfance)',
+                    'acm'                   => 'ACM (Accueil Collectif de Mineurs)',
+                    'autre'                 => 'Autre',
                 ],
                 'default_value' => 'tous', 'allow_null' => 0, 'return_format' => 'value',
             ],
@@ -576,25 +577,25 @@ function prh68_acf_register_groups() {
 
     acf_add_local_field_group( [
         'key'        => 'group_ot_scores',
-        'title'      => 'Scores & Évaluation',
+        'title'      => "Tranches d'âge",
         'menu_order' => 2,
         'position'   => 'normal',
         'location'   => $loc_ot,
         'fields'     => [
             [
-                'key' => 'field_ot_usage', 'label' => "Fréquence d'usage", 'name' => 'ot_usage',
-                'type' => 'number', 'min' => 0, 'max' => 5, 'step' => 0.1,
-                'instructions' => 'Note sur 5 (ex : 4.8)',
-            ],
-            [
-                'key' => 'field_ot_deploy', 'label' => 'Facilité de déploiement', 'name' => 'ot_deploy',
-                'type' => 'number', 'min' => 0, 'max' => 5, 'step' => 0.1,
-                'instructions' => 'Note sur 5 (ex : 3.5)',
-            ],
-            [
-                'key' => 'field_ot_difficulty', 'label' => 'Score de difficulté', 'name' => 'ot_difficulty',
-                'type' => 'number', 'min' => 0, 'max' => 100, 'step' => 1,
-                'instructions' => 'De 0 (très facile) à 100 (très difficile)',
+                'key'           => 'field_ot_age_ranges',
+                'label'         => "Tranches d'âge",
+                'name'          => 'ot_age_ranges',
+                'type'          => 'checkbox',
+                'choices'       => [
+                    '0-3'   => '0 – 3 ans',
+                    '3-6'   => '3 – 6 ans',
+                    '6-12'  => '6 – 12 ans',
+                    '12-18' => '12 – 18 ans',
+                ],
+                'layout'        => 'horizontal',
+                'return_format' => 'value',
+                'instructions'  => 'Sélectionnez une ou plusieurs tranches d\'âge visées par cet outil.',
             ],
         ],
     ] );
@@ -649,6 +650,25 @@ function prh68_acf_register_groups() {
             [ 'key' => 'field_prh68_temp_cta_btn1',   'label' => 'Bouton 1',      'name' => 'prh68_temp_cta_btn1',   'type' => 'text',     'default_value' => 'Partager mon témoignage' ],
             [ 'key' => 'field_prh68_temp_cta_btn2',   'label' => 'Bouton 2',      'name' => 'prh68_temp_cta_btn2',   'type' => 'text',     'default_value' => 'Nous contacter' ],
             [ 'key' => 'field_prh68_temp_legal',      'label' => 'Mention légale','name' => 'prh68_temp_legal',      'type' => 'textarea', 'rows' => 2, 'default_value' => "Les témoignages sont publiés avec l'accord explicite des personnes concernées. Certains prénoms ont été modifiés pour préserver l'anonymat." ],
+        ],
+    ] );
+
+    /* ── PAGE OUTILS DE TERRAIN ────────────────────────── */
+    $loc_ot_page = [ [ [ 'param' => 'page_template', 'operator' => '==', 'value' => 'page-outils-terrain.php' ] ] ];
+
+    acf_add_local_field_group( [
+        'key'        => 'group_ot_page_texts',
+        'title'      => 'Textes de la page',
+        'menu_order' => 50,
+        'position'   => 'normal',
+        'location'   => $loc_ot_page,
+        'fields'     => [
+            [ 'key' => 'field_ot_hero_title', 'label' => 'Titre hero',           'name' => 'ot_hero_title',  'type' => 'text',     'default_value' => 'Les Outils de Terrain' ],
+            [ 'key' => 'field_ot_hero_sub',   'label' => 'Sous-titre hero',      'name' => 'ot_hero_sub',    'type' => 'textarea', 'rows' => 2, 'default_value' => 'Une cartographie collaborative des pratiques innovantes, partagée par les professionnels du terrain.' ],
+            [ 'key' => 'field_ot_grid_title', 'label' => 'Titre section grille', 'name' => 'ot_grid_title',  'type' => 'text',     'default_value' => 'Les Outils du Terrain' ],
+            [ 'key' => 'field_ot_grid_sub',   'label' => 'Sous-titre grille',    'name' => 'ot_grid_sub',    'type' => 'text',     'default_value' => 'Explorez les pratiques innovantes partagées par vos pairs' ],
+            [ 'key' => 'field_ot_cta_title',  'label' => 'Titre CTA',            'name' => 'ot_cta_title',   'type' => 'text',     'default_value' => 'Vous utilisez un outil innovant ?' ],
+            [ 'key' => 'field_ot_cta_sub',    'label' => 'Texte CTA',            'name' => 'ot_cta_sub',     'type' => 'textarea', 'rows' => 2, 'default_value' => "Partagez-le avec la communauté PRH et contribuez à améliorer les pratiques inclusives pour tous les enfants de 0 à 17 ans." ],
         ],
     ] );
 }

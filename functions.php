@@ -101,6 +101,38 @@ function prh68_create_temoignage_form_page() {
     }
 }
 
+/* ── Auto-création de la page "Partager un outil de terrain" ── */
+add_action( 'after_switch_theme', 'prh68_create_outil_form_page' );
+add_action( 'admin_init',          'prh68_create_outil_form_page' );
+function prh68_create_outil_form_page() {
+    // Si une page utilise déjà ce template → rien à faire
+    $existing = get_posts( [
+        'post_type'      => 'page',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'meta_key'       => '_wp_page_template',
+        'meta_value'     => 'page-formulaire-outil.php',
+        'post_status'    => 'any',
+    ] );
+    if ( ! empty( $existing ) ) return;
+
+    if ( get_page_by_path( 'partager-un-outil' ) || get_page_by_path( 'formulaire-outil' ) ) return;
+
+    $page_id = wp_insert_post( [
+        'post_title'     => 'Partager un outil de terrain',
+        'post_name'      => 'partager-un-outil',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'post_content'   => '',
+        'comment_status' => 'closed',
+        'ping_status'    => 'closed',
+    ] );
+
+    if ( $page_id && ! is_wp_error( $page_id ) ) {
+        update_post_meta( $page_id, '_wp_page_template', 'page-formulaire-outil.php' );
+    }
+}
+
 /* CPT — Résultats enquête observatoire */
 add_action( 'init', function () {
     register_post_type( 'resultats_enquete', [
