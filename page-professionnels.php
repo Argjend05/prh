@@ -331,11 +331,20 @@ $acc6_items = $parse_acc_items( $f( 'prh68_pro_acc6_items', '' ), $acc6_defaults
         <div class="pro-container">
             <h2 data-reveal="fade-up"><?= esc_html($cta_title) ?></h2>
             <p data-reveal="fade-up" data-reveal-delay="100"><?= esc_html($cta_sub) ?></p>
-            <a href="<?= esc_url(get_permalink(get_page_by_path('formulaire-contact'))) ?>" class="pro-cta-btn" data-magnetic>
-                <span><?= esc_html($cta_btn) ?></span>
-                <img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg') ?>" alt="" width="18"
-                    height="15" class="pro-cta-arrow">
-            </a>
+            <div class="pro-cta-btns">
+                <a href="<?= esc_url(get_permalink(get_page_by_path('formulaire-contact'))) ?>" class="pro-cta-btn" data-magnetic>
+                    <span><?= esc_html($cta_btn) ?></span>
+                    <img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/icons/fleche.svg') ?>" alt="" width="18"
+                        height="15" class="pro-cta-arrow">
+                </a>
+                <a href="<?= esc_url( get_stylesheet_directory_uri() . '/assets/docs/flyer-prh68.pdf' ) ?>"
+                    class="pro-cta-flyer" download target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM12 17l-4-4h2.5v-3h3v3H16l-4 4z"/>
+                    </svg>
+                    Télécharger le flyer
+                </a>
+            </div>
             <div class="pro-cta-contact" data-reveal="fade-up" data-reveal-delay="200">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24"

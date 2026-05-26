@@ -110,8 +110,6 @@ add_filter( 'manage_outil_terrain_posts_columns', function ( $cols ) {
         'title'       => 'Titre',
         'ot_category' => 'Catégorie',
         'ot_envs'     => 'Environnements',
-        'ot_usage'    => 'Usage /5',
-        'ot_diff'     => 'Difficulté',
         'date'        => $cols['date'],
     ];
 } );
@@ -139,11 +137,5 @@ add_action( 'manage_outil_terrain_posts_custom_column', function ( $col, $post_i
         $envs = get_field( 'ot_envs', $post_id ) ?: [];
         $labels = array_map( fn( $e ) => $env_labels[ $e ] ?? $e, $envs );
         echo esc_html( implode( ', ', $labels ) ?: '—' );
-    } elseif ( $col === 'ot_usage' ) {
-        $v = get_field( 'ot_usage', $post_id );
-        echo $v !== '' && $v !== false ? esc_html( number_format( (float) $v, 1 ) ) : '—';
-    } elseif ( $col === 'ot_diff' ) {
-        $v = get_field( 'ot_difficulty', $post_id );
-        echo $v !== '' && $v !== false ? esc_html( $v ) . '/100' : '—';
     }
 }, 10, 2 );

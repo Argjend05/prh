@@ -396,8 +396,17 @@ get_header();
                     </div>
                     <span><?php echo esc_html($cta_phone); ?></span>
                 </div>
-                <a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>"
-                    class="acc-btn-dark" data-magnetic><?php echo esc_html($cta_btn); ?></a>
+                <div class="acc-cta-btns">
+                    <a href="<?php echo esc_url(get_permalink(get_page_by_path('formulaire-contact'))); ?>"
+                        class="acc-btn-dark" data-magnetic><?php echo esc_html($cta_btn); ?></a>
+                    <a href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/docs/flyer-prh68.pdf' ); ?>"
+                        class="acc-btn-flyer" download target="_blank" rel="noopener">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM12 17l-4-4h2.5v-3h3v3H16l-4 4z"/>
+                        </svg>
+                        Télécharger le flyer
+                    </a>
+                </div>
             </div>
         </div>
     </section>

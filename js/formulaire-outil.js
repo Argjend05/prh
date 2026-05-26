@@ -99,7 +99,8 @@
             if (stype.value === 'autre' && sautre && !sautre.value.trim()) {
                 markInvalid(sautre, 'Précisez le type de structure.');
             }
-            if (!spostal.value.trim()) markInvalid(spostal, 'Le code postal est requis.');
+            if (!spostal.value.trim())                    markInvalid(spostal, 'Le code postal est requis.');
+            else if (!/^\d{5}$/.test(spostal.value.trim())) markInvalid(spostal, 'Le code postal doit contenir exactement 5 chiffres.');
             if (!rname.value.trim())   markInvalid(rname,   'Le nom du référent est requis.');
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
                 markInvalid(email, 'Adresse e-mail invalide.');
@@ -107,15 +108,17 @@
         }
 
         if (n === 2) {
-            var oname   = stepEl.querySelector('#fot_outil_name');
-            var odesc   = stepEl.querySelector('#fot_outil_desc');
-            var octx    = stepEl.querySelector('#fot_outil_context');
-            var envs    = stepEl.querySelectorAll('input[name="fot_outil_envs[]"]:checked');
+            var oname    = stepEl.querySelector('#fot_outil_name');
+            var ocat     = stepEl.querySelector('#fot_outil_category');
+            var odesc    = stepEl.querySelector('#fot_outil_desc');
+            var octx     = stepEl.querySelector('#fot_outil_context');
+            var envs     = stepEl.querySelectorAll('input[name="fot_outil_envs[]"]:checked');
 
             if (!oname.value.trim() || oname.value.length < 3) markInvalid(oname, 'Le nom de l\'outil est requis (3 caractères min).');
+            if (ocat && !ocat.value)                           markInvalid(ocat,  'Sélectionnez une catégorie.');
             if (!odesc.value.trim() || odesc.value.length < 20) markInvalid(odesc, 'La description doit faire au moins 20 caractères.');
-            if (odesc.value.length > 400) markInvalid(odesc, 'La description est trop longue (400 car. max).');
-            if (!octx.value.trim()  || octx.value.length < 30)  markInvalid(octx, 'Le contexte d\'utilisation est requis (30 caractères min).');
+            if (odesc.value.length > 400)                       markInvalid(odesc, 'La description est trop longue (400 car. max).');
+            if (!octx.value.trim()  || octx.value.length < 30)  markInvalid(octx,  'Le contexte d\'utilisation est requis (30 caractères min).');
             if (envs.length === 0) {
                 var fieldset = stepEl.querySelector('.fot-env-pills');
                 var err = document.createElement('span');
@@ -231,69 +234,6 @@
     }
 
     /* ─────────────────────────────────────────────────────
-       TAG INPUT
-    ───────────────────────────────────────────────────── */
-    var tagInput  = document.getElementById('fot-tag-input');
-    var tagList   = document.getElementById('fot-tags-list');
-    var tagHidden = document.getElementById('fot-tags-hidden');
-    var tagAddBtn = document.getElementById('fot-tag-add');
-    var tags      = [];
-
-    function renderTags() {
-        if (!tagList) return;
-        tagList.innerHTML = '';
-        tags.forEach(function (tag, idx) {
-            var chip = document.createElement('span');
-            chip.className = 'fot-tag-chip';
-            chip.innerHTML = tag + '<button type="button" class="fot-tag-remove" data-idx="' + idx + '" aria-label="Supprimer ' + tag + '">×</button>';
-            tagList.appendChild(chip);
-        });
-        if (tagHidden) tagHidden.value = tags.join(',');
-    }
-
-    function addTag(raw) {
-        var val = raw.trim().replace(/,+/g, '').substring(0, 32);
-        if (!val || tags.length >= 10 || tags.indexOf(val) !== -1) return;
-        tags.push(val);
-        renderTags();
-    }
-
-    if (tagInput) {
-        tagInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ',') {
-                e.preventDefault();
-                addTag(tagInput.value);
-                tagInput.value = '';
-            }
-            if (e.key === 'Backspace' && tagInput.value === '' && tags.length) {
-                tags.pop();
-                renderTags();
-            }
-        });
-    }
-
-    if (tagAddBtn) {
-        tagAddBtn.addEventListener('click', function () {
-            if (tagInput) {
-                addTag(tagInput.value);
-                tagInput.value = '';
-                tagInput.focus();
-            }
-        });
-    }
-
-    if (tagList) {
-        tagList.addEventListener('click', function (e) {
-            var btn = e.target.closest('.fot-tag-remove');
-            if (btn) {
-                var idx = parseInt(btn.dataset.idx, 10);
-                tags.splice(idx, 1);
-                renderTags();
-            }
-        });
-    }
-
-    /* ─────────────────────────────────────────────────────
        DROPZONE + PHOTO PREVIEW
     ───────────────────────────────────────────────────── */
     var dropzone    = document.getElementById('fot-dropzone');
@@ -353,17 +293,45 @@
             img.alt = file.name;
             img.onload = function () { URL.revokeObjectURL(url); };
 
+            /* Overlay nom de fichier au survol */
+            var overlay = document.createElement('div');
+            overlay.className = 'fot-preview-overlay';
+            var fname = document.createElement('span');
+            fname.className = 'fot-preview-filename';
+            fname.textContent = file.name;
+            overlay.appendChild(fname);
+
             var rm = document.createElement('button');
             rm.type = 'button';
             rm.className = 'fot-preview-remove';
             rm.setAttribute('aria-label', 'Supprimer ' + file.name);
-            rm.textContent = '×';
+            rm.innerHTML = '<svg viewBox="0 0 10 10" fill="none" width="10" height="10"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
             rm.dataset.idx = idx;
 
             thumb.appendChild(img);
+            thumb.appendChild(overlay);
             thumb.appendChild(rm);
             preview.appendChild(thumb);
         });
+        updateDropzoneUI();
+    }
+
+    function updateDropzoneUI() {
+        var n         = photoFiles.length;
+        var emptyEl   = document.getElementById('fot-dz-empty');
+        var filledEl  = document.getElementById('fot-dz-filled');
+        var countLbl  = document.getElementById('fot-photo-count-label');
+        var browseLbl = document.getElementById('fot-browse-label');
+        var hintEl    = document.getElementById('fot-dropzone-hint');
+        var bBtn      = document.getElementById('fot-browse-btn');
+
+        if (emptyEl)   emptyEl.hidden   = n > 0;
+        if (filledEl)  filledEl.hidden  = n === 0;
+        if (countLbl)  countLbl.textContent = n + (n > 1 ? ' photos ajoutées' : ' photo ajoutée') + ' (' + n + '/5)';
+        if (browseLbl) browseLbl.textContent = n === 0 ? 'Choisir des photos' : 'Ajouter d\'autres';
+        if (bBtn)      bBtn.hidden = n >= 5;
+        if (hintEl)    hintEl.hidden = n > 0;
+        if (dropzone)  dropzone.classList.toggle('has-files', n > 0);
     }
 
     if (preview) {
@@ -408,7 +376,12 @@
     ───────────────────────────────────────────────────── */
     var envLabels = {
         'urbain': 'Urbain', 'rural': 'Rural', 'domicile': 'Domicile',
-        'eaje': 'EAJE', 'rue': 'Rue', 'collectivite': 'Collectivité'
+        'eaje': 'EAJE', 'rue': 'Rue'
+    };
+
+    var categoryLabels = {
+        'scolaire': 'Scolaire', 'observation': 'Observation', 'communication': 'Communication',
+        'urgence': 'Urgence', 'accueil': 'Accueil', 'soutien': 'Soutien'
     };
 
     var ageLabels = {
@@ -430,7 +403,8 @@
         var email = val('#fot_ref_email');
         setRecap('fot-recap-role', [role, email].filter(Boolean).join(' · ') || '—');
 
-        setRecap('fot-recap-outil',  val('#fot_outil_name') || '—');
+        var catVal = val('#fot_outil_category');
+        setRecap('fot-recap-outil',  (val('#fot_outil_name') || '—') + (catVal ? ' · ' + (categoryLabels[catVal] || catVal) : ''));
 
         // Photos
         var n = photoFiles.length;

@@ -517,6 +517,40 @@ details[open] .pro-acc-chevron {
     transform: translateX(4px);
 }
 
+/* Wrapper boutons CTA */
+.pro-cta-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bouton téléchargement flyer */
+.pro-cta-flyer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,.35);
+    font-family: var(--ubuntu);
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    padding: 16px 32px;
+    text-decoration: none;
+    transition: background .2s, border-color .2s, transform .2s;
+    white-space: nowrap;
+}
+
+.pro-cta-flyer:hover {
+    background: rgba(255,255,255,.18);
+    border-color: rgba(255,255,255,.65);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
 .pro-cta-contact {
     display: flex;
     justify-content: center;

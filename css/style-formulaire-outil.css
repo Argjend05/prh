@@ -715,8 +715,15 @@
     background: rgba(12,122,130,.04);
 }
 
+/* Input caché hors écran — display:none bloque le change event sur certains navigateurs */
 .fot-file-input {
-    display: none;
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
 }
 
 .fot-dropzone-inner {
@@ -725,45 +732,86 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     pointer-events: none;
+}
+
+.fot-dropzone-inner .fot-btn,
+.fot-dropzone-inner .fot-dropzone-hint { pointer-events: auto; }
+
+/* ── État vide ── */
+.fot-dz-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     color: #9aa3b2;
 }
 
-.fot-dropzone-inner p {
+.fot-dz-empty p {
     font-size: .95rem;
     color: #5a6380;
     line-height: 1.55;
     margin: 0;
+    text-align: center;
 }
 
-.fot-dropzone-inner strong { color: #1a2540; }
+.fot-dz-empty strong { color: #1a2540; }
 
-.fot-dropzone-inner .fot-btn {
-    pointer-events: auto;
+/* ── État avec photos ── */
+.fot-dz-filled {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .92rem;
+    font-weight: 700;
+    color: #0c7a82;
+}
+
+/* Dropzone compacte quand photos présentes */
+.fot-dropzone.has-files {
+    padding: 18px 28px;
+    border-color: rgba(12,122,130,.4);
+    background: rgba(12,122,130,.03);
+}
+
+.fot-dropzone.has-files .fot-dropzone-inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 20px;
 }
 
 .fot-dropzone-hint {
-    font-size: .75rem !important;
-    color: #9aa3b2 !important;
+    font-size: .75rem;
+    color: #9aa3b2;
+    margin: 0;
+    pointer-events: none;
 }
 
-/* Photo preview grid */
+/* ── Grille d'aperçus ── */
 .fot-photo-preview {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
 }
 
 .fot-photo-preview:empty { display: none; }
 
 .fot-preview-thumb {
     position: relative;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
     background: #e8ecf2;
+    box-shadow: 0 2px 8px rgba(10,46,80,.1);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.fot-preview-thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10,46,80,.16);
 }
 
 .fot-preview-thumb img {
@@ -773,26 +821,56 @@
     display: block;
 }
 
+/* Overlay au survol avec nom du fichier */
+.fot-preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,30,60,.5);
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    opacity: 0;
+    transition: opacity .18s;
+    border-radius: inherit;
+}
+
+.fot-preview-thumb:hover .fot-preview-overlay { opacity: 1; }
+
+.fot-preview-filename {
+    font-size: .68rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    line-height: 1.2;
+}
+
 .fot-preview-remove {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 22px;
-    height: 22px;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    background: rgba(0,0,0,.55);
-    border: none;
+    background: rgba(0,0,0,.6);
+    border: 1.5px solid rgba(255,255,255,.3);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: .8rem;
+    font-size: .9rem;
     line-height: 1;
-    transition: background .15s;
+    transition: background .15s, transform .15s;
+    backdrop-filter: blur(4px);
 }
 
-.fot-preview-remove:hover { background: rgba(192,57,43,.85); }
+.fot-preview-remove:hover {
+    background: rgba(192,57,43,.9);
+    transform: scale(1.1);
+}
 
 /* Privacy note */
 .fot-photos-note {

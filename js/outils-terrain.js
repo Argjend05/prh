@@ -20,10 +20,11 @@
     /* ── État des filtres ───────────────────────────────── */
     var activeEnvs      = [];   // [] = tous
     var activeStructure = 'tous';
+    var activeCat       = 'tous';
     var searchQuery     = '';
 
     /* ── DOM refs ───────────────────────────────────────── */
-    var grid, cards, noResultsEl, activeFiltersEl,
+    var grid, cards, noResultsEl, activeFiltersEl, resultCountEl,
         overlay, modal, modalContent, modalVisual, modalIcon, modalTags,
         searchInput, structureSelect;
 
@@ -47,16 +48,22 @@
         return (card.dataset.search || '').indexOf(searchQuery) !== -1;
     }
 
+    function matchesCat(card) {
+        if (activeCat === 'tous') return true;
+        return (card.dataset.cat || '') === activeCat;
+    }
+
     function applyFilters() {
         var visible = 0;
         cards.forEach(function (card) {
-            var show = matchesEnv(card) && matchesStructure(card) && matchesSearch(card);
+            var show = matchesEnv(card) && matchesStructure(card) && matchesCat(card) && matchesSearch(card);
             card.hidden = !show;
             if (show) visible++;
         });
         noResultsEl.hidden = visible > 0;
         applyGridCols(visible);
         renderActiveFilters();
+        updateResultCount(visible);
     }
 
     /* Colonnes adaptatives : aligné sur le PHP (1 → 1 col,
@@ -68,6 +75,24 @@
         grid.classList.add('ot-grid--c' + c);
     }
 
+    function updateResultCount(n) {
+        if (!resultCountEl) return;
+        var total = cards.length;
+        if (n === total) {
+            resultCountEl.hidden = true;
+            resultCountEl.textContent = '';
+        } else {
+            resultCountEl.hidden = false;
+            resultCountEl.textContent = n + ' outil' + (n > 1 ? 's' : '') + ' affiché' + (n > 1 ? 's' : '') + ' sur ' + total;
+        }
+    }
+
+    function syncCatPills() {
+        document.querySelectorAll('.ot-cat-pill').forEach(function (pill) {
+            pill.classList.toggle('is-active', pill.dataset.cat === activeCat);
+        });
+    }
+
     /* ── Chips filtres actifs ───────────────────────────── */
     function renderActiveFilters() {
         var chips = [];
@@ -75,6 +100,14 @@
         activeEnvs.forEach(function (env) {
             chips.push({ label: ucFirst(env), key: 'env', val: env });
         });
+
+        if (activeCat !== 'tous') {
+            var catLabels = {
+                scolaire: 'Scolaire', observation: 'Observation', communication: 'Communication',
+                urgence: 'Urgence', accueil: 'Accueil', soutien: 'Soutien'
+            };
+            chips.push({ label: catLabels[activeCat] || activeCat, key: 'cat', val: activeCat });
+        }
 
         if (activeStructure !== 'tous') {
             var opt = structureSelect.querySelector('option[value="' + activeStructure + '"]');
@@ -105,6 +138,9 @@
         if (key === 'env') {
             activeEnvs = activeEnvs.filter(function (e) { return e !== val; });
             syncEnvPills();
+        } else if (key === 'cat') {
+            activeCat = 'tous';
+            syncCatPills();
         } else if (key === 'struct') {
             activeStructure = 'tous';
             structureSelect.value = 'tous';
@@ -129,10 +165,12 @@
     function resetAllFilters() {
         activeEnvs = [];
         activeStructure = 'tous';
+        activeCat = 'tous';
         searchQuery = '';
         structureSelect.value = 'tous';
         searchInput.value = '';
         syncEnvPills();
+        syncCatPills();
         applyFilters();
     }
 
@@ -179,7 +217,11 @@
         }).join('');
 
         /* Initiales avatar */
-        var initials = tool.contact_name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+        var initials = tool.contact_name
+            ? tool.contact_name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase()
+            : '?';
+        var roleOrgParts = [tool.contact_role, tool.contact_org].filter(Boolean);
+        var roleOrgHtml = escHtml(roleOrgParts.join(' — '));
 
         /* Specs rows */
         var specsRows = (tool.specs || []).map(function (s) {
@@ -201,8 +243,10 @@
         if (tool.photos && tool.photos.length) {
             var isSingle = tool.photos.length === 1;
             photosHtml = '<div class="ot-modal-gallery' + (isSingle ? ' ot-modal-gallery--single' : '') + '">'
-                + tool.photos.map(function (url) {
-                    return '<img class="ot-modal-gallery-img" src="' + escHtml(url) + '" alt="" loading="lazy">';
+                + tool.photos.map(function (url, i) {
+                    return '<img class="ot-modal-gallery-img" src="' + escHtml(url) + '" alt="" loading="lazy"'
+                        + ' data-lightbox-idx="' + i + '" role="button" tabindex="0"'
+                        + ' aria-label="Agrandir la photo ' + (i + 1) + '">';
                 }).join('')
                 + '</div>';
         }
@@ -212,38 +256,55 @@
             + '<p class="ot-modal-meta">Partagé par ' + escHtml(tool.contact_org)
             + ' &middot; Mis à jour le ' + escHtml(tool.date) + '</p>'
 
+            + (tool.description
+                ? '<p class="ot-modal-description">' + escHtml(tool.description) + '</p>'
+                : '')
+
             + photosHtml
 
             + agesHtml
 
-            + '<div class="ot-modal-section">'
-            +   '<h3 class="ot-modal-section-title">📖 L\'Histoire</h3>'
-            +   '<p class="ot-modal-story">' + escHtml(tool.story) + '</p>'
-            + '</div>'
+            + (tool.story
+                ? '<div class="ot-modal-section">'
+                +   '<h3 class="ot-modal-section-title">'
+                +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><path d="M2 3h12v8H9l-3 3V11H2V3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
+                +     'L\'Histoire'
+                +   '</h3>'
+                +   '<p class="ot-modal-story">' + escHtml(tool.story) + '</p>'
+                + '</div>'
+                : '')
 
             + (specsRows
                 ? '<div class="ot-modal-section">'
-                +   '<h3 class="ot-modal-section-title">⚙️ Spécifications Techniques</h3>'
+                +   '<h3 class="ot-modal-section-title">'
+                +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><rect x="2" y="2" width="12" height="2" rx=".5" fill="currentColor" opacity=".6"/><rect x="2" y="7" width="8" height="2" rx=".5" fill="currentColor" opacity=".6"/><rect x="2" y="12" width="10" height="2" rx=".5" fill="currentColor" opacity=".6"/></svg>'
+                +     'Spécifications'
+                +   '</h3>'
                 +   '<table class="ot-modal-specs">' + specsRows + '</table>'
                 + '</div>'
                 : '')
 
-            + '<div class="ot-modal-section">'
-            +   '<h3 class="ot-modal-section-title">👤 Contact Structure</h3>'
-            +   '<div class="ot-modal-contact">'
-            +     '<div class="ot-modal-contact-info">'
-            +       '<div class="ot-modal-avatar">' + initials + '</div>'
-            +       '<div>'
-            +         '<span class="ot-modal-contact-name">' + escHtml(tool.contact_name) + '</span>'
-            +         '<span class="ot-modal-contact-role">' + escHtml(tool.contact_role) + ' — ' + escHtml(tool.contact_org) + '</span>'
-            +       '</div>'
-            +     '</div>'
-            +     '<a href="' + contactUrl() + '" class="ot-modal-contact-btn">'
-            +       '<svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>'
-            +       'Contacter'
-            +     '</a>'
-            +   '</div>'
-            + '</div>';
+            + ((tool.contact_name || tool.contact_org)
+                ? '<div class="ot-modal-section">'
+                +   '<h3 class="ot-modal-section-title">'
+                +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
+                +     'Contact Structure'
+                +   '</h3>'
+                +   '<div class="ot-modal-contact">'
+                +     '<div class="ot-modal-contact-info">'
+                +       '<div class="ot-modal-avatar">' + initials + '</div>'
+                +       '<div>'
+                +         '<span class="ot-modal-contact-name">' + escHtml(tool.contact_name) + '</span>'
+                +         '<span class="ot-modal-contact-role">' + roleOrgHtml + '</span>'
+                +       '</div>'
+                +     '</div>'
+                +     '<a href="' + contactUrl() + '" class="ot-modal-contact-btn">'
+                +       '<svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>'
+                +       'Contacter'
+                +     '</a>'
+                +   '</div>'
+                + '</div>'
+                : '');
     }
 
     /* ══════════════════════════════════════════════════════
@@ -274,6 +335,7 @@
         grid            = document.getElementById('ot-grid');
         noResultsEl     = document.getElementById('ot-no-results');
         activeFiltersEl = document.getElementById('ot-active-filters');
+        resultCountEl   = document.getElementById('ot-result-count');
         overlay         = document.getElementById('ot-modal-overlay');
         modal           = document.getElementById('ot-modal');
         modalContent    = document.getElementById('ot-modal-content');
@@ -302,6 +364,15 @@
                     }
                 }
                 syncEnvPills();
+                applyFilters();
+            });
+        });
+
+        /* Cat pills */
+        document.querySelectorAll('.ot-cat-pill').forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                activeCat = pill.dataset.cat;
+                syncCatPills();
                 applyFilters();
             });
         });
@@ -354,7 +425,27 @@
         });
 
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape') {
+                if (lightbox && !lightbox.hasAttribute('hidden')) {
+                    closeLightbox();
+                } else {
+                    closeModal();
+                }
+            }
+            if (e.key === 'ArrowRight' && lightbox && !lightbox.hasAttribute('hidden')) lightboxNav(1);
+            if (e.key === 'ArrowLeft'  && lightbox && !lightbox.hasAttribute('hidden')) lightboxNav(-1);
+        });
+
+        /* Lightbox — clic sur une image de la galerie */
+        modal.addEventListener('click', function (e) {
+            var img = e.target.closest('.ot-modal-gallery-img');
+            if (img) openLightbox(parseInt(img.dataset.lightboxIdx, 10));
+        });
+        modal.addEventListener('keydown', function (e) {
+            if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('ot-modal-gallery-img')) {
+                e.preventDefault();
+                openLightbox(parseInt(e.target.dataset.lightboxIdx, 10));
+            }
         });
 
         /* Trap focus in modal */
@@ -371,6 +462,98 @@
                 e.preventDefault(); first.focus();
             }
         });
+    }
+
+    /* ─────────────────────────────────────────────────────
+       LIGHTBOX
+    ───────────────────────────────────────────────────── */
+    var lightbox     = null;
+    var lbImg        = null;
+    var lbPrev       = null;
+    var lbNext       = null;
+    var lbCounter    = null;
+    var lbUrls       = [];
+    var lbIndex      = 0;
+
+    function buildLightbox() {
+        if (lightbox) return;
+        lightbox = document.createElement('div');
+        lightbox.className = 'ot-lightbox';
+        lightbox.setAttribute('role', 'dialog');
+        lightbox.setAttribute('aria-modal', 'true');
+        lightbox.setAttribute('aria-label', 'Photo agrandie');
+        lightbox.setAttribute('hidden', '');
+
+        lightbox.innerHTML =
+            '<button class="ot-lb-close" aria-label="Fermer">'
+            + '<svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+            + '</button>'
+            + '<button class="ot-lb-nav ot-lb-prev" aria-label="Photo précédente">'
+            + '<svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            + '</button>'
+            + '<div class="ot-lb-img-wrap"><img class="ot-lb-img" src="" alt=""></div>'
+            + '<button class="ot-lb-nav ot-lb-next" aria-label="Photo suivante">'
+            + '<svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            + '</button>'
+            + '<span class="ot-lb-counter"></span>';
+
+        document.body.appendChild(lightbox);
+
+        lbImg     = lightbox.querySelector('.ot-lb-img');
+        lbPrev    = lightbox.querySelector('.ot-lb-prev');
+        lbNext    = lightbox.querySelector('.ot-lb-next');
+        lbCounter = lightbox.querySelector('.ot-lb-counter');
+
+        lightbox.querySelector('.ot-lb-close').addEventListener('click', closeLightbox);
+        lbPrev.addEventListener('click', function () { lightboxNav(-1); });
+        lbNext.addEventListener('click', function () { lightboxNav(1); });
+
+        /* Clic sur le fond → fermer */
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox || e.target.classList.contains('ot-lb-img-wrap')) closeLightbox();
+        });
+    }
+
+    function openLightbox(idx) {
+        var imgs = modal.querySelectorAll('.ot-modal-gallery-img');
+        lbUrls = Array.from(imgs).map(function (i) { return i.src; });
+        if (!lbUrls.length) return;
+
+        buildLightbox();
+        lbIndex = idx || 0;
+        lightboxShow();
+
+        lightbox.removeAttribute('hidden');
+        document.body.style.overflow = 'hidden';
+        lightbox.querySelector('.ot-lb-close').focus();
+    }
+
+    function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.setAttribute('hidden', '');
+        document.body.style.overflow = '';
+    }
+
+    function lightboxShow() {
+        if (!lbImg) return;
+        lbImg.src = lbUrls[lbIndex];
+        lbImg.alt = 'Photo ' + (lbIndex + 1) + ' sur ' + lbUrls.length;
+
+        var multi = lbUrls.length > 1;
+        lbPrev.hidden = !multi;
+        lbNext.hidden = !multi;
+        lbCounter.hidden = !multi;
+        if (multi) lbCounter.textContent = (lbIndex + 1) + ' / ' + lbUrls.length;
+
+        lbPrev.disabled = lbIndex === 0;
+        lbNext.disabled = lbIndex === lbUrls.length - 1;
+    }
+
+    function lightboxNav(dir) {
+        var next = lbIndex + dir;
+        if (next < 0 || next >= lbUrls.length) return;
+        lbIndex = next;
+        lightboxShow();
     }
 
     document.addEventListener('DOMContentLoaded', init);

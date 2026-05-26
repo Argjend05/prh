@@ -84,6 +84,43 @@
     color: #fff;
 }
 
+/* Wrapper boutons CTA */
+.acc-cta-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.acc-cta-btns .acc-btn-dark { margin-top: 0; }
+
+/* Bouton téléchargement flyer */
+.acc-btn-flyer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,.35);
+    font-family: var(--ubuntu);
+    font-size: .88rem;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 12px 22px;
+    text-decoration: none;
+    transition: background .2s, border-color .2s, transform .2s;
+    white-space: nowrap;
+}
+
+.acc-btn-flyer:hover {
+    background: rgba(255,255,255,.18);
+    border-color: rgba(255,255,255,.65);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
 /* Bouton outline hero */
 .acc-btn-hero-outline {
     display: inline-flex;

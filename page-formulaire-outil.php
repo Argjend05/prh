@@ -28,11 +28,11 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
         'ref_email'          => sanitize_email(          $_POST['fot_ref_email']          ?? '' ),
         'ref_phone'          => sanitize_text_field(     $_POST['fot_ref_phone']          ?? '' ),
         'outil_name'         => sanitize_text_field(     $_POST['fot_outil_name']         ?? '' ),
+        'outil_category'     => sanitize_text_field(     $_POST['fot_outil_category']     ?? '' ),
         'outil_desc'         => sanitize_textarea_field( $_POST['fot_outil_desc']         ?? '' ),
         'outil_context'      => sanitize_textarea_field( $_POST['fot_outil_context']      ?? '' ),
         'outil_envs'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_envs']  ?? [] ) ),
         'outil_ages'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_ages']  ?? [] ) ),
-        'outil_tags'         => sanitize_text_field(     $_POST['fot_outil_tags']         ?? '' ),
         'consent'            => ! empty( $_POST['fot_consent'] ),
     ];
 
@@ -41,6 +41,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
     if ( empty( $d['struct_type'] ) )                                $fot_errors[] = "Le type de structure est requis.";
     if ( $d['struct_type'] === 'autre' && empty( $d['struct_type_autre'] ) ) $fot_errors[] = "Précisez le type de structure.";
     if ( empty( $d['struct_postal'] ) )                              $fot_errors[] = "Le code postal est requis.";
+    elseif ( ! preg_match( '/^\d{5}$/', $d['struct_postal'] ) )    $fot_errors[] = "Le code postal doit contenir exactement 5 chiffres.";
     if ( empty( $d['ref_name'] ) )                                   $fot_errors[] = "Le nom du référent est requis.";
     if ( ! is_email( $d['ref_email'] ) )                             $fot_errors[] = "Adresse e-mail invalide.";
     if ( strlen( $d['outil_name'] ) < 3 )                            $fot_errors[] = "Le nom de l'outil est requis.";
@@ -64,16 +65,18 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
 
             /* ACF */
             if ( function_exists( 'update_field' ) ) {
-                update_field( 'ot_description',   $d['outil_context'],    $post_id );
+                update_field( 'ot_description',   $d['outil_desc'],       $post_id );
                 update_field( 'ot_story',         $d['outil_context'],    $post_id );
                 update_field( 'ot_envs',          $d['outil_envs'],       $post_id );
                 update_field( 'ot_age_ranges',    $d['outil_ages'],       $post_id );
                 update_field( 'ot_contact_name',  $d['ref_name'],         $post_id );
                 update_field( 'ot_contact_role',  $d['ref_role'],         $post_id );
                 update_field( 'ot_contact_org',   $d['struct_name'],      $post_id );
-                update_field( 'ot_extra_tags',    $d['outil_tags'],       $post_id );
+                if ( ! empty( $d['outil_category'] ) ) {
+                    update_field( 'ot_category',  $d['outil_category'],   $post_id );
+                }
                 if ( ! empty( $d['struct_type'] ) ) {
-                    update_field( 'ot_structure', $d['struct_type'], $post_id );
+                    update_field( 'ot_structure', $d['struct_type'],      $post_id );
                 }
             }
 
@@ -154,12 +157,21 @@ $age_choices = [
 ];
 
 $envs_choices = [
-    'urbain'       => 'Urbain',
-    'rural'        => 'Rural',
-    'domicile'     => 'Domicile',
-    'eaje'         => 'EAJE',
-    'rue'          => 'Rue',
-    'collectivite' => 'Collectivité',
+    'urbain'   => 'Urbain',
+    'rural'    => 'Rural',
+    'domicile' => 'Domicile',
+    'eaje'     => 'EAJE',
+    'rue'      => 'Rue',
+];
+
+$category_choices = [
+    ''               => 'Sélectionnez une catégorie…',
+    'scolaire'       => 'Scolaire',
+    'observation'    => 'Observation',
+    'communication'  => 'Communication',
+    'urgence'        => 'Urgence',
+    'accueil'        => 'Accueil',
+    'soutien'        => 'Soutien',
 ];
 
 /* ── Suggestions de structures existantes ── */
@@ -195,7 +207,15 @@ sort( $_existing_orgs );
             <p class="fot-success-sub">Vous recevrez un e-mail de confirmation à <strong><?php echo esc_html( $d['ref_email'] ); ?></strong> lors de la publication.</p>
             <div class="fot-success-btns">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="fot-btn fot-btn--primary">Retour à l'accueil</a>
-                <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'outils-terrain' ) ) ?: home_url( '/' ) ); ?>" class="fot-btn fot-btn--ghost">Voir les outils publiés</a>
+                <?php
+                $_ot_pages = get_posts( [
+                    'post_type' => 'page', 'posts_per_page' => 1, 'fields' => 'ids',
+                    'meta_key' => '_wp_page_template', 'meta_value' => 'page-outils-terrain.php',
+                    'post_status' => 'publish',
+                ] );
+                $_ot_url = ! empty( $_ot_pages ) ? get_permalink( $_ot_pages[0] ) : home_url( '/' );
+                ?>
+                <a href="<?php echo esc_url( $_ot_url ); ?>" class="fot-btn fot-btn--ghost">Voir les outils publiés</a>
             </div>
         </div>
     </div>
@@ -296,7 +316,8 @@ sort( $_existing_orgs );
                         <label for="fot_struct_postal">Code postal <abbr title="requis">*</abbr></label>
                         <div class="fot-input-wrap">
                             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16" class="fot-input-icon"><path d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor" opacity=".4"/></svg>
-                            <input type="text" id="fot_struct_postal" name="fot_struct_postal" class="fot-input" placeholder="Ex. 68100" required inputmode="numeric" maxlength="10">
+                            <input type="text" id="fot_struct_postal" name="fot_struct_postal" class="fot-input" placeholder="Ex. 68100" required inputmode="numeric" maxlength="5" pattern="[0-9]{5}" title="5 chiffres requis"
+                                value="<?php echo esc_attr( $_POST['fot_struct_postal'] ?? '' ); ?>">
                         </div>
                     </div>
 
@@ -364,6 +385,18 @@ sort( $_existing_orgs );
                         </div>
                     </div>
 
+                    <div class="fot-field">
+                        <label for="fot_outil_category">Catégorie <abbr title="requis">*</abbr></label>
+                        <div class="fot-select-wrap">
+                            <select id="fot_outil_category" name="fot_outil_category" class="fot-select" required>
+                                <?php foreach ( $category_choices as $val => $label ) : ?>
+                                <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $_POST['fot_outil_category'] ?? '', $val ); ?>><?php echo esc_html( $label ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <svg viewBox="0 0 12 8" fill="none" aria-hidden="true" width="12" class="fot-select-arrow"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        </div>
+                    </div>
+
                     <div class="fot-field fot-field--full">
                         <label for="fot_outil_desc">
                             Description courte <abbr title="requis">*</abbr>
@@ -405,19 +438,6 @@ sort( $_existing_orgs );
                         </fieldset>
                     </div>
 
-                    <div class="fot-field fot-field--full">
-                        <label>Mots-clés</label>
-                        <div class="fot-tags-wrap">
-                            <div class="fot-tags-list" id="fot-tags-list"></div>
-                            <div class="fot-tags-input-row">
-                                <input type="text" id="fot-tag-input" class="fot-input fot-tag-input" placeholder="Ajouter un mot-clé…">
-                                <button type="button" class="fot-tag-add-btn" id="fot-tag-add" aria-label="Ajouter">
-                                    <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" name="fot_outil_tags" id="fot-tags-hidden">
-                    </div>
                 </div>
 
                 <div class="fot-step-actions">
@@ -448,14 +468,39 @@ sort( $_existing_orgs );
 
                 <div class="fot-dropzone" id="fot-dropzone" role="region" aria-label="Zone de dépôt de photos">
                     <input type="file" id="fot_photos" name="fot_photos[]" accept="image/jpeg,image/png,image/webp" multiple class="fot-file-input" aria-label="Sélectionner des photos">
-                    <div class="fot-dropzone-inner" id="fot-dropzone-inner">
-                        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true" width="48" height="48"><rect x="4" y="8" width="40" height="32" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".3"/><path d="M16 28l6-8 5 6 3-4 6 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/><circle cx="17" cy="18" r="2" fill="currentColor" opacity=".4"/><path d="M24 36v-12M18 30l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        <p><strong>Glissez vos photos ici</strong><br>ou cliquez pour parcourir vos fichiers</p>
+                    <div class="fot-dropzone-inner">
+
+                        <!-- Vue par défaut : aucune photo -->
+                        <div class="fot-dz-empty" id="fot-dz-empty">
+                            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true" width="44" height="44">
+                                <rect x="4" y="8" width="40" height="32" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".3"/>
+                                <circle cx="17" cy="20" r="2.5" fill="currentColor" opacity=".4"/>
+                                <path d="M4 33l11-12 7 8 5-6 8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+                                <path d="M30 13v10M25 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <p><strong>Glissez vos photos ici</strong><br>ou sélectionnez-les depuis votre appareil</p>
+                        </div>
+
+                        <!-- Vue résumé : visible dès qu'une photo est ajoutée -->
+                        <div class="fot-dz-filled" id="fot-dz-filled" hidden>
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="18" height="18">
+                                <rect x="2" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
+                                <circle cx="10" cy="11" r="3" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M6 5V4a2 2 0 012-2h4a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.4"/>
+                            </svg>
+                            <span id="fot-photo-count-label">0 photo ajoutée</span>
+                        </div>
+
+                        <!-- Bouton (texte mis à jour par JS) -->
                         <button type="button" class="fot-btn fot-btn--outline" id="fot-browse-btn">
-                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" width="14"><path d="M2 12l4-4 3 3 2-2 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                            Parcourir les fichiers
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" width="14">
+                                <path d="M8 1v9M4 5l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            </svg>
+                            <span id="fot-browse-label">Choisir des photos</span>
                         </button>
-                        <p class="fot-dropzone-hint">JPG, PNG — 5 Mo max — 5 photos maximum</p>
+
+                        <p class="fot-dropzone-hint" id="fot-dropzone-hint">JPG, PNG, WebP · 5 Mo max · 5 photos maximum</p>
                     </div>
                 </div>
 

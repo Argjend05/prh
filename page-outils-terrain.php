@@ -172,6 +172,21 @@ $icons = [
     <div class="ot-container">
         <h1 id="ot-hero-title"><?php echo esc_html( $hero_title ); ?></h1>
         <p class="ot-page-header-sub"><?php echo esc_html( $hero_sub ); ?></p>
+        <?php if ( (int) $hero_stat1 > 0 ) : ?>
+        <div class="ot-hero-stats">
+            <div class="ot-hero-stat">
+                <strong><?php echo esc_html( $hero_stat1 ); ?></strong>
+                <span>outil<?php echo (int) $hero_stat1 > 1 ? 's' : ''; ?> référencé<?php echo (int) $hero_stat1 > 1 ? 's' : ''; ?></span>
+            </div>
+            <?php if ( (int) $hero_stat2 > 0 ) : ?>
+            <div class="ot-hero-stat-sep" aria-hidden="true"></div>
+            <div class="ot-hero-stat">
+                <strong><?php echo esc_html( $hero_stat2 ); ?></strong>
+                <span>structure<?php echo (int) $hero_stat2 > 1 ? 's' : ''; ?> contributrice<?php echo (int) $hero_stat2 > 1 ? 's' : ''; ?></span>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
     </div>
     <div class="ot-hero-wave" aria-hidden="true">
         <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -229,6 +244,19 @@ $icons = [
 
             </div>
 
+            <!-- Catégorie -->
+            <div class="ot-filters-row ot-filters-row--cats">
+                <div class="ot-filters-col ot-filters-col--cats">
+                    <span class="ot-filters-label" id="ot-cat-label">Catégorie :</span>
+                    <div class="ot-cat-pills" role="group" aria-labelledby="ot-cat-label">
+                        <button class="ot-cat-pill is-active" data-cat="tous">Toutes</button>
+                        <?php foreach ( $cat_meta as $slug => $meta ) : ?>
+                        <button class="ot-cat-pill" data-cat="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $meta['label'] ); ?></button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
             <div class="ot-active-filters" id="ot-active-filters" aria-live="polite"></div>
         </div>
     </div>
@@ -254,6 +282,7 @@ $icons = [
             $_n = count( $tools );
             $grid_cols = $_n <= 1 ? 1 : ( $_n <= 4 ? 2 : 3 );
         ?>
+        <p class="ot-result-count" id="ot-result-count" hidden></p>
         <div class="ot-grid ot-grid--c<?php echo (int) $grid_cols; ?>" id="ot-grid" role="list">
             <?php foreach ( $tools as $t ) :
                 $envs_str = implode( ',', $t['envs'] );
@@ -264,7 +293,8 @@ $icons = [
                 data-id="<?php echo esc_attr( $t['id'] ); ?>"
                 data-envs="<?php echo esc_attr( $envs_str ); ?>"
                 data-structure="<?php echo esc_attr( $t['structure'] ); ?>"
-                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['description'] . ' ' . implode( ' ', $t['age_ranges'] ) ) ); ?>"
+                data-cat="<?php echo esc_attr( $t['cat_slug'] ); ?>"
+                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['cat_slug'] . ' ' . $t['description'] . ' ' . implode( ' ', $t['age_ranges'] ) ) ); ?>"
                 tabindex="0"
                 aria-label="<?php echo esc_attr( 'Voir les détails : ' . $t['title'] ); ?>">
 
