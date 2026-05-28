@@ -22,21 +22,39 @@ add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
         'post_status'    => 'publish',
     ] );
 
-    // 3. Premier passage : on supprime le lien témoignages si pas de témoignages
-    if ( ! $has_temoignages ) {
-        $items = array_filter( $items, function ( $item ) {
+    // 2b. Check : existe-t-il au moins un outil terrain publié ?
+    $has_outils = (bool) get_posts( [
+        'post_type'      => 'outil_terrain',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'post_status'    => 'publish',
+    ] );
+
+    // 3. Premier passage : on supprime les liens si contenu vide
+    $slugs_to_hide = [];
+    if ( ! $has_temoignages ) $slugs_to_hide[] = 'temoignages';
+    if ( ! $has_outils )      $slugs_to_hide[] = 'outils-de-terrain';
+
+    if ( ! empty( $slugs_to_hide ) ) {
+        $items = array_filter( $items, function ( $item ) use ( $slugs_to_hide ) {
             $url   = trim( $item->url );
             $title = strtolower( trim( wp_strip_all_tags( $item->title ) ) );
 
-            // Page assignée avec slug "temoignages"
             if ( $item->object === 'page' ) {
                 $slug = get_post_field( 'post_name', (int) $item->object_id );
-                if ( $slug === 'temoignages' ) return false;
+                if ( in_array( $slug, $slugs_to_hide, true ) ) return false;
             }
-            // URL pointant vers /temoignages
-            if ( preg_match( '#/temoignages/?$#i', $url ) ) return false;
-            // Titre exactement "Témoignages"
-            if ( in_array( $title, [ 'témoignages', 'temoignages' ], true ) ) return false;
+            foreach ( $slugs_to_hide as $s ) {
+                if ( preg_match( '#/' . preg_quote( $s, '#' ) . '/?$#i', $url ) ) return false;
+            }
+            // Titres lisibles correspondants
+            $titles_map = [
+                'temoignages'      => [ 'témoignages', 'temoignages' ],
+                'outils-de-terrain' => [ 'outils de terrain', 'outils-de-terrain' ],
+            ];
+            foreach ( $slugs_to_hide as $s ) {
+                if ( isset( $titles_map[ $s ] ) && in_array( $title, $titles_map[ $s ], true ) ) return false;
+            }
 
             return true;
         } );
