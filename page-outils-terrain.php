@@ -25,6 +25,13 @@ $cta_sub     = $f( 'ot_cta_sub',    "Partagez-le avec la communauté PRH et cont
 
 /* ── Mapping catégorie → couleurs + icône (auto, sans champ admin) ── */
 $cat_meta = [
+    /* ── Types de lieu d'accueil (nouvelles soumissions) ── */
+    'eaje'                  => [ 'g1' => '#0ea5e9', 'g2' => '#0369a1', 'icon' => 'home',   'label' => 'EAJE'                  ],
+    'assistante_maternelle' => [ 'g1' => '#f97316', 'g2' => '#c2410c', 'icon' => 'heart',  'label' => 'Ass. maternelle'       ],
+    'rpe'                   => [ 'g1' => '#a855f7', 'g2' => '#7e22ce', 'icon' => 'chat',   'label' => 'RPE'                   ],
+    'acm'                   => [ 'g1' => '#22c55e', 'g2' => '#15803d', 'icon' => 'school', 'label' => 'ACM'                   ],
+    'autre'                 => [ 'g1' => '#64748b', 'g2' => '#334155', 'icon' => 'shield', 'label' => 'Autre'                 ],
+    /* ── Anciennes catégories (outils existants) ── */
     'scolaire'      => [ 'g1' => '#1a8fa8', 'g2' => '#0d5c7a', 'icon' => 'school',  'label' => 'Scolaire'      ],
     'observation'   => [ 'g1' => '#2a9d6e', 'g2' => '#1a5c3a', 'icon' => 'eye',     'label' => 'Observation'   ],
     'communication' => [ 'g1' => '#8e44ad', 'g2' => '#5b2d8e', 'icon' => 'chat',    'label' => 'Communication' ],
@@ -69,7 +76,6 @@ foreach ( $outil_posts as $op ) {
         'icon'         => $meta['icon'],
         'g1'           => $meta['g1'],
         'g2'           => $meta['g2'],
-        'envs'         => get_field( 'ot_envs',        $pid ) ?: ['urbain'],
         'structure'    => get_field( 'ot_structure',   $pid ) ?: 'tous',
         'description'  => get_field( 'ot_description', $pid ) ?: '',
         'age_ranges'   => get_field( 'ot_age_ranges',  $pid ) ?: [],
@@ -201,34 +207,16 @@ $icons = [
         <div class="ot-filters-card">
             <div class="ot-filters-row">
 
-                <!-- Environnements -->
-                <div class="ot-filters-col ot-filters-col--env">
-                    <span class="ot-filters-label" id="ot-env-label">Environnement :</span>
-                    <div class="ot-env-pills" role="group" aria-labelledby="ot-env-label">
-                        <button class="ot-env-pill is-active" data-env="tous">Tous</button>
-                        <button class="ot-env-pill" data-env="urbain">Urbain</button>
-                        <button class="ot-env-pill" data-env="rural">Rural</button>
-                        <button class="ot-env-pill" data-env="domicile">Domicile</button>
-                        <button class="ot-env-pill" data-env="eaje">EAJE</button>
-                        <button class="ot-env-pill" data-env="rue">Rue</button>
-                    </div>
-                </div>
-
-                <div class="ot-filters-divider" aria-hidden="true"></div>
-
                 <!-- Type de structure -->
                 <div class="ot-filters-col ot-filters-col--struct">
-                    <label class="ot-filters-label" for="ot-structure-select">Type de structure :</label>
-                    <div class="ot-select-wrap">
-                        <select id="ot-structure-select" class="ot-select">
-                            <option value="tous">Toutes</option>
-                            <option value="eaje">EAJE / Crèche</option>
-                            <option value="assistante_maternelle">Assistante maternelle</option>
-                            <option value="rpe">RPE</option>
-                            <option value="acm">ACM</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                        <svg class="ot-select-arrow" viewBox="0 0 12 8" fill="none" aria-hidden="true" width="12"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span class="ot-filters-label" id="ot-struct-label">Type de structure :</span>
+                    <div class="ot-struct-pills" role="group" aria-labelledby="ot-struct-label">
+                        <button class="ot-struct-pill is-active" data-struct="tous">Tous</button>
+                        <button class="ot-struct-pill" data-struct="eaje">EAJE</button>
+                        <button class="ot-struct-pill" data-struct="assistante_maternelle">Ass. maternelle</button>
+                        <button class="ot-struct-pill" data-struct="rpe">RPE</button>
+                        <button class="ot-struct-pill" data-struct="acm">ACM</button>
+                        <button class="ot-struct-pill" data-struct="autre">Autre</button>
                     </div>
                 </div>
 
@@ -242,19 +230,6 @@ $icons = [
                     </div>
                 </div>
 
-            </div>
-
-            <!-- Catégorie -->
-            <div class="ot-filters-row ot-filters-row--cats">
-                <div class="ot-filters-col ot-filters-col--cats">
-                    <span class="ot-filters-label" id="ot-cat-label">Catégorie :</span>
-                    <div class="ot-cat-pills" role="group" aria-labelledby="ot-cat-label">
-                        <button class="ot-cat-pill is-active" data-cat="tous">Toutes</button>
-                        <?php foreach ( $cat_meta as $slug => $meta ) : ?>
-                        <button class="ot-cat-pill" data-cat="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $meta['label'] ); ?></button>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
             </div>
 
             <div class="ot-active-filters" id="ot-active-filters" aria-live="polite"></div>
@@ -284,17 +259,13 @@ $icons = [
         ?>
         <p class="ot-result-count" id="ot-result-count" hidden></p>
         <div class="ot-grid ot-grid--c<?php echo (int) $grid_cols; ?>" id="ot-grid" role="list">
-            <?php foreach ( $tools as $t ) :
-                $envs_str = implode( ',', $t['envs'] );
-            ?>
+            <?php foreach ( $tools as $t ) : ?>
             <article
                 class="ot-card"
                 role="listitem"
                 data-id="<?php echo esc_attr( $t['id'] ); ?>"
-                data-envs="<?php echo esc_attr( $envs_str ); ?>"
                 data-structure="<?php echo esc_attr( $t['structure'] ); ?>"
-                data-cat="<?php echo esc_attr( $t['cat_slug'] ); ?>"
-                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['cat_slug'] . ' ' . $t['description'] . ' ' . implode( ' ', $t['age_ranges'] ) ) ); ?>"
+                data-search="<?php echo esc_attr( strtolower( $t['title'] . ' ' . $t['category'] . ' ' . $t['description'] . ' ' . implode( ' ', $t['age_ranges'] ) ) ); ?>"
                 tabindex="0"
                 aria-label="<?php echo esc_attr( 'Voir les détails : ' . $t['title'] ); ?>">
 
@@ -308,19 +279,18 @@ $icons = [
                     : 'background:linear-gradient(135deg,' . esc_attr( $t['g1'] ) . ',' . esc_attr( $t['g2'] ) . ')';
                 ?>
                 <div class="ot-card-visual<?php echo $has_photo ? ' ot-card-visual--photo' : ''; ?>" style="<?php echo $vis_style; ?>" aria-hidden="true">
-                    <?php echo $icons[ $t['icon'] ] ?? ''; ?>
+                    <?php if ( ! $has_photo ) echo $icons[ $t['icon'] ] ?? ''; ?>
                     <span class="ot-card-cat-badge"><?php echo esc_html( $t['category'] ); ?></span>
                 </div>
 
                 <div class="ot-card-body">
+                    <?php if ( ! empty( $t['extra_tags'] ) ) : ?>
                     <div class="ot-card-tags">
-                        <?php foreach ( array_slice( $t['envs'], 0, 2 ) as $env ) : ?>
-                        <span class="ot-env-tag"><?php echo esc_html( ucfirst( $env ) ); ?></span>
-                        <?php endforeach; ?>
                         <?php foreach ( array_slice( $t['extra_tags'], 0, 1 ) as $tag ) : ?>
                         <span class="ot-env-tag ot-env-tag--extra"><?php echo esc_html( $tag ); ?></span>
                         <?php endforeach; ?>
                     </div>
+                    <?php endif; ?>
 
                     <h3 class="ot-card-title"><?php echo esc_html( $t['title'] ); ?></h3>
                     <p class="ot-card-desc"><?php echo esc_html( $t['description'] ); ?></p>
@@ -363,9 +333,10 @@ $icons = [
             <div class="ot-modal-visual" id="ot-modal-visual" aria-hidden="true">
                 <div class="ot-modal-icon-wrap" id="ot-modal-icon"></div>
                 <div class="ot-modal-visual-tags" id="ot-modal-visual-tags"></div>
+                <div class="ot-modal-visual-org" id="ot-modal-visual-org"></div>
             </div>
 
-            <div class="ot-modal-content" id="ot-modal-content">
+            <div class="ot-modal-content" id="ot-modal-content" data-lenis-prevent>
                 <!-- Populated by JS -->
             </div>
         </div>
@@ -407,7 +378,6 @@ window.prhOutils = <?php
             'icon'         => $t['icon'],
             'g1'           => $t['g1'],
             'g2'           => $t['g2'],
-            'envs'         => $t['envs'],
             'structure'    => $t['structure'],
             'description'  => $t['description'],
             'age_ranges'   => $t['age_ranges'],

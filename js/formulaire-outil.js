@@ -112,23 +112,16 @@
             var ocat     = stepEl.querySelector('#fot_outil_category');
             var odesc    = stepEl.querySelector('#fot_outil_desc');
             var octx     = stepEl.querySelector('#fot_outil_context');
-            var envs     = stepEl.querySelectorAll('input[name="fot_outil_envs[]"]:checked');
+            var outiAutre = stepEl.querySelector('#fot_outil_category_autre');
 
             if (!oname.value.trim() || oname.value.length < 3) markInvalid(oname, 'Le nom de l\'outil est requis (3 caractères min).');
-            if (ocat && !ocat.value)                           markInvalid(ocat,  'Sélectionnez une catégorie.');
-            if (!odesc.value.trim() || odesc.value.length < 20) markInvalid(odesc, 'La description doit faire au moins 20 caractères.');
-            if (odesc.value.length > 400)                       markInvalid(odesc, 'La description est trop longue (400 car. max).');
-            if (!octx.value.trim()  || octx.value.length < 30)  markInvalid(octx,  'Le contexte d\'utilisation est requis (30 caractères min).');
-            if (envs.length === 0) {
-                var fieldset = stepEl.querySelector('.fot-env-pills');
-                var err = document.createElement('span');
-                err.className = 'fot-inline-error';
-                err.style.cssText = 'display:block;font-size:.75rem;color:#dc2626;margin-top:6px;font-weight:600;';
-                err.textContent = 'Sélectionnez au moins un environnement.';
-                fieldset.insertAdjacentElement('afterend', err);
-                if (valid) (stepEl.querySelector('input[name="fot_outil_envs[]"]') || fieldset).focus();
-                valid = false;
+            if (ocat && !ocat.value)                           markInvalid(ocat,  'Sélectionnez un type de lieu d\'accueil.');
+            if (ocat && ocat.value === 'autre' && outiAutre && !outiAutre.value.trim()) {
+                markInvalid(outiAutre, 'Précisez le type de lieu d\'accueil.');
             }
+            if (!odesc.value.trim() || odesc.value.length < 20) markInvalid(odesc, 'La description doit faire au moins 20 caractères.');
+            if (odesc.value.length > 1200)                      markInvalid(odesc, 'La description est trop longue (1200 car. max).');
+            if (!octx.value.trim()  || octx.value.length < 30)  markInvalid(octx,  'Le contexte d\'utilisation est requis (30 caractères min).');
         }
 
         // Steps 3 (photos) and 4 (recap + consent) validate lightly
@@ -167,6 +160,21 @@
         if (nextBtn) {
             var next = parseInt(nextBtn.dataset.next, 10);
             if (validateStep(currentStep)) {
+                /* ── Pré-remplir étape 2 depuis étape 1 ── */
+                if (next === 2) {
+                    var structSel  = document.getElementById('fot_struct_type');
+                    var outiCatSel = document.getElementById('fot_outil_category');
+                    if (structSel && outiCatSel) {
+                        outiCatSel.value = structSel.value;
+                        /* Sync le champ texte "autre" si applicable */
+                        var structAutreInp = document.getElementById('fot_struct_type_autre');
+                        var outiAutreInp   = document.getElementById('fot_outil_category_autre');
+                        if (structAutreInp && outiAutreInp) {
+                            outiAutreInp.value = structAutreInp.value;
+                        }
+                        toggleAutreWrap(outiCatSel, document.getElementById('fot-outil-autre-wrap'));
+                    }
+                }
                 if (next === 4) populateRecap();
                 goToStep(next);
             }
@@ -201,8 +209,8 @@
             var len = descTA.value.length;
             descCnt.textContent = len;
             if (charSpan) {
-                charSpan.classList.toggle('is-near', len >= 340 && len <= 400);
-                charSpan.classList.toggle('is-over', len > 400);
+                charSpan.classList.toggle('is-near', len >= 1000 && len <= 1200);
+                charSpan.classList.toggle('is-over', len > 1200);
             }
         }
         descTA.addEventListener('input', updateCount);
@@ -210,27 +218,35 @@
     }
 
     /* ─────────────────────────────────────────────────────
-       TYPE STRUCTURE "AUTRE" — champ conditionnel
+       TYPE "AUTRE" — champs conditionnels (étapes 1 et 2)
     ───────────────────────────────────────────────────── */
-    var structSelect = document.getElementById('fot_struct_type');
-    var autreWrap    = document.getElementById('fot-struct-autre-wrap');
-
-    function toggleAutreField() {
-        if (!structSelect || !autreWrap) return;
-        var show = structSelect.value === 'autre';
+    function toggleAutreWrap(selectEl, wrapEl) {
+        if (!selectEl || !wrapEl) return;
+        var inp  = wrapEl.querySelector('input');
+        var show = selectEl.value === 'autre';
         if (show) {
-            autreWrap.removeAttribute('hidden');
-            autreWrap.querySelector('input').required = true;
+            wrapEl.removeAttribute('hidden');
+            if (inp) inp.required = true;
         } else {
-            autreWrap.setAttribute('hidden', '');
-            autreWrap.querySelector('input').required = false;
-            autreWrap.querySelector('input').value = '';
+            wrapEl.setAttribute('hidden', '');
+            if (inp) { inp.required = false; inp.value = ''; }
         }
     }
 
+    /* Étape 1 */
+    var structSelect  = document.getElementById('fot_struct_type');
+    var autreWrap     = document.getElementById('fot-struct-autre-wrap');
     if (structSelect) {
-        structSelect.addEventListener('change', toggleAutreField);
-        toggleAutreField();
+        structSelect.addEventListener('change', function () { toggleAutreWrap(structSelect, autreWrap); });
+        toggleAutreWrap(structSelect, autreWrap);
+    }
+
+    /* Étape 2 */
+    var outiCatSelect = document.getElementById('fot_outil_category');
+    var outiAutreWrap = document.getElementById('fot-outil-autre-wrap');
+    if (outiCatSelect) {
+        outiCatSelect.addEventListener('change', function () { toggleAutreWrap(outiCatSelect, outiAutreWrap); });
+        toggleAutreWrap(outiCatSelect, outiAutreWrap);
     }
 
     /* ─────────────────────────────────────────────────────
@@ -374,14 +390,9 @@
     /* ─────────────────────────────────────────────────────
        RECAP POPULATION (step 4)
     ───────────────────────────────────────────────────── */
-    var envLabels = {
-        'urbain': 'Urbain', 'rural': 'Rural', 'domicile': 'Domicile',
-        'eaje': 'EAJE', 'rue': 'Rue'
-    };
-
     var categoryLabels = {
-        'scolaire': 'Scolaire', 'observation': 'Observation', 'communication': 'Communication',
-        'urgence': 'Urgence', 'accueil': 'Accueil', 'soutien': 'Soutien'
+        'eaje': 'EAJE', 'assistante_maternelle': 'Assistante maternelle',
+        'rpe': 'RPE', 'acm': 'ACM', 'autre': 'Autre'
     };
 
     var ageLabels = {
@@ -403,8 +414,7 @@
         var email = val('#fot_ref_email');
         setRecap('fot-recap-role', [role, email].filter(Boolean).join(' · ') || '—');
 
-        var catVal = val('#fot_outil_category');
-        setRecap('fot-recap-outil',  (val('#fot_outil_name') || '—') + (catVal ? ' · ' + (categoryLabels[catVal] || catVal) : ''));
+        setRecap('fot-recap-outil', val('#fot_outil_name') || '—');
 
         // Photos
         var n = photoFiles.length;
@@ -415,18 +425,22 @@
         var subEl = document.getElementById('fot-recap-photos-sub');
         if (subEl) subEl.textContent = n > 0 ? 'JPG / PNG · En attente de modération' : '';
 
-        // Environnements
+        // Type de lieu d'accueil (tag dans le récap)
         var envsEl = document.getElementById('fot-recap-envs');
         if (envsEl) {
             envsEl.innerHTML = '';
-            var checkedEnvs = Array.from(form.querySelectorAll('input[name="fot_outil_envs[]"]:checked'));
-            checkedEnvs.forEach(function (cb) {
+            var catSelect   = form.querySelector('#fot_outil_category');
+            var catVal      = catSelect ? catSelect.value : '';
+            var catAutreInp = form.querySelector('#fot_outil_category_autre');
+            var catLabel    = (catVal === 'autre' && catAutreInp && catAutreInp.value.trim())
+                                ? catAutreInp.value.trim()
+                                : (categoryLabels[catVal] || catVal);
+            if (catVal) {
                 var chip = document.createElement('span');
                 chip.className = 'fot-recap-tag';
-                chip.textContent = envLabels[cb.value] || cb.value;
+                chip.textContent = catLabel;
                 envsEl.appendChild(chip);
-            });
-            if (!checkedEnvs.length) envsEl.textContent = '—';
+            }
         }
 
         // Tranches d'âge

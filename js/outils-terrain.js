@@ -18,25 +18,17 @@
     };
 
     /* ── État des filtres ───────────────────────────────── */
-    var activeEnvs      = [];   // [] = tous
     var activeStructure = 'tous';
-    var activeCat       = 'tous';
     var searchQuery     = '';
 
     /* ── DOM refs ───────────────────────────────────────── */
     var grid, cards, noResultsEl, activeFiltersEl, resultCountEl,
-        overlay, modal, modalContent, modalVisual, modalIcon, modalTags,
-        searchInput, structureSelect;
+        overlay, modal, modalContent, modalVisual, modalIcon, modalTags, modalVisualOrg,
+        searchInput;
 
     /* ══════════════════════════════════════════════════════
        FILTRES
        ══════════════════════════════════════════════════════ */
-
-    function matchesEnv(card) {
-        if (!activeEnvs.length) return true;
-        var cardEnvs = (card.dataset.envs || '').split(',');
-        return activeEnvs.some(function (e) { return cardEnvs.indexOf(e) !== -1; });
-    }
 
     function matchesStructure(card) {
         if (activeStructure === 'tous') return true;
@@ -48,15 +40,10 @@
         return (card.dataset.search || '').indexOf(searchQuery) !== -1;
     }
 
-    function matchesCat(card) {
-        if (activeCat === 'tous') return true;
-        return (card.dataset.cat || '') === activeCat;
-    }
-
     function applyFilters() {
         var visible = 0;
         cards.forEach(function (card) {
-            var show = matchesEnv(card) && matchesStructure(card) && matchesCat(card) && matchesSearch(card);
+            var show = matchesStructure(card) && matchesSearch(card);
             card.hidden = !show;
             if (show) visible++;
         });
@@ -87,31 +74,16 @@
         }
     }
 
-    function syncCatPills() {
-        document.querySelectorAll('.ot-cat-pill').forEach(function (pill) {
-            pill.classList.toggle('is-active', pill.dataset.cat === activeCat);
-        });
-    }
-
     /* ── Chips filtres actifs ───────────────────────────── */
     function renderActiveFilters() {
         var chips = [];
 
-        activeEnvs.forEach(function (env) {
-            chips.push({ label: ucFirst(env), key: 'env', val: env });
-        });
-
-        if (activeCat !== 'tous') {
-            var catLabels = {
-                scolaire: 'Scolaire', observation: 'Observation', communication: 'Communication',
-                urgence: 'Urgence', accueil: 'Accueil', soutien: 'Soutien'
-            };
-            chips.push({ label: catLabels[activeCat] || activeCat, key: 'cat', val: activeCat });
-        }
-
         if (activeStructure !== 'tous') {
-            var opt = structureSelect.querySelector('option[value="' + activeStructure + '"]');
-            chips.push({ label: opt ? opt.textContent : activeStructure, key: 'struct', val: activeStructure });
+            var structLabels = {
+                'eaje': 'EAJE', 'assistante_maternelle': 'Ass. maternelle',
+                'rpe': 'RPE', 'acm': 'ACM', 'autre': 'Autre'
+            };
+            chips.push({ label: structLabels[activeStructure] || activeStructure, key: 'struct', val: activeStructure });
         }
 
         if (searchQuery) {
@@ -134,16 +106,16 @@
             }).join('');
     }
 
+    function syncStructPills() {
+        document.querySelectorAll('.ot-struct-pill').forEach(function (pill) {
+            pill.classList.toggle('is-active', pill.dataset.struct === activeStructure);
+        });
+    }
+
     function removeFilter(key, val) {
-        if (key === 'env') {
-            activeEnvs = activeEnvs.filter(function (e) { return e !== val; });
-            syncEnvPills();
-        } else if (key === 'cat') {
-            activeCat = 'tous';
-            syncCatPills();
-        } else if (key === 'struct') {
+        if (key === 'struct') {
             activeStructure = 'tous';
-            structureSelect.value = 'tous';
+            syncStructPills();
         } else if (key === 'search') {
             searchQuery = '';
             searchInput.value = '';
@@ -151,26 +123,11 @@
         applyFilters();
     }
 
-    function syncEnvPills() {
-        document.querySelectorAll('.ot-env-pill').forEach(function (pill) {
-            var env = pill.dataset.env;
-            if (env === 'tous') {
-                pill.classList.toggle('is-active', activeEnvs.length === 0);
-            } else {
-                pill.classList.toggle('is-active', activeEnvs.indexOf(env) !== -1);
-            }
-        });
-    }
-
     function resetAllFilters() {
-        activeEnvs = [];
         activeStructure = 'tous';
-        activeCat = 'tous';
         searchQuery = '';
-        structureSelect.value = 'tous';
+        syncStructPills();
         searchInput.value = '';
-        syncEnvPills();
-        syncCatPills();
         applyFilters();
     }
 
@@ -185,7 +142,8 @@
         populateModal(tool);
         overlay.setAttribute('aria-hidden', 'false');
         overlay.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
+        document.documentElement.classList.add('ot-modal-open');
+        if (window._prhLenis) window._prhLenis.stop();
 
         /* Focus premier élément focusable */
         requestAnimationFrame(function () {
@@ -197,7 +155,8 @@
     function closeModal() {
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        document.documentElement.classList.remove('ot-modal-open');
+        if (window._prhLenis) window._prhLenis.start();
     }
 
     /* Libellés des tranches d'âge */
@@ -206,37 +165,61 @@
         '6-12': '6-12 ans', '12-18': '12-18 ans'
     };
 
+    /* Libellés type de lieu d'accueil */
+    var LIEU_LABELS = {
+        'eaje':                  'EAJE',
+        'assistante_maternelle': 'Assistante maternelle',
+        'rpe':                   'RPE',
+        'acm':                   'ACM',
+        'autre':                 'Autre',
+        'tous':                  'Tous types',
+    };
+
     function populateModal(tool) {
         /* Visual sidebar */
         modalVisual.style.background = 'linear-gradient(135deg,' + tool.g1 + ',' + tool.g2 + ')';
         modalIcon.innerHTML = ICONS[tool.icon] || '';
 
-        var tags = [tool.category].concat(tool.envs.slice(0, 2)).concat(tool.extra_tags || []);
-        modalTags.innerHTML = tags.map(function (t) {
-            return '<span class="ot-modal-tag">' + escHtml(ucFirst(t)) + '</span>';
-        }).join('');
+        /* Sidebar : lieu d'accueil + tranches d'âge */
+        var lieuTagHtml = '';
+        var lieuLabel = LIEU_LABELS[tool.structure] || null;
+        if (lieuLabel) {
+            lieuTagHtml = '<div class="ot-modal-sidebar-group">'
+                + '<span class="ot-modal-sidebar-label">Lieu d\'accueil</span>'
+                + '<span class="ot-modal-tag ot-modal-tag--lieu">' + escHtml(lieuLabel) + '</span>'
+                + '</div>';
+        }
+        var ageTagsHtml = '';
+        if (tool.age_ranges && tool.age_ranges.length) {
+            ageTagsHtml = '<div class="ot-modal-sidebar-group">'
+                + '<span class="ot-modal-sidebar-label">Tranches d\'âge</span>'
+                + '<div class="ot-modal-sidebar-chips">'
+                + tool.age_ranges.map(function (a) {
+                    return '<span class="ot-modal-tag ot-modal-tag--age">' + escHtml(AGE_LABELS[a] || a) + '</span>';
+                }).join('')
+                + '</div>'
+                + '</div>';
+        }
+        modalTags.innerHTML = lieuTagHtml + ageTagsHtml;
 
-        /* Initiales avatar */
-        var initials = tool.contact_name
-            ? tool.contact_name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase()
-            : '?';
-        var roleOrgParts = [tool.contact_role, tool.contact_org].filter(Boolean);
-        var roleOrgHtml = escHtml(roleOrgParts.join(' — '));
+        /* Sidebar org (en bas) */
+        if (modalVisualOrg) {
+            var initials = tool.contact_name
+                ? tool.contact_name.split(' ').map(function (w) { return w[0] || ''; }).join('').slice(0, 2).toUpperCase()
+                : '?';
+            modalVisualOrg.innerHTML = tool.contact_org
+                ? '<div class="ot-modal-visual-org-inner">'
+                +   '<div class="ot-modal-avatar">' + escHtml(initials) + '</div>'
+                +   '<span class="ot-modal-visual-org-name">' + escHtml(tool.contact_org) + '</span>'
+                + '</div>'
+                : '';
+        }
 
         /* Specs rows */
         var specsRows = (tool.specs || []).map(function (s) {
             return '<tr><th>' + escHtml(s[0]) + '</th><td>' + escHtml(s[1]) + '</td></tr>';
         }).join('');
 
-        /* Tranches d'âge */
-        var agesHtml = '';
-        if (tool.age_ranges && tool.age_ranges.length) {
-            agesHtml = '<div class="ot-modal-ages">'
-                + tool.age_ranges.map(function (a) {
-                    return '<span class="ot-age-tag">' + escHtml(AGE_LABELS[a] || a) + '</span>';
-                }).join('')
-                + '</div>';
-        }
 
         /* Galerie photos */
         var photosHtml = '';
@@ -253,22 +236,25 @@
 
         modalContent.innerHTML =
             '<h2 class="ot-modal-title" id="ot-modal-title">' + escHtml(tool.title) + '</h2>'
-            + '<p class="ot-modal-meta">Partagé par ' + escHtml(tool.contact_org)
-            + ' &middot; Mis à jour le ' + escHtml(tool.date) + '</p>'
+            + '<p class="ot-modal-meta">Mis à jour le ' + escHtml(tool.date) + '</p>'
 
             + (tool.description
-                ? '<p class="ot-modal-description">' + escHtml(tool.description) + '</p>'
+                ? '<div class="ot-modal-section">'
+                +   '<h3 class="ot-modal-section-title">'
+                +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><path d="M2 3h12M2 7h9M2 11h11M2 15h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
+                +     'Description'
+                +   '</h3>'
+                +   '<p class="ot-modal-description">' + escHtml(tool.description) + '</p>'
+                + '</div>'
                 : '')
 
             + photosHtml
-
-            + agesHtml
 
             + (tool.story
                 ? '<div class="ot-modal-section">'
                 +   '<h3 class="ot-modal-section-title">'
                 +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><path d="M2 3h12v8H9l-3 3V11H2V3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
-                +     'L\'Histoire'
+                +     'Contexte d\'utilisation'
                 +   '</h3>'
                 +   '<p class="ot-modal-story">' + escHtml(tool.story) + '</p>'
                 + '</div>'
@@ -284,27 +270,7 @@
                 + '</div>'
                 : '')
 
-            + ((tool.contact_name || tool.contact_org)
-                ? '<div class="ot-modal-section">'
-                +   '<h3 class="ot-modal-section-title">'
-                +     '<svg class="ot-modal-section-icon" viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
-                +     'Contact Structure'
-                +   '</h3>'
-                +   '<div class="ot-modal-contact">'
-                +     '<div class="ot-modal-contact-info">'
-                +       '<div class="ot-modal-avatar">' + initials + '</div>'
-                +       '<div>'
-                +         '<span class="ot-modal-contact-name">' + escHtml(tool.contact_name) + '</span>'
-                +         '<span class="ot-modal-contact-role">' + roleOrgHtml + '</span>'
-                +       '</div>'
-                +     '</div>'
-                +     '<a href="' + contactUrl() + '" class="ot-modal-contact-btn">'
-                +       '<svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>'
-                +       'Contacter'
-                +     '</a>'
-                +   '</div>'
-                + '</div>'
-                : '');
+            + '';
     }
 
     /* ══════════════════════════════════════════════════════
@@ -342,45 +308,20 @@
         modalVisual     = document.getElementById('ot-modal-visual');
         modalIcon       = document.getElementById('ot-modal-icon');
         modalTags       = document.getElementById('ot-modal-visual-tags');
+        modalVisualOrg  = document.getElementById('ot-modal-visual-org');
         searchInput     = document.getElementById('ot-search');
-        structureSelect = document.getElementById('ot-structure-select');
 
         if (!grid) return;
 
         cards = Array.from(grid.querySelectorAll('.ot-card'));
 
-        /* Env pills */
-        document.querySelectorAll('.ot-env-pill').forEach(function (pill) {
+        /* Structure pills */
+        document.querySelectorAll('.ot-struct-pill').forEach(function (pill) {
             pill.addEventListener('click', function () {
-                var env = pill.dataset.env;
-                if (env === 'tous') {
-                    activeEnvs = [];
-                } else {
-                    var idx = activeEnvs.indexOf(env);
-                    if (idx === -1) {
-                        activeEnvs.push(env);
-                    } else {
-                        activeEnvs.splice(idx, 1);
-                    }
-                }
-                syncEnvPills();
+                activeStructure = pill.dataset.struct;
+                syncStructPills();
                 applyFilters();
             });
-        });
-
-        /* Cat pills */
-        document.querySelectorAll('.ot-cat-pill').forEach(function (pill) {
-            pill.addEventListener('click', function () {
-                activeCat = pill.dataset.cat;
-                syncCatPills();
-                applyFilters();
-            });
-        });
-
-        /* Structure select */
-        structureSelect.addEventListener('change', function () {
-            activeStructure = this.value;
-            applyFilters();
         });
 
         /* Search */
@@ -524,14 +465,14 @@
         lightboxShow();
 
         lightbox.removeAttribute('hidden');
-        document.body.style.overflow = 'hidden';
+        /* scroll déjà verrouillé par la modal — pas besoin de retoucher */
         lightbox.querySelector('.ot-lb-close').focus();
     }
 
     function closeLightbox() {
         if (!lightbox) return;
         lightbox.setAttribute('hidden', '');
-        document.body.style.overflow = '';
+        /* ne pas toucher au scroll — la modal est encore ouverte */
     }
 
     function lightboxShow() {

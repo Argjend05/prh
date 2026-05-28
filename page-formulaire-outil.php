@@ -29,9 +29,10 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
         'ref_phone'          => sanitize_text_field(     $_POST['fot_ref_phone']          ?? '' ),
         'outil_name'         => sanitize_text_field(     $_POST['fot_outil_name']         ?? '' ),
         'outil_category'     => sanitize_text_field(     $_POST['fot_outil_category']     ?? '' ),
+        'outil_category_autre' => sanitize_text_field(  $_POST['fot_outil_category_autre'] ?? '' ),
         'outil_desc'         => sanitize_textarea_field( $_POST['fot_outil_desc']         ?? '' ),
         'outil_context'      => sanitize_textarea_field( $_POST['fot_outil_context']      ?? '' ),
-        'outil_envs'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_envs']  ?? [] ) ),
+        'outil_envs'         => [],
         'outil_ages'         => array_map( 'sanitize_text_field', (array) ( $_POST['fot_outil_ages']  ?? [] ) ),
         'consent'            => ! empty( $_POST['fot_consent'] ),
     ];
@@ -46,9 +47,10 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
     if ( ! is_email( $d['ref_email'] ) )                             $fot_errors[] = "Adresse e-mail invalide.";
     if ( strlen( $d['outil_name'] ) < 3 )                            $fot_errors[] = "Le nom de l'outil est requis.";
     if ( strlen( $d['outil_desc'] ) < 20 )                           $fot_errors[] = "La description doit faire au moins 20 caractères.";
-    if ( strlen( $d['outil_desc'] ) > 400 )                          $fot_errors[] = "La description est trop longue (400 car. max).";
+    if ( strlen( $d['outil_desc'] ) > 1200 )                          $fot_errors[] = "La description est trop longue (1200 car. max).";
     if ( strlen( $d['outil_context'] ) < 30 )                        $fot_errors[] = "Le contexte d'utilisation est requis.";
-    if ( empty( $d['outil_envs'] ) )                                 $fot_errors[] = "Sélectionnez au moins un environnement.";
+    if ( empty( $d['outil_category'] ) )                             $fot_errors[] = "Sélectionnez un type de lieu d'accueil.";
+    if ( $d['outil_category'] === 'autre' && empty( $d['outil_category_autre'] ) ) $fot_errors[] = "Précisez le type de lieu d'accueil.";
     if ( ! $d['consent'] )                                           $fot_errors[] = "Vous devez accepter les conditions avant de soumettre.";
 
     /* ── Création du post en attente ── */
@@ -67,7 +69,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
             if ( function_exists( 'update_field' ) ) {
                 update_field( 'ot_description',   $d['outil_desc'],       $post_id );
                 update_field( 'ot_story',         $d['outil_context'],    $post_id );
-                update_field( 'ot_envs',          $d['outil_envs'],       $post_id );
+                // ot_envs supprimé du formulaire front-end
                 update_field( 'ot_age_ranges',    $d['outil_ages'],       $post_id );
                 update_field( 'ot_contact_name',  $d['ref_name'],         $post_id );
                 update_field( 'ot_contact_role',  $d['ref_role'],         $post_id );
@@ -120,14 +122,74 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['fot_nonce'] ) ) {
             $body       .= "Outil       : " . $d['outil_name'] . "\n";
             $struct_display = $d['struct_type'] === 'autre' ? ( 'Autre : ' . $d['struct_type_autre'] ) : $d['struct_type'];
             $body       .= "Structure   : " . $d['struct_name'] . " (" . $struct_display . ") — CP " . $d['struct_postal'] . "\n";
-            $body       .= "Référent    : " . $d['ref_name'] . " — " . $d['ref_email'] . "\n";
-            $body       .= "Environnements : " . implode( ', ', $d['outil_envs'] ) . "\n";
+            $body       .= "Référent    : " . $d['ref_name'] . " — " . $d['ref_email'];
+            if ( ! empty( $d['ref_phone'] ) ) {
+                $body   .= " — " . $d['ref_phone'];
+            }
+            $body       .= "\n";
+            $lieu_label = $struct_types[ $d['outil_category'] ] ?? $d['outil_category'] ?: '—';
+            if ( $d['outil_category'] === 'autre' && ! empty( $d['outil_category_autre'] ) ) {
+                $lieu_label .= ' — ' . $d['outil_category_autre'];
+            }
+            $body       .= "Type de lieu   : " . $lieu_label . "\n";
             if ( ! empty( $d['outil_ages'] ) ) {
                 $body   .= "Tranches d'âge : " . implode( ', ', $d['outil_ages'] ) . "\n";
             }
             $body       .= "\n";
             $body       .= "Voir la soumission : " . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "\n";
             wp_mail( $admin_email, $subject, $body );
+
+            /* Email de confirmation à l'expéditeur */
+            $headers_html   = [ 'Content-Type: text/html; charset=UTF-8' ];
+            $subj_confirm   = 'Votre contribution a bien été reçue – PRH68';
+            $msg_confirm    = "
+<!DOCTYPE html>
+<html lang='fr'>
+<body style='margin:0;padding:0;background:#f4f4f7;font-family:Arial,sans-serif;'>
+<table width='100%' cellpadding='0' cellspacing='0' style='background:#f4f4f7;padding:32px 0;'>
+  <tr><td align='center'>
+    <table width='560' cellpadding='0' cellspacing='0' style='background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);'>
+      <!-- En-tête -->
+      <tr><td style='background:#4b4b8b;padding:28px 32px;'>
+        <h1 style='margin:0;color:#ffffff;font-size:20px;font-weight:700;'>Contribution bien reçue !</h1>
+        <p style='margin:6px 0 0;color:rgba(255,255,255,.75);font-size:13px;'>PRH68 – Pôle Ressources Handicap du Haut-Rhin</p>
+      </td></tr>
+      <!-- Corps -->
+      <tr><td style='padding:28px 32px 0;'>
+        <p style='margin:0;font-size:15px;color:#333;line-height:1.6;'>Bonjour <strong>" . esc_html( $d['ref_name'] ) . "</strong>,</p>
+        <p style='font-size:15px;color:#333;line-height:1.6;'>Nous avons bien reçu votre contribution concernant l'outil <strong style='color:#4b4b8b;'>" . esc_html( $d['outil_name'] ) . "</strong>.</p>
+        <p style='font-size:15px;color:#333;line-height:1.6;'>Notre équipe va examiner votre fiche sous <strong>5 à 7 jours ouvrés</strong> et vous recontactera si nécessaire.</p>
+      </td></tr>
+      <!-- Séparateur -->
+      <tr><td style='padding:20px 32px;'><hr style='border:none;border-top:1px solid #ebebf0;margin:0;'></td></tr>
+      <!-- Récap -->
+      <tr><td style='padding:0 32px;'>
+        <p style='margin:0 0 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9b9bb0;'>Récapitulatif</p>
+        <table width='100%' cellpadding='0' cellspacing='0'>
+          <tr>
+            <td style='padding:5px 0;font-size:14px;color:#666;width:140px;'>Outil</td>
+            <td style='padding:5px 0;font-size:14px;color:#222;font-weight:600;'>" . esc_html( $d['outil_name'] ) . "</td>
+          </tr>
+          <tr>
+            <td style='padding:5px 0;font-size:14px;color:#666;'>Structure</td>
+            <td style='padding:5px 0;font-size:14px;color:#222;font-weight:600;'>" . esc_html( $d['struct_name'] ) . "</td>
+          </tr>
+          <tr>
+            <td style='padding:5px 0;font-size:14px;color:#666;'>Référent</td>
+            <td style='padding:5px 0;font-size:14px;color:#222;font-weight:600;'>" . esc_html( $d['ref_name'] ) . "</td>
+          </tr>
+        </table>
+      </td></tr>
+      <!-- Pied -->
+      <tr><td style='padding:24px 32px 32px;background:#f8f8fb;border-radius:0 0 10px 10px;margin-top:20px;'>
+        <p style='margin:0 0 4px;font-size:13px;color:#888;'>Des questions ? Contactez-nous :</p>
+        <p style='margin:0;font-size:14px;color:#4b4b8b;font-weight:600;'>03 89 32 81 50</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>";
+            wp_mail( $d['ref_email'], $subj_confirm, $msg_confirm, $headers_html );
 
             $fot_success = true;
         } else {
@@ -204,7 +266,7 @@ sort( $_existing_orgs );
             </div>
             <h1>Contribution reçue !</h1>
             <p>Merci pour votre partage. Votre outil <strong><?php echo esc_html( $d['outil_name'] ); ?></strong> a bien été reçu et sera examiné par l'équipe PRH68 sous <strong>5 à 7 jours ouvrés</strong>.</p>
-            <p class="fot-success-sub">Vous recevrez un e-mail de confirmation à <strong><?php echo esc_html( $d['ref_email'] ); ?></strong> lors de la publication.</p>
+            <p class="fot-success-sub">Un e-mail de confirmation a été envoyé à <strong><?php echo esc_html( $d['ref_email'] ); ?></strong>.</p>
             <div class="fot-success-btns">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="fot-btn fot-btn--primary">Retour à l'accueil</a>
                 <?php
@@ -223,22 +285,11 @@ sort( $_existing_orgs );
 
 <?php else : ?>
 
-<!-- ══ HERO ══════════════════════════════════════════════ -->
-<section class="fot-hero">
-    <div class="fot-hero-bg" aria-hidden="true"></div>
-    <div class="fot-container">
-        <div class="fot-breadcrumb">
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" width="13" height="13"><path d="M10 2v16M2 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            Contribuer à la base
-        </div>
-        <h1>Partagez un Outil de Terrain</h1>
-        <p>Enrichissez la bibliothèque collaborative PRH68 en partageant vos pratiques innovantes avec d'autres professionnels.</p>
-    </div>
-</section>
-
 <!-- ══ FORMULAIRE ════════════════════════════════════════ -->
 <section class="fot-form-section">
     <div class="fot-container">
+
+        <h1 class="fot-page-title">Partagez un Outil de Terrain</h1>
 
         <?php if ( ! empty( $fot_errors ) ) : ?>
         <div class="fot-error-banner" role="alert">
@@ -386,23 +437,34 @@ sort( $_existing_orgs );
                     </div>
 
                     <div class="fot-field">
-                        <label for="fot_outil_category">Catégorie <abbr title="requis">*</abbr></label>
+                        <label for="fot_outil_category">Type de lieu d'accueil <abbr title="requis">*</abbr></label>
                         <div class="fot-select-wrap">
                             <select id="fot_outil_category" name="fot_outil_category" class="fot-select" required>
-                                <?php foreach ( $category_choices as $val => $label ) : ?>
-                                <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $_POST['fot_outil_category'] ?? '', $val ); ?>><?php echo esc_html( $label ); ?></option>
+                                <?php foreach ( $struct_types as $val => $label ) : ?>
+                                <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $_POST['fot_outil_category'] ?? $_POST['fot_struct_type'] ?? '', $val ); ?>><?php echo esc_html( $label ); ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <svg viewBox="0 0 12 8" fill="none" aria-hidden="true" width="12" class="fot-select-arrow"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                         </div>
                     </div>
 
+                    <div class="fot-field fot-field--full" id="fot-outil-autre-wrap" <?php echo ( ( $_POST['fot_outil_category'] ?? $_POST['fot_struct_type'] ?? '' ) !== 'autre' ) ? 'hidden' : ''; ?>>
+                        <label for="fot_outil_category_autre">Précisez le type de lieu d'accueil <abbr title="requis">*</abbr></label>
+                        <div class="fot-input-wrap">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16" class="fot-input-icon"><path d="M4 6h12M4 10h8M4 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <input type="text" id="fot_outil_category_autre" name="fot_outil_category_autre" class="fot-input"
+                                placeholder="Ex. Maison d'assistantes maternelles, CAMSP…"
+                                value="<?php echo esc_attr( $_POST['fot_outil_category_autre'] ?? $_POST['fot_struct_type_autre'] ?? '' ); ?>"
+                                <?php echo ( ( $_POST['fot_outil_category'] ?? $_POST['fot_struct_type'] ?? '' ) === 'autre' ) ? 'required' : ''; ?>>
+                        </div>
+                    </div>
+
                     <div class="fot-field fot-field--full">
                         <label for="fot_outil_desc">
                             Description courte <abbr title="requis">*</abbr>
-                            <span class="fot-charcount"><span id="fot-desc-count">0</span> / 400 caractères</span>
+                            <span class="fot-charcount"><span id="fot-desc-count">0</span> / 1200 caractères</span>
                         </label>
-                        <textarea id="fot_outil_desc" name="fot_outil_desc" class="fot-textarea" rows="3" maxlength="400" placeholder="Décrivez votre outil en quelques phrases…" required></textarea>
+                        <textarea id="fot_outil_desc" name="fot_outil_desc" class="fot-textarea" rows="3" maxlength="1200" placeholder="Décrivez votre outil en quelques phrases…" required></textarea>
                     </div>
 
                     <div class="fot-field fot-field--full">
@@ -410,19 +472,6 @@ sort( $_existing_orgs );
                         <textarea id="fot_outil_context" name="fot_outil_context" class="fot-textarea" rows="4" placeholder="Dans quel contexte utilisez-vous cet outil ? Quelle problématique résout-il ?" required></textarea>
                     </div>
 
-                    <div class="fot-field fot-field--full">
-                        <fieldset>
-                            <legend>Environnement d'usage <abbr title="requis">*</abbr></legend>
-                            <div class="fot-env-pills">
-                                <?php foreach ( $envs_choices as $val => $label ) : ?>
-                                <label class="fot-env-pill">
-                                    <input type="checkbox" name="fot_outil_envs[]" value="<?php echo esc_attr( $val ); ?>">
-                                    <?php echo esc_html( $label ); ?>
-                                </label>
-                                <?php endforeach; ?>
-                            </div>
-                        </fieldset>
-                    </div>
 
                     <div class="fot-field fot-field--full">
                         <fieldset>
