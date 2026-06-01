@@ -17,7 +17,6 @@
             condBlocks.forEach(function (block) {
                 var match = block.dataset.showIfType === val;
                 block.classList.toggle('is-active', match);
-                // Désactive les inputs des blocs cachés pour éviter envoi
                 block.querySelectorAll('input').forEach(function (inp) {
                     inp.disabled = !match;
                 });
@@ -31,7 +30,7 @@
         /* ──────────────────────────────────────────────────
            COMPTEUR DE CARACTÈRES
         ────────────────────────────────────────────────── */
-        var quote = form.querySelector('#ftem_quote');
+        var quote   = form.querySelector('#ftem_quote');
         var counter = form.querySelector('.ftem-counter-num');
         if (quote && counter) {
             function updateCounter() {
@@ -47,11 +46,11 @@
            NOM DE FICHIER AUDIO
         ────────────────────────────────────────────────── */
         var fileInput = form.querySelector('#ftem_audio_file');
-        var fileName = form.querySelector('.ftem-file-name');
+        var fileName  = form.querySelector('.ftem-file-name');
         if (fileInput && fileName) {
             fileInput.addEventListener('change', function () {
                 if (fileInput.files && fileInput.files.length) {
-                    var f = fileInput.files[0];
+                    var f      = fileInput.files[0];
                     var sizeMb = (f.size / (1024 * 1024)).toFixed(1);
                     fileName.textContent = f.name + ' (' + sizeMb + ' Mo)';
                     if (f.size > 25 * 1024 * 1024) {
@@ -67,17 +66,81 @@
         }
 
         /* ──────────────────────────────────────────────────
-           PROTECTION DOUBLE SUBMIT
+           ERREURS / SUCCÈS
         ────────────────────────────────────────────────── */
-        var submitBtn = form.querySelector('.ftem-submit');
-        form.addEventListener('submit', function () {
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = '.6';
-                submitBtn.style.cursor = 'wait';
-                var original = submitBtn.innerHTML;
-                submitBtn.innerHTML = original.replace('Envoyer mon témoignage', 'Envoi en cours…');
-            }
+        var errorZone    = document.querySelector('.ftem-errors');
+        var successPanel = document.querySelector('.ftem-success');
+
+        function showErrors(msgs) {
+            if (!errorZone) return;
+            var html = '<strong>Quelques points à corriger&nbsp;:</strong><ul>';
+            msgs.forEach(function (m) { html += '<li>' + m + '</li>'; });
+            html += '</ul>';
+            errorZone.innerHTML = html;
+            errorZone.hidden = false;
+            errorZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideErrors() {
+            if (errorZone) { errorZone.hidden = true; errorZone.innerHTML = ''; }
+        }
+
+        /* ──────────────────────────────────────────────────
+           ENVOI AJAX
+        ────────────────────────────────────────────────── */
+        var submitting  = false;
+        var submitBtn   = form.querySelector('.ftem-submit');
+        var originalHtml = submitBtn ? submitBtn.innerHTML : '';
+
+        function resetBtn() {
+            if (!submitBtn) return;
+            submitBtn.disabled   = false;
+            submitBtn.style.opacity = '';
+            submitBtn.style.cursor  = '';
+            submitBtn.innerHTML  = originalHtml;
+        }
+
+        function lockBtn() {
+            if (!submitBtn) return;
+            submitBtn.disabled      = true;
+            submitBtn.style.opacity = '.6';
+            submitBtn.style.cursor  = 'wait';
+            submitBtn.innerHTML = originalHtml.replace('Envoyer mon témoignage', 'Envoi en cours…');
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (submitting) return;
+            submitting = true;
+            hideErrors();
+            lockBtn();
+
+            var formData = new FormData(form);
+            formData.append('action', 'ftem_submit');
+
+            fetch('/wp-admin/admin-ajax.php', { method: 'POST', body: formData })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        form.hidden = true;
+                        if (successPanel) {
+                            successPanel.hidden = false;
+                            successPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    } else {
+                        var msgs = (data.data && data.data.errors)
+                            ? data.data.errors
+                            : [(data.data && data.data.message) ? data.data.message : "Une erreur est survenue."];
+                        showErrors(msgs);
+                        submitting = false;
+                        resetBtn();
+                    }
+                })
+                .catch(function () {
+                    showErrors(["Erreur de connexion. Merci de réessayer."]);
+                    submitting = false;
+                    resetBtn();
+                });
         });
     }
 

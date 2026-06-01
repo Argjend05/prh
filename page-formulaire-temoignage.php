@@ -1,170 +1,6 @@
 <?php
 /* Template Name: Formulaire Témoignage */
-
-/* ─────────────────────────────────────────────────────────
-   TRAITEMENT DU FORMULAIRE
-   ───────────────────────────────────────────────────────── */
-$ftem_errors  = [];
-$ftem_success = false;
-$ftem_old     = [];
-
-if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['ftem_nonce'] ) ) {
-
-    /* ── Sécurité : nonce + honeypot ── */
-    if ( ! wp_verify_nonce( $_POST['ftem_nonce'], 'ftem_submit' ) ) {
-        $ftem_errors[] = "Session expirée. Merci de recharger la page.";
-    }
-    if ( ! empty( $_POST['ftem_website'] ) ) {
-        // Honeypot rempli = bot
-        $ftem_errors[] = "Erreur de validation.";
-    }
-
-    /* ── Récupération des champs ── */
-    $ftem_old = [
-        'category' => sanitize_text_field( $_POST['ftem_category'] ?? '' ),
-        'type'     => sanitize_text_field( $_POST['ftem_type'] ?? 'texte' ),
-        'quote'    => sanitize_textarea_field( $_POST['ftem_quote'] ?? '' ),
-        'name'     => sanitize_text_field( $_POST['ftem_name'] ?? '' ),
-        'role'     => sanitize_text_field( $_POST['ftem_role'] ?? '' ),
-        'email'    => sanitize_email( $_POST['ftem_email'] ?? '' ),
-        'phone'    => sanitize_text_field( $_POST['ftem_phone'] ?? '' ),
-        'video_url'=> esc_url_raw( $_POST['ftem_video_url'] ?? '' ),
-        'consent'  => ! empty( $_POST['ftem_consent'] ),
-        'anon'     => ! empty( $_POST['ftem_anonymous'] ),
-    ];
-
-    /* ── Validation ── */
-    $allowed_cats  = [ 'parent', 'professionnel', 'personne_accompagnee' ];
-    $allowed_types = [ 'texte', 'audio', 'video' ];
-
-    if ( ! in_array( $ftem_old['category'], $allowed_cats, true ) ) {
-        $ftem_errors[] = "Merci de sélectionner une catégorie.";
-    }
-    if ( ! in_array( $ftem_old['type'], $allowed_types, true ) ) {
-        $ftem_errors[] = "Type de témoignage invalide.";
-    }
-    if ( strlen( $ftem_old['quote'] ) < 30 ) {
-        $ftem_errors[] = "Votre témoignage doit faire au moins 30 caractères.";
-    }
-    if ( strlen( $ftem_old['quote'] ) > 4000 ) {
-        $ftem_errors[] = "Votre témoignage est trop long (max 4000 caractères).";
-    }
-    if ( ! is_email( $ftem_old['email'] ) ) {
-        $ftem_errors[] = "Adresse email invalide.";
-    }
-    if ( ! $ftem_old['consent'] ) {
-        $ftem_errors[] = "Vous devez accepter les conditions de publication.";
-    }
-    if ( $ftem_old['type'] === 'video' && empty( $ftem_old['video_url'] ) ) {
-        $ftem_errors[] = "Merci de fournir un lien YouTube ou Vimeo pour la vidéo.";
-    }
-
-    /* ── Gestion du fichier audio ── */
-    $ftem_audio_attach_id = 0;
-    if ( $ftem_old['type'] === 'audio' && empty( $ftem_errors ) ) {
-        if ( empty( $_FILES['ftem_audio_file']['name'] ) ) {
-            $ftem_errors[] = "Merci de joindre un fichier audio.";
-        } else {
-            $allowed_mimes = [
-                'mp3'  => 'audio/mpeg',
-                'wav'  => 'audio/wav',
-                'm4a'  => 'audio/mp4',
-                'ogg'  => 'audio/ogg',
-                'webm' => 'audio/webm',
-            ];
-            $check = wp_check_filetype_and_ext(
-                $_FILES['ftem_audio_file']['tmp_name'],
-                $_FILES['ftem_audio_file']['name'],
-                $allowed_mimes
-            );
-            if ( ! $check['type'] ) {
-                $ftem_errors[] = "Format audio non autorisé (mp3, wav, m4a, ogg uniquement).";
-            } elseif ( $_FILES['ftem_audio_file']['size'] > 25 * 1024 * 1024 ) {
-                $ftem_errors[] = "Fichier audio trop lourd (max 25 Mo).";
-            } else {
-                require_once ABSPATH . 'wp-admin/includes/file.php';
-                require_once ABSPATH . 'wp-admin/includes/media.php';
-                require_once ABSPATH . 'wp-admin/includes/image.php';
-
-                $upload_overrides = [ 'test_form' => false, 'mimes' => $allowed_mimes ];
-                $movefile = wp_handle_upload( $_FILES['ftem_audio_file'], $upload_overrides );
-
-                if ( $movefile && empty( $movefile['error'] ) ) {
-                    $attachment = [
-                        'post_mime_type' => $movefile['type'],
-                        'post_title'     => sanitize_file_name( pathinfo( $movefile['file'], PATHINFO_FILENAME ) ),
-                        'post_content'   => '',
-                        'post_status'    => 'inherit',
-                    ];
-                    $ftem_audio_attach_id = wp_insert_attachment( $attachment, $movefile['file'] );
-                    if ( $ftem_audio_attach_id ) {
-                        $meta = wp_generate_attachment_metadata( $ftem_audio_attach_id, $movefile['file'] );
-                        wp_update_attachment_metadata( $ftem_audio_attach_id, $meta );
-                    }
-                } else {
-                    $ftem_errors[] = "Échec de l'upload du fichier audio.";
-                }
-            }
-        }
-    }
-
-    /* ── Création du post si tout est OK ── */
-    if ( empty( $ftem_errors ) ) {
-        $display_name = $ftem_old['anon']
-            ? 'Témoignage anonyme'
-            : ( $ftem_old['name'] ?: 'Témoignage anonyme' );
-
-        $post_id = wp_insert_post( [
-            'post_type'    => 'temoignage',
-            'post_status'  => 'pending',
-            'post_title'   => $display_name . ' — ' . wp_date( 'd/m/Y H:i' ),
-            'post_content' => $ftem_old['quote'],
-        ] );
-
-        if ( $post_id && ! is_wp_error( $post_id ) ) {
-            update_field( 'temoig_category', $ftem_old['category'], $post_id );
-            update_field( 'temoig_type', $ftem_old['type'], $post_id );
-            update_field( 'temoig_quote', $ftem_old['quote'], $post_id );
-            update_field( 'temoig_person_name', $ftem_old['anon'] ? '' : $ftem_old['name'], $post_id );
-            update_field( 'temoig_person_role', $ftem_old['role'], $post_id );
-
-            if ( $ftem_old['type'] === 'video' ) {
-                update_field( 'temoig_video_url', $ftem_old['video_url'], $post_id );
-            }
-            if ( $ftem_old['type'] === 'audio' && $ftem_audio_attach_id ) {
-                update_field( 'temoig_audio_file', $ftem_audio_attach_id, $post_id );
-            }
-
-            // Stocker email/téléphone pour contact admin (champs internes)
-            update_post_meta( $post_id, '_ftem_submit_email', $ftem_old['email'] );
-            if ( $ftem_old['phone'] ) {
-                update_post_meta( $post_id, '_ftem_submit_phone', $ftem_old['phone'] );
-            }
-            update_post_meta( $post_id, '_ftem_submit_date', current_time( 'mysql' ) );
-            update_post_meta( $post_id, '_ftem_submit_ip', $_SERVER['REMOTE_ADDR'] ?? '' );
-
-            // Notification email à l'admin
-            $admin_email = get_option( 'admin_email' );
-            $edit_link   = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-            $subject     = '[PRH68] Nouveau témoignage à valider';
-            $body  = "Un nouveau témoignage a été soumis et attend modération.\n\n";
-            $body .= "Catégorie : " . ( $ftem_old['category'] ) . "\n";
-            $body .= "Type : " . $ftem_old['type'] . "\n";
-            $body .= "Auteur : " . $display_name . "\n";
-            $body .= "Email : " . $ftem_old['email'] . "\n";
-            if ( $ftem_old['phone'] ) $body .= "Téléphone : " . $ftem_old['phone'] . "\n";
-            $body .= "\nExtrait :\n" . wp_trim_words( $ftem_old['quote'], 40 ) . "\n\n";
-            $body .= "Modérer : " . $edit_link;
-
-            wp_mail( $admin_email, $subject, $body );
-
-            $ftem_success = true;
-            $ftem_old = []; // reset
-        } else {
-            $ftem_errors[] = "Erreur lors de l'enregistrement. Merci de réessayer.";
-        }
-    }
-}
+/* Traitement via AJAX — voir inc/ajax-handlers.php (action: ftem_submit) */
 
 get_header();
 ?>
@@ -190,8 +26,8 @@ get_header();
     <section class="ftem-form-section">
         <div class="ftem-container">
 
-            <?php if ( $ftem_success ) : ?>
-                <div class="ftem-success" role="status">
+            <!-- Panneau succès (masqué par défaut, affiché par JS) -->
+                <div class="ftem-success" hidden>
                     <div class="ftem-success-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
                             <polyline points="20 6 9 17 4 12"/>
@@ -203,18 +39,9 @@ get_header();
                         Retour aux témoignages
                     </a>
                 </div>
-            <?php else : ?>
 
-                <?php if ( ! empty( $ftem_errors ) ) : ?>
-                    <div class="ftem-errors" role="alert">
-                        <strong>Quelques points à corriger :</strong>
-                        <ul>
-                            <?php foreach ( $ftem_errors as $err ) : ?>
-                                <li><?php echo esc_html( $err ); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
+                <!-- Zone erreurs (remplie par JS) -->
+                <div class="ftem-errors" hidden role="alert"></div>
 
                 <form class="ftem-form" method="post" enctype="multipart/form-data" novalidate>
                     <?php wp_nonce_field( 'ftem_submit', 'ftem_nonce' ); ?>
@@ -382,8 +209,6 @@ get_header();
                     </div>
 
                 </form>
-
-            <?php endif; ?>
 
         </div>
     </section>

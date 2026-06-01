@@ -67,6 +67,10 @@ function prh68_enqueue_styles() {
         wp_enqueue_style(  'fot-style',  $uri . '/css/style-formulaire-outil.css', [ 'prh68-style' ],   $ver );
         wp_enqueue_script( 'fot-script', $uri . '/js/formulaire-outil.js',         [ 'common-script' ], $ver, true );
     }
+
+    if ( is_page_template( 'page-observatoire.php' ) ) {
+        wp_enqueue_style( 'obs-style', $uri . '/css/style-observatoire.css', [ 'prh68-style' ], $ver );
+    }
 }
 
 /* =======================================================

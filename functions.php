@@ -2,6 +2,7 @@
 require_once get_stylesheet_directory() . '/inc/acf-fields.php';
 require_once get_stylesheet_directory() . '/inc/scripts.php';
 require_once get_stylesheet_directory() . '/inc/cpt.php';
+require_once get_stylesheet_directory() . '/inc/ajax-handlers.php';
 
 /* ── Filtrage des items de menu (dropdowns vides + témoignages) ─── */
 add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
@@ -85,6 +86,27 @@ add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
         return true;
     } ) );
 }, 10, 2 );
+
+/* ── Limite taille upload vidéo (50 Mo max) ──────────── */
+add_filter( 'wp_handle_upload_prefilter', function ( $file ) {
+    $video_types = [
+        'video/mp4', 'video/webm', 'video/ogg',
+        'video/avi', 'video/quicktime', 'video/x-matroska',
+        'video/x-msvideo', 'video/3gpp',
+    ];
+    if ( in_array( $file['type'], $video_types, true ) ) {
+        $max_mb   = 500;
+        $max_size = $max_mb * 1024 * 1024;
+        if ( $file['size'] > $max_size ) {
+            $file['error'] = sprintf(
+                'Les fichiers vidéo ne peuvent pas dépasser %d Mo. Votre fichier fait %.1f Mo. Préférez un lien YouTube ou Vimeo.',
+                $max_mb,
+                round( $file['size'] / 1024 / 1024, 1 )
+            );
+        }
+    }
+    return $file;
+} );
 
 /* ── Auto-création de la page "Partager témoignage" ──── */
 add_action( 'after_switch_theme', 'prh68_create_temoignage_form_page' );
