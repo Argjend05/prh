@@ -9,13 +9,14 @@
            CHAMPS CONDITIONNELS (audio / vidéo)
         ────────────────────────────────────────────────── */
         var typeRadios = form.querySelectorAll('input[name="ftem_type"]');
-        var condBlocks = form.querySelectorAll('.ftem-cond[data-show-if-type]');
+        var condBlocks = form.querySelectorAll('.ftem-cond[data-show-if-types]');
 
         function updateConditional() {
             var current = form.querySelector('input[name="ftem_type"]:checked');
             var val = current ? current.value : 'texte';
             condBlocks.forEach(function (block) {
-                var match = block.dataset.showIfType === val;
+                var types = (block.dataset.showIfTypes || '').split(' ');
+                var match = types.indexOf(val) !== -1;
                 block.classList.toggle('is-active', match);
                 block.querySelectorAll('input').forEach(function (inp) {
                     inp.disabled = !match;

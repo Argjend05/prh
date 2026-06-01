@@ -98,7 +98,13 @@ if ( ! function_exists( 'ml_nl2br' ) ) {
    ======================================================= */
 
 add_action( 'wp_head', function () {
-    $logo = get_stylesheet_directory_uri() . '/assets/img/logo.svg';
+    /* Logo Google/schema.org :
+       - Si une "Icône du site" est définie dans Apparence → Personnaliser
+         → Identité du site, on l'utilise (image sur fond non transparent = idéal Google).
+       - Sinon, fallback sur le SVG du thème. */
+    $logo = has_site_icon()
+        ? get_site_icon_url( 512 )
+        : get_stylesheet_directory_uri() . '/assets/img/logo.svg';
 
     /* Organization + WebSite : Organization.logo est LE signal que
        Google utilise pour l'image représentative du site (vignette

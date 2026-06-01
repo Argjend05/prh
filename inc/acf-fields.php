@@ -530,29 +530,6 @@ function prh68_acf_register_groups() {
         'location'   => $loc_ot,
         'fields'     => [
             [
-                'key' => 'field_ot_category', 'label' => 'Catégorie', 'name' => 'ot_category', 'type' => 'select',
-                'choices' => [
-                    'scolaire'      => 'Scolaire',
-                    'observation'   => 'Observation',
-                    'communication' => 'Communication',
-                    'urgence'       => 'Urgence',
-                    'accueil'       => 'Accueil',
-                    'soutien'       => 'Soutien',
-                ],
-                'default_value' => 'scolaire', 'allow_null' => 0, 'return_format' => 'value',
-            ],
-            [
-                'key' => 'field_ot_envs', 'label' => 'Environnements', 'name' => 'ot_envs', 'type' => 'checkbox',
-                'choices' => [
-                    'urbain'   => 'Urbain',
-                    'rural'    => 'Rural',
-                    'domicile' => 'Domicile',
-                    'eaje'     => 'EAJE',
-                    'rue'      => 'Rue',
-                ],
-                'layout' => 'horizontal', 'return_format' => 'value',
-            ],
-            [
                 'key' => 'field_ot_structure', 'label' => 'Type de structure', 'name' => 'ot_structure', 'type' => 'select',
                 'choices' => [
                     'tous'                  => 'Toutes',

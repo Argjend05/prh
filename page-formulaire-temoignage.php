@@ -81,9 +81,10 @@ get_header();
                         <div class="ftem-radio-pills">
                             <?php
                             $types = [
-                                'texte' => 'Texte écrit',
-                                'audio' => 'Audio',
-                                'video' => 'Vidéo (lien)',
+                                'texte'       => 'Texte écrit',
+                                'audio'       => 'Audio',
+                                'video'       => 'Vidéo (lien)',
+                                'video_audio' => 'Vidéo + Audio',
                             ];
                             foreach ( $types as $key => $label ) :
                                 $checked = ( ( $ftem_old['type'] ?? 'texte' ) === $key ) ? 'checked' : '';
@@ -96,7 +97,7 @@ get_header();
                         </div>
 
                         <!-- Champs conditionnels Audio -->
-                        <div class="ftem-cond" data-show-if-type="audio">
+                        <div class="ftem-cond" data-show-if-types="audio video_audio">
                             <label class="ftem-label" for="ftem_audio_file">
                                 Fichier audio <span class="ftem-required">*</span>
                                 <span class="ftem-hint">mp3, wav, m4a, ogg — max 25 Mo</span>
@@ -108,7 +109,7 @@ get_header();
                         </div>
 
                         <!-- Champs conditionnels Vidéo -->
-                        <div class="ftem-cond" data-show-if-type="video">
+                        <div class="ftem-cond" data-show-if-types="video video_audio">
                             <label class="ftem-label" for="ftem_video_url">
                                 Lien YouTube ou Vimeo <span class="ftem-required">*</span>
                                 <span class="ftem-hint">La vidéo doit être hébergée et publique</span>
@@ -128,7 +129,7 @@ get_header();
                         </legend>
 
                         <label class="ftem-label" for="ftem_quote">
-                            Texte du témoignage <span class="ftem-required">*</span>
+                            Quelle expérience inclusive souhaitez-vous partager&nbsp;? <span class="ftem-required">*</span>
                             <span class="ftem-hint">Pour les vidéos/audio, écrivez un résumé ou la transcription</span>
                         </label>
                         <textarea id="ftem_quote" name="ftem_quote" rows="7" required

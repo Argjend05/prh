@@ -1,7 +1,7 @@
 ﻿/*
  Theme Name:   PRH68
  Author:       Argjend KALLARI
- Version:      1.7.0
+ Version:      1.7.1
 */
 
 /* =====================================================
@@ -588,6 +588,33 @@ body .prh-mobile-nav-list li a {
 .prh-mobile-nav-list li:last-child a {
     color: var(--orange);
     border-bottom: none;
+}
+
+/* =====================================================
+   BOUTON ORANGE — base partagée (accueil + observatoire)
+   ===================================================== */
+.btn-orange,
+.acc-btn-orange,
+.obs-btn-orange {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--ubuntu);
+    font-size: .95rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background .2s, transform .2s;
+}
+
+.btn-orange:hover,
+.acc-btn-orange:hover,
+.obs-btn-orange:hover {
+    background: var(--orange-hover);
+    color: #fff;
+    transform: translateY(-1px);
 }
 
 /* =====================================================

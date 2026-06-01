@@ -464,11 +464,13 @@ sort( $_existing_orgs );
                             Description courte <abbr title="requis">*</abbr>
                             <span class="fot-charcount"><span id="fot-desc-count">0</span> / 1200 caractères</span>
                         </label>
+                        <span class="fot-field-hint">Pourquoi cet outil vous semble-t-il intéressant à partager&nbsp;?</span>
                         <textarea id="fot_outil_desc" name="fot_outil_desc" class="fot-textarea" rows="3" maxlength="1200" placeholder="Décrivez votre outil en quelques phrases…" required></textarea>
                     </div>
 
                     <div class="fot-field fot-field--full">
                         <label for="fot_outil_context">Contexte d'utilisation <abbr title="requis">*</abbr></label>
+                        <span class="fot-field-hint">Intérêts / bénéfices pour l'enfant concerné, pour tous les enfants, pour les professionnels.</span>
                         <textarea id="fot_outil_context" name="fot_outil_context" class="fot-textarea" rows="4" placeholder="Dans quel contexte utilisez-vous cet outil ? Quelle problématique résout-il ?" required></textarea>
                     </div>
 

@@ -262,9 +262,17 @@
     gap: 22px;
 }
 
-.fot-field { display: flex; flex-direction: column; gap: 8px; }
+.fot-field { display: flex; flex-direction: column; gap: 6px; }
 .fot-field[hidden] { display: none !important; }
 .fot-field--full { grid-column: 1 / -1; }
+
+.fot-field-hint {
+    font-size: .82rem;
+    color: #888;
+    font-style: italic;
+    line-height: 1.4;
+    margin-top: -1px;
+}
 
 .fot-field label {
     font-size: .82rem;
