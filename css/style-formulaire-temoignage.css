@@ -326,6 +326,32 @@
 }
 .ftem-cond.is-active { display: block; }
 
+/* Note "pas de lien" sous le champ vidéo */
+.ftem-cond-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    background: rgba(236, 111, 4, .07);
+    border-left: 3px solid var(--orange);
+    border-radius: 8px;
+    font-size: .82rem;
+    line-height: 1.5;
+    color: #555;
+}
+.ftem-cond-note svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--orange);
+}
+.ftem-cond-note a {
+    color: var(--orange);
+    font-weight: 600;
+    text-decoration: underline;
+}
+.ftem-cond-note a:hover { color: var(--violet); }
+
 @keyframes ftem-cond-in {
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: none; }

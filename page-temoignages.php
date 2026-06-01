@@ -83,7 +83,12 @@ $render_card = function ( $post, $cat_labels, $cat_icons, $is_featured = false, 
     $name      = get_field( 'temoig_person_name', $post->ID );
     $role      = get_field( 'temoig_person_role', $post->ID );
 
-    $video_url = get_field( 'temoig_video_url', $post->ID );
+    $video_url  = get_field( 'temoig_video_url', $post->ID );
+    $video_file = get_field( 'temoig_video_file', $post->ID );
+    // Le lien (YouTube/Vimeo) prime ; sinon on retombe sur le fichier uploadé par l'équipe.
+    if ( empty( $video_url ) && is_array( $video_file ) && ! empty( $video_file['url'] ) ) {
+        $video_url = $video_file['url'];
+    }
     $video_th  = get_field( 'temoig_video_thumb', $post->ID );
     $video_dur = get_field( 'temoig_video_duration', $post->ID );
 

@@ -437,6 +437,19 @@ function prh68_acf_register_groups() {
                 ],
             ],
             [
+                'key' => 'field_prh68_temoig_video_file',
+                'label' => 'Fichier vidéo (alternative au lien)',
+                'name' => 'temoig_video_file',
+                'type' => 'file',
+                'return_format' => 'array',
+                'mime_types' => 'mp4,webm,ogg',
+                'instructions' => 'Réservé à l\'équipe : si une personne souhaite partager une vidéo sans lien YouTube/Vimeo, uploadez le fichier ici (mp4, webm, ogg). Utilisé uniquement si aucun lien n\'est renseigné ci-dessus.',
+                'conditional_logic' => [
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video' ] ],
+                    [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],
+                ],
+            ],
+            [
                 'key' => 'field_prh68_temoig_video_thumb',
                 'label' => 'Miniature de la vidéo',
                 'name' => 'temoig_video_thumb',
