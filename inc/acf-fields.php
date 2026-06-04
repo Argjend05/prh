@@ -443,7 +443,7 @@ function prh68_acf_register_groups() {
                 'type' => 'file',
                 'return_format' => 'array',
                 'mime_types' => 'mp4,webm,ogg',
-                'instructions' => 'Réservé à l\'équipe : si une personne souhaite partager une vidéo sans lien YouTube/Vimeo, uploadez le fichier ici (mp4, webm, ogg). Utilisé uniquement si aucun lien n\'est renseigné ci-dessus.',
+                'instructions' => 'Réservé à l\'équipe : si une personne souhaite partager une vidéo sans lien YouTube/Vimeo, uploadez le fichier ici (mp4, webm, ogg). Gardez un poids raisonnable (idéalement moins de 500 Mo) pour ne pas ralentir le site. Utilisé uniquement si aucun lien n\'est renseigné ci-dessus.',
                 'conditional_logic' => [
                     [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video' ] ],
                     [ [ 'field' => 'field_prh68_temoig_type', 'operator' => '==', 'value' => 'video_audio' ] ],

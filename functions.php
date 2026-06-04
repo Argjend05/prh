@@ -87,25 +87,20 @@ add_filter( 'wp_nav_menu_objects', function ( $items, $args ) {
     } ) );
 }, 10, 2 );
 
-/* ── Limite taille upload vidéo (50 Mo max) ──────────── */
-add_filter( 'wp_handle_upload_prefilter', function ( $file ) {
-    $video_types = [
-        'video/mp4', 'video/webm', 'video/ogg',
-        'video/avi', 'video/quicktime', 'video/x-matroska',
-        'video/x-msvideo', 'video/3gpp',
-    ];
-    if ( in_array( $file['type'], $video_types, true ) ) {
-        $max_mb   = 500;
-        $max_size = $max_mb * 1024 * 1024;
-        if ( $file['size'] > $max_size ) {
-            $file['error'] = sprintf(
-                'Les fichiers vidéo ne peuvent pas dépasser %d Mo. Votre fichier fait %.1f Mo. Préférez un lien YouTube ou Vimeo.',
-                $max_mb,
-                round( $file['size'] / 1024 / 1024, 1 )
-            );
-        }
+/* ── Rappel (non bloquant) sur le poids des vidéos ─────
+   Plus de blocage dur : seuls les admins uploadent des vidéos.
+   On affiche juste un message d'information dans la médiathèque
+   pour les sensibiliser au poids des fichiers. */
+add_action( 'admin_notices', function () {
+    $screen = get_current_screen();
+    if ( ! $screen || ! in_array( $screen->base, [ 'upload', 'media' ], true ) ) {
+        return;
     }
-    return $file;
+    echo '<div class="notice notice-info">
+        <p><strong>📹 Vidéos :</strong> privilégiez un lien YouTube ou Vimeo plutôt qu\'un fichier hébergé.
+        Si vous devez uploader une vidéo, gardez un poids raisonnable (idéalement &lt; 500 Mo) :
+        des fichiers trop lourds ralentissent le site et saturent l\'espace de stockage.</p>
+    </div>';
 } );
 
 /* ── Auto-création de la page "Partager témoignage" ──── */
